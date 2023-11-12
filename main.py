@@ -6,6 +6,8 @@ from game import Game
 from Players.player import Player
 from playing_board import PlayingBoard
 from Players.random_player import RandomPlayer
+import time
+from timeit import default_timer as timer
 
 
 if __name__ == "__main__":
@@ -25,12 +27,14 @@ if __name__ == "__main__":
     # mode 0 - run everything
     # mode 1 - make breaks, print turns
     # mode 2 - dont make breaks, print turns
-    mode = 2
+    mode = 0
 
     
     game_simulation = Game(bank, card_deck, players, playing_board, 0, mode, True)
     print(players)
+    start = timer()
     game_simulation.run_game()
+    end = timer()
 
     print("################################################################################")
     print("Results")
@@ -45,3 +49,4 @@ if __name__ == "__main__":
             card_sum += color_count
         print(f"Player has {card_sum} cards")
         player.print_player_points()
+    print(f"Simulation time: {end - start}")

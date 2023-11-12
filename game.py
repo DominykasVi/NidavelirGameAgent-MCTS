@@ -50,6 +50,13 @@ class Game:
         self.turn_split = self.calculate_turn_split()
         self.mode = mode
 
+    def get_possible_game_states(self):
+        if self.turn > self.turn_split*2:
+            raise Exception(f"Illegal game state {self.turn} reached")
+        if self.turn == self.turn_split*2:
+            return []
+        pass
+
 ##################################################################################################################
     def run_game(self):
         while self.turn < self.turn_split*2:

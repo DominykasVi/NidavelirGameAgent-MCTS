@@ -88,7 +88,7 @@ class Player:
         if coin_to_increase.exchangeable == True:
             raise Exception("Cannot increase an exchange coin")
 
-        # print(f"{self.name} incresed coin {coin_to_increase} to", end=' ')
+        print(f"{self.name} incresed coin {coin_to_increase} to", end=' ')
 
         new_coin_value = self.bank.take_coin((coin_to_increase.value+value))
         new_coin = Coin(new_coin_value)
@@ -102,7 +102,7 @@ class Player:
 
         self.coins.remove(coin_to_increase)
         self.coins.append(new_coin)
-        # print(new_coin)
+        print(new_coin)
 
     def get_coin_points(self) -> int:
         return sum(x.value for x in self.coins)
