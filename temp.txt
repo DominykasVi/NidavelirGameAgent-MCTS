@@ -1,0 +1,37 @@
+Player2 (4)
+10 -> blue:7 (1)
+19 -> red:5 (1)
+6 -> violet:None (1)
+12 -> blue:8 (1)
+9 -> blue:9 (1)
+5 -> violet:None (1)
+26 -> green:None (1)
+17 -> red:4 (1)
+21 -> red:6 (1)
+35 -> orange:1 (1)
+20 -> red:8 (1)
+4 -> violet:None (1)
+58 -> blue:8 (2)
+56 -> blue:10 (2)
+57 -> blue:7 (2)
+69 -> red:8 (2)
+53 -> green:None (2)
+46 -> violet:None (2)
+38 -> orange:0 (2)
+60 -> blue:9 (2)
+45 -> violet:None (2)
+61 -> blue:6 (2)
+48 -> violet:None (2)
+50 -> green:None (2)
+Has 5 of red
+Has 3 of green
+Has 2 of orange
+Has 6 of violet
+Has 8 of blue
+Player2
+Coin points: 32
+Card points: 139
+Bonus points: 0
+Total points: 171
+
+        print(f"Incresed coin {coin_to_increase} to", end=' ')
