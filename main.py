@@ -5,6 +5,7 @@ from card_deck import CardDeck
 from game import Game
 from player import Player
 from playing_board import PlayingBoard
+from random_player import RandomPlayer
 
 
 if __name__ == "__main__":
@@ -17,12 +18,14 @@ if __name__ == "__main__":
 
     #here we can define random, MCTS or human players
     players:List[Player] = []
-    for i in range(NUMBER_OF_PLAYERS):
-        players.append(Player(f"Player{i+1}", None, bank))
+    players.append(RandomPlayer("Player1", None, bank))
+    players.append(RandomPlayer("Player2", None, bank))
+    # for i in range(NUMBER_OF_PLAYERS):
+    #     players.append(Player(f"Player{i+1}", None, bank))
     # mode 0 - run everything
     # mode 1 - make breaks, print turns
-    # mode 1 - dont make breaks, print turns
-    mode = 0
+    # mode 2 - dont make breaks, print turns
+    mode = 2
 
     
     game_simulation = Game(bank, card_deck, players, playing_board, 0, mode, True)

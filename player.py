@@ -34,37 +34,27 @@ class Player:
     def set_crystal(self, crystal:int) -> None:
         self.crystal = crystal
 
-    def make_bet(self, possible_choices:Dict[int, List[Card]]) -> None:
-        coins_to_bet = self.coins.copy()
-        for _ in possible_choices:
-            coin_choice = random.choice(coins_to_bet)
-            self.bets.append(coin_choice)
-            coins_to_bet.remove(coin_choice)
-        self.left_over_coins = coins_to_bet
+    def make_bet(self, bets:List[Coin]) -> None:
+        coins_copy = self.coins.copy()
+        for bet in bets:
+            if bet not in self.coins:
+                raise Exception("Trying to bet a coin that doesn't exist")
+            coins_copy.remove(bet)
+        self.bets = bets
+        self.left_over_coins = coins_copy
+        #TODO: can be removed later 
+        try:  
+            assert(len(self.bets)+len(self.left_over_coins) == 5)
+        except:
+            raise Exception(f"Coins don't add up to five.\n Betted coins:{self.bets}. Left over: {self.left_over_coins}")
 
-    def make_bet_input(self, slots:Dict[int, List[Card]]) -> None:
-        coins_to_bet = self.coins.copy()
-        for slot in slots.items():
-            print("Please make a bet for this slot")
-            for card in slot:
-                print(card)
-            coin = int(input())
-            while int(coin) in self.bets:
-                print("This amount has already been betted!")
-                print(self.bets)
-                print("Please imput bet amount again.")
-                coin = int(input())
-            coins_to_bet.remove(coin)
-            self.bets.append(coin)
-        self.left_over_coins = coins_to_bet
-        # for cards in possible_choices:
-        #     self.bets.append(random.choice(range(len(cards) + 1)))
-    def take_card(self, cards_to_choose: List[Card]) -> List[Card]:
-        taken_card = random.choice(cards_to_choose)
-        self.add_card(taken_card)
-        cards_to_choose.remove(taken_card)
-        return cards_to_choose, taken_card
 
+    def take_card(self, cards_to_choose: List[Card], card_to_take:Card) -> List[Card]:
+        if card_to_take not in cards_to_choose:
+            raise Exception("Trying to take a card that doesn't exist")
+        self.add_card(card_to_take)
+        cards_to_choose.remove(card_to_take)
+        return cards_to_choose, card_to_take
 
     def add_card(self, card : Card) -> None:
         if card.color == 'coin':
@@ -72,7 +62,6 @@ class Player:
         else:
             self.card_deck.add_card(card)
             # TODO recruit_hero?
-
 
     def make_coin_exchange(self, bet_index:int) -> None:
         if self.bets[bet_index].exchangeable == True:
