@@ -4,7 +4,7 @@ from bank import Bank
 from card import Card
 from card_deck import CardDeck
 from coin import Coin
-from player import Player
+from Players.player import Player
 
 import random
 
@@ -181,8 +181,8 @@ class Game:
                 player.distinction_cards += 1
             elif color == 'blue':
                 card_to_choose_from = playing_board.get_number_of_cards(3, playing_board.card_deck.get_age_two_cards())
-                card_to_choose_from = player.take_card(card_to_choose_from)
-                for card in card_to_choose_from:
+                left_cards, _ = player.take_card(card_to_choose_from)
+                for card in left_cards:
                     playing_board.card_deck.add_card(card)
                 player.distinction_cards += 1
     

@@ -84,13 +84,11 @@ class Player:
     def remove_bets(self) -> None:
         self.bets.clear()
 
-    def increase_coin(self, value: int) -> None:
-        iterator = True
-        while iterator:
-            coin_to_increase = random.choice(self.coins)
-            if coin_to_increase.exchangeable == False:
-                iterator = False
-        print(f"{self.name} incresed coin {coin_to_increase} to", end=' ')
+    def increase_coin(self, value: int, coin_to_increase:Coin) -> None:
+        if coin_to_increase.exchangeable == True:
+            raise Exception("Cannot increase an exchange coin")
+
+        # print(f"{self.name} incresed coin {coin_to_increase} to", end=' ')
 
         new_coin_value = self.bank.take_coin((coin_to_increase.value+value))
         new_coin = Coin(new_coin_value)
@@ -98,13 +96,13 @@ class Player:
         if coin_to_increase in self.bets:
             coin_index = self.bets.index(coin_to_increase)
             self.bets[coin_index] = new_coin
-        else:
+        elif coin_to_increase in self.left_over_coins:
             self.left_over_coins.remove(coin_to_increase)
             self.left_over_coins.append(new_coin)
 
         self.coins.remove(coin_to_increase)
         self.coins.append(new_coin)
-        print(new_coin)
+        # print(new_coin)
 
     def get_coin_points(self) -> int:
         return sum(x.value for x in self.coins)

@@ -1,7 +1,7 @@
 import random
 from typing import Dict, List
 from card import Card
-from player import Player
+from Players.player import Player
 
 
 class RandomPlayer(Player):
@@ -20,4 +20,10 @@ class RandomPlayer(Player):
         taken_card = random.choice(cards_to_choose)
         return super().take_card(cards_to_choose, taken_card)
         
-        
+    def increase_coin(self, value: int):
+        iterator = True
+        while iterator:
+            coin_to_increase = random.choice(self.coins)
+            if coin_to_increase.exchangeable == False:
+                iterator = False
+        super().increase_coin(value, coin_to_increase)

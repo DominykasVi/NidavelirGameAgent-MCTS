@@ -3,9 +3,9 @@ from typing import List
 from bank import Bank
 from card_deck import CardDeck
 from game import Game
-from player import Player
+from Players.player import Player
 from playing_board import PlayingBoard
-from random_player import RandomPlayer
+from Players.random_player import RandomPlayer
 
 
 if __name__ == "__main__":

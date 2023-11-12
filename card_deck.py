@@ -53,7 +53,7 @@ class CardDeck:
         return [Card(value.split(' ')[0], value.split(' ')[1]) for value in  text_list if value != '']
 
     def read_cards_from_file(self, number_of_players:int) -> (List[Card],List[Card]):
-        with open(f'cards_{number_of_players}.txt', 'r') as f:
+        with open(f'./Resources/cards_{number_of_players}.txt', 'r') as f:
                 text = f.read()
         age_one_text, age_two_text = text.split('---')
         return self.parse_card_text(age_one_text), self.parse_card_text(age_two_text)

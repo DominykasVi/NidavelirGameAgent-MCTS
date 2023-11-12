@@ -11,7 +11,7 @@ class Bank:
 
 
     def get_coins_from_file(self) -> Dict[int, int]:
-        with open('coins.txt', 'r') as f:
+        with open('./Resources/coins.txt', 'r') as f:
             text = f.read()
 
         coins_text = text.split('\n')
