@@ -2,13 +2,13 @@ from card import Card
 from typing import List, Dict
 
 class CardDeck:
-    def __init__(self, number_of_players:int=5, initialization:bool=False) -> None:
+    def __init__(self, number_of_players:int=5, initialization:bool=False, card_file_name:str='2') -> None:
 
         self.card_count:Dict[str, int] = {'red':0, 'green':0, 'orange':0, 'violet':0, 'blue':0, 'coin':0}
 
         if initialization:
             self.cards:Dict[int, Card] = {}
-            age_one_cards_list, age_two_cards_list = self.read_cards_from_file(number_of_players)
+            age_one_cards_list, age_two_cards_list = self.read_cards_from_file(card_file_name)
             self.put_cards_into_dict(age_one_cards_list, age_two_cards_list)
         else:
             self.cards:Dict[int, Card] = {}
@@ -52,8 +52,8 @@ class CardDeck:
         text_list = input_text.split('\n')
         return [Card(value.split(' ')[0], value.split(' ')[1]) for value in  text_list if value != '']
 
-    def read_cards_from_file(self, number_of_players:int) -> (List[Card],List[Card]):
-        with open(f'./Resources/cards_{number_of_players}.txt', 'r') as f:
+    def read_cards_from_file(self, card_file_name:str) -> (List[Card],List[Card]):
+        with open(f'./Resources/cards_{card_file_name}.txt', 'r') as f:
                 text = f.read()
         age_one_text, age_two_text = text.split('---')
         return self.parse_card_text(age_one_text), self.parse_card_text(age_two_text)

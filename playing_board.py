@@ -1,3 +1,4 @@
+import itertools
 from card_deck import CardDeck
 from typing import List, Tuple, Dict
 from card import Card
@@ -33,15 +34,28 @@ class PlayingBoard:
         # TODO: if cases for how many cards to generate by number of playees
         range_limit = self.get_player_card_limit(age_split)
 
-        if turn_number <= age_split:
+        if turn_number < age_split:
             selection_deck = self.card_deck.get_age_one_cards().copy()
         else:
             selection_deck = self.card_deck.get_age_two_cards().copy()
 
 
-        return_list = {}
+        return_dict = {}
         for i in range(1, 4):
             selected_cards = self.get_number_of_cards(range_limit, selection_deck)
-            return_list[i] = selected_cards
-        return return_list
+            return_dict[i] = selected_cards
+        return return_dict
+    
+    def generate_possible_slots(self, age_split:int, turn_number:int) -> List[Dict[int, List[Card]]]:
+        range_limit = self.get_player_card_limit(age_split)
+
+        if turn_number <= age_split:
+            selection_deck = self.card_deck.get_age_one_cards().copy()
+        else:
+            selection_deck = self.card_deck.get_age_two_cards().copy()
+
+        return list(itertools.permutations(selection_deck, range_limit*3))
+        
+
+
 

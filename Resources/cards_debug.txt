@@ -1,0 +1,23 @@
+coin 3
+violet None
+violet None
+blue 9
+blue 7
+red 9
+red 4
+green None
+green None
+orange 1
+orange 0
+---
+orange 2
+orange 2
+violet None
+violet None
+green None
+green None
+blue 10
+blue 7
+red 7
+red 3
+coin 5
