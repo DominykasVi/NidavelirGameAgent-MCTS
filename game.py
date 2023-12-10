@@ -7,6 +7,7 @@ from coin import Coin
 from Players.player import Player
 
 import random
+from game_state import GameState
 
 from playing_board import PlayingBoard
 
@@ -36,21 +37,21 @@ class Game:
 
                 # players.append(Player(f"Player {i+1}", crystal, bank))
 
-    def __init__(self, bank:Bank, card_deck:CardDeck, players:List[Player], playing_board:PlayingBoard, turn:int, mode:int=0, initialize=False) -> None:
+    def __init__(self, game_state:GameState, initialize=False) -> None:
         # SEED = 10
-        self.players = players
-        self.NUMBER_OF_PLAYERS = len(players)
+        self.players = game_state.players
+        self.NUMBER_OF_PLAYERS = len(self.players)
         if initialize:
-            self.give_players_crystals(players)
+            self.give_players_crystals(self.players)
         # random.seed(SEED)#?? ar reikalingas
-        self.card_deck = card_deck
-        self.bank = bank
-        self.playing_board = playing_board
-        self.turn = turn
+        self.card_deck = game_state.deck
+        self.bank = game_state.bank
+        self.playing_board = game_state.playing_board
+        self.turn = game_state.turn
         self.turn_split = self.calculate_turn_split()
-        self.mode = mode
-        self.slots = []
-        self.slot_index = 0
+        self.mode = game_state.mode
+        self.slots = game_state.slots
+        self.slot_index = game_state.slot_index
 
     def get_possible_game_states(self):
         if self.turn > self.turn_split*2:
@@ -69,15 +70,22 @@ class Game:
         self.slot_index = 1
         self.print_function(str(self.slots))
 
+    def create_game_state(self) -> GameState:
+        return GameState(playing_board=self.playing_board,
+                         players=self.players,
+                         card_deck=self.card_deck,
+                         bank=self.bank,
+                         turn=self.turn,
+                         slot_index=self.slot_index,
+                         slots=self.slots,
+                         mode=self.mode)
+
     def make_player_bets(self):
         for player in self.players:
-            player.make_bet(self.slots) #MCTS decision
+            player.make_bet(self.slots, self.create_game_state()) #MCTS decision 
 
 ##################################################################################################################
-    def run_game(self, custom_slot_index=None):
-        if custom_slot_index is not None:
-            self.slot_index = custom_slot_index
-
+    def run_game(self):
         while self.turn < self.turn_split*2:
             # in halfway point we award bonuses to players, no decision needed
             
@@ -113,6 +121,7 @@ class Game:
                 for player in player_queue:
                     self.print_function(str(player))
                     self.slots[self.slot_index], taken_card = player.take_card(self.slots[self.slot_index]) #MCTS decision
+                    player.cards_taken += 1
                     self.print_function(f"Taken card {taken_card}")
 
                     player.make_coin_exchange(bet_index)
@@ -132,6 +141,7 @@ class Game:
                 red_highest_players = self.get_player_with_highest_count(self.players, 'red')
                 for player in red_highest_players:
                     player.add_red_bonus()
+        return [player.get_player_points() for player in self.players]
 ##################################################################################################################
 
 

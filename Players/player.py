@@ -6,8 +6,9 @@ from coin import Coin
 import random
 
 class Player:
-    def __init__(self, name:str, crystal:int, bank_reference:Bank) -> None:
-        self.name = name
+    def __init__(self, index:int, crystal:int, bank_reference:Bank) -> None:
+        self.index = index
+        self.name = f"Player{index}"
         self.card_deck = CardDeck()
         self.crystal = crystal
         self.bank = bank_reference
@@ -18,6 +19,7 @@ class Player:
 
         self.distinction_cards = 0
         self.bonus_points = 0
+        self.cards_taken = 0
 
         # self.debug = 0
     def __eq__(self, __value:object) -> bool:
@@ -131,6 +133,7 @@ class Player:
     
     def print_player_points(self) -> None:
         print(self.name)
+        print(f"Cards taken: {self.cards_taken}")
         print(f"Coin points: {self.get_coin_points()}")
         print(f"Card points: {self.card_deck.calculate_points()}")
         print(f"Bonus points: {self.get_bonus_points()}")

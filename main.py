@@ -4,6 +4,8 @@ from bank import Bank
 from card_deck import CardDeck
 from game import Game
 from Players.player import Player
+from game_state import GameState
+from Players.mcts_player import MCTSPlayer
 from playing_board import PlayingBoard
 from Players.random_player import RandomPlayer
 import time
@@ -36,8 +38,9 @@ if __name__ == "__main__":
 
     #here we can define random, MCTS or human players
     players:List[Player] = []
-    players.append(RandomPlayer("Player1", None, bank))
-    players.append(RandomPlayer("Player2", None, bank))
+    players.append(RandomPlayer(1, None, bank))
+    players.append(MCTSPlayer(2, None, bank))
+    # players.append(RandomPlayer("Player2", None, bank))
     # for i in range(NUMBER_OF_PLAYERS):
     #     players.append(Player(f"Player{i+1}", None, bank))
     # mode 0 - run everything
@@ -46,13 +49,28 @@ if __name__ == "__main__":
     mode = 0
 
     
-    game_simulation = Game(bank, card_deck, players, playing_board, 0, mode, True)
+    # game_simulation = Game( players, playing_board, mode, True)
     # From turn 1
     # game_simulation = Game(bank, card_deck, players, playing_board, 1, mode, True)
+    game_state = GameState(playing_board=playing_board,
+                           players=players,
+                           card_deck=card_deck,
+                           bank=bank, 
+                           turn=0,
+                           slot_index=0,
+                           slots=[],
+                           mode=mode)
 
-    game_simulation = Game(bank, card_deck, players, playing_board, 0, mode, True)
-    game_simulation.generate_slots()
-    game_simulation.make_player_bets()
+    game_simulation = Game(game_state, True)
+
+    #######################################################
+    # game_simulation.generate_slots()
+    # new_state = game_simulation.create_game_state()
+    # print(new_state)
+
+
+    # game_simulation.make_player_bets()
+
 
     # Possible combinations
     # start = timer()
@@ -62,8 +80,8 @@ if __name__ == "__main__":
 
     # print(len(possible_card_combinatons))
     # exit()
-
-    print(players)
+    ###########################################################
+    # print(players)
     start = timer()
     game_simulation.run_game()
     end = timer()

@@ -2,11 +2,12 @@ import random
 from typing import Dict, List
 from card import Card
 from Players.player import Player
+from game_state import GameState
 
 
 class RandomPlayer(Player):
     
-    def make_bet(self, possible_choices:Dict[int, List[Card]]) -> None:
+    def make_bet(self, possible_choices:Dict[int, List[Card]], game_state:GameState) -> None:
         coins_to_bet = self.coins.copy()
         chosen_bets = []
         for _ in possible_choices:
