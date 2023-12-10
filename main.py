@@ -43,14 +43,14 @@ if __name__ == "__main__":
     # mode 0 - run everything
     # mode 1 - make breaks, print turns
     # mode 2 - dont make breaks, print turns
-    mode = 2
+    mode = 0
 
     
     game_simulation = Game(bank, card_deck, players, playing_board, 0, mode, True)
     # From turn 1
     # game_simulation = Game(bank, card_deck, players, playing_board, 1, mode, True)
 
-    game_simulation = Game(bank, card_deck, players, playing_board, 7, mode, True)
+    game_simulation = Game(bank, card_deck, players, playing_board, 0, mode, True)
     game_simulation.generate_slots()
     game_simulation.make_player_bets()
 
@@ -65,7 +65,7 @@ if __name__ == "__main__":
 
     print(players)
     start = timer()
-    game_simulation.run_game(3)
+    game_simulation.run_game()
     end = timer()
 
     print_game_results(players, colors)
