@@ -49,41 +49,62 @@ class Game:
         self.turn = turn
         self.turn_split = self.calculate_turn_split()
         self.mode = mode
+        self.slots = []
+        self.slot_index = 0
 
     def get_possible_game_states(self):
         if self.turn > self.turn_split*2:
             raise Exception(f"Illegal game state {self.turn} reached")
         if self.turn == self.turn_split*2:
             return []
-        pass
+        if self.slots == []:
+            pass
+            # return self.playing_board.generate_possible_slots()
+        else:
+            pass
+            # return self.generate_possible_bet_slot_variations(self.slot_index, known_player_bets, know_player_coins)
+
+    def generate_slots(self):
+        self.slots = self.playing_board.generate_slots(self.turn_split, self.turn)
+        self.slot_index = 1
+        self.print_function(str(self.slots))
+
+    def make_player_bets(self):
+        for player in self.players:
+            player.make_bet(self.slots) #MCTS decision
 
 ##################################################################################################################
-    def run_game(self):
+    def run_game(self, custom_slot_index=None):
+        if custom_slot_index is not None:
+            self.slot_index = custom_slot_index
+
         while self.turn < self.turn_split*2:
-            self.turn += 1
-            self.print_function(f"Turn {self.turn}")
             # in halfway point we award bonuses to players, no decision needed
-            if self.turn == self.turn_split+1:
-                self.print_function("Granting players distinction bonuses")
-                self.award_distinction_cards(self.players, self.playing_board)
+            
+            if self.slot_index == 0:
+
+                self.print_function(f"Turn {self.turn}")
+
+                if self.turn == self.turn_split:
+                    self.print_function("Granting players distinction bonuses")
+                    self.award_distinction_cards(self.players, self.playing_board)
 
             # take cards which will be shown to players
-            slots = self.playing_board.generate_slots(self.turn_split, self.turn)
-            self.print_function(str(slots))
+                self.generate_slots()
 
             # here we can have update player function, which to MCTS player would pass the game state
             # for player in self.players:
             #     player.update_state(self.card_deck, self.players, self.bank, self.turn)
+                self.make_player_bets()
 
-            for player in self.players:
-                player.make_bet(slots) #MCTS decision
 
-            for slot_index in slots.keys():
-                bet_index = slot_index - 1
+            # for slot_index in self.slots.keys():
+            while self.slot_index < 4:
+                bet_index = self.slot_index - 1
                 
                 self.print_function(f"Turn {self.turn}")
                 self.print_player_bets()
-                self.print_function(f"SLOT {slot_index} : {slots[slot_index]}")
+                self.print_function(f"SLOT {self.slot_index} : {self.slots[self.slot_index]}")
 
                 player_queue = self.create_player_queue(bet_index)
 
@@ -91,12 +112,19 @@ class Game:
                     
                 for player in player_queue:
                     self.print_function(str(player))
-                    slots[slot_index], taken_card = player.take_card(slots[slot_index]) #MCTS decision
+                    self.slots[self.slot_index], taken_card = player.take_card(self.slots[self.slot_index]) #MCTS decision
                     self.print_function(f"Taken card {taken_card}")
 
                     player.make_coin_exchange(bet_index)
                     self.breakpoint()
-                self.clear()
+                # self.slots.pop(slot_index)
+                self.slot_index += 1
+                self.clear_console()
+
+
+            self.slots.clear()
+            self.slot_index = 0
+            self.turn += 1
 
             for player in self.players:
                 player.remove_bets()
@@ -206,7 +234,7 @@ class Game:
             for player in self.players:
                 print(f"{player}, bets: ", player.bets, "lefover: ", player.left_over_coins)
 
-    def clear(self) -> None:
+    def clear_console(self) -> None:
         if self.mode == 1:
             clear = lambda: os.system('cls')
             clear()
