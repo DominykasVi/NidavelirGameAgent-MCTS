@@ -12,6 +12,7 @@ class Player:
         self.card_deck = CardDeck()
         self.crystal = crystal
         self.bank = bank_reference
+        self.player_type = 'base'
 
         self.bets:List[Coin] = []
         self.coins:List[Coin] = [Coin(0, True), Coin(2), Coin(3), Coin(4), Coin(5)]
@@ -20,6 +21,7 @@ class Player:
         self.distinction_cards = 0
         self.bonus_points = 0
         self.cards_taken = 0
+        self.card_taken = False
 
         # self.debug = 0
     def __eq__(self, __value:object) -> bool:
@@ -56,10 +58,13 @@ class Player:
             raise Exception("Trying to take a card that doesn't exist")
         self.add_card(card_to_take)
         cards_to_choose.remove(card_to_take)
+        self.cards_taken += 1
+        self.card_taken = True
         return cards_to_choose, card_to_take
 
     def add_card(self, card : Card) -> None:
         if card.color == 'coin':
+            self.card_deck.add_card(card)
             self.increase_coin(card.value)
         else:
             self.card_deck.add_card(card)
@@ -77,7 +82,7 @@ class Player:
             new_coin_value = self.bank.take_coin((bigger_coin.value+lower_coin.value))
             new_coin = Coin(new_coin_value)
 
-            self.bets[bet_index] = new_coin
+            # self.bets[bet_index] = new_coin
             self.coins.append(new_coin)
             self.left_over_coins.append(new_coin)
             # print(f"Changed {bigger_coin} -> {new_coin}, new left coins", self.left_over_coins, " new coins", self.coins)
@@ -90,7 +95,7 @@ class Player:
         if coin_to_increase.exchangeable == True:
             raise Exception("Cannot increase an exchange coin")
 
-        print(f"{self.name} incresed coin {coin_to_increase} to", end=' ')
+        # print(f"{self.name} incresed coin {coin_to_increase} to", end=' ')
 
         new_coin_value = self.bank.take_coin((coin_to_increase.value+value))
         new_coin = Coin(new_coin_value)
@@ -104,7 +109,7 @@ class Player:
 
         self.coins.remove(coin_to_increase)
         self.coins.append(new_coin)
-        print(new_coin)
+        # print(new_coin)
 
     def get_coin_points(self) -> int:
         return sum(x.value for x in self.coins)

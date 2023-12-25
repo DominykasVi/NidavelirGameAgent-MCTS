@@ -32,6 +32,25 @@ class CardDeck:
             14: 133,
             15: 150
         }
+
+        self.green_points = {
+            0: 0,
+            1: 1,
+            2: 4,
+            3: 9,
+            4: 16,
+            5: 25,
+            6: 36,
+            7: 49,
+            8: 64,
+            9: 81,
+            10: 100,
+            11: 121,
+            12: 144,
+            13: 169,
+            14: 196,
+            15: 225
+        }
         
     def put_cards_into_dict(self, age_one_cards_list, age_two_cards_list):
         index = 0
@@ -98,7 +117,11 @@ class CardDeck:
                 orange_sum += self.cards[key].value
                 orange_card_count += 1
         
-        card_sum = blue_sum + red_sum + (orange_sum * self.card_count['orange']) + self.violet_points[self.card_count['violet']] + pow(self.card_count['green'], 2)
+        if violet_card_count > 15:
+            violet_card_count = 15
+        if green_card_count > 15:
+            green_card_count = 15
+        card_sum = blue_sum + red_sum + (orange_sum * self.card_count['orange']) + self.violet_points[violet_card_count] + self.green_points[green_card_count]
         return card_sum
 
     def get_color_count(self, color:str) -> int:

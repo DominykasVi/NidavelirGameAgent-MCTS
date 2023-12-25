@@ -7,6 +7,6 @@ class Coin:
         return str(self.value)
     
     def __repr__(self) -> str:
-        return str(self.value)
+        return f"{self.value}({self.exchangeable})"
     def __eq__(self, __value: object) -> bool:
         return self.value == __value

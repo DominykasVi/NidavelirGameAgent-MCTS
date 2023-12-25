@@ -1,0 +1,58 @@
+digraph tree {
+    "Root
+6184a621-9e08-4be0-b668-e06f4bef74eb";
+    "Player0
+Take:  (red:5 (1),)
+1873b7ad-4591-4398-824f-87b99cf57fca";
+    "Player0
+Take:  (blue:5 (1),)
+c947b212-f29f-4055-b0bb-c657ebf12231";
+    "Player0
+Take:  (red:9 (1),)
+53dfe4a9-6eb9-4aad-ac5f-27e04e25ea7e";
+    "Player0
+Take:  (red:8 (1),)
+59ad54c3-fca9-471e-9d2d-1f781152b9e6";
+    "Player0
+Take:  (orange:0 (1),)
+515a2ab3-987b-49b1-a5f6-37c4197afe68";
+    "Player0
+Take:  (blue:5 (1),)
+a7af9c31-de6d-4f90-935e-7be3581cbb59";
+    "Player0
+Take:  (red:9 (1),)
+8675c8ed-f1d5-45d8-a61e-9cfd738364d7";
+    "Root
+6184a621-9e08-4be0-b668-e06f4bef74eb" -> "Player0
+Take:  (red:5 (1),)
+1873b7ad-4591-4398-824f-87b99cf57fca";
+    "Root
+6184a621-9e08-4be0-b668-e06f4bef74eb" -> "Player0
+Take:  (orange:0 (1),)
+515a2ab3-987b-49b1-a5f6-37c4197afe68";
+    "Player0
+Take:  (red:5 (1),)
+1873b7ad-4591-4398-824f-87b99cf57fca" -> "Player0
+Take:  (blue:5 (1),)
+c947b212-f29f-4055-b0bb-c657ebf12231";
+    "Player0
+Take:  (red:5 (1),)
+1873b7ad-4591-4398-824f-87b99cf57fca" -> "Player0
+Take:  (red:9 (1),)
+53dfe4a9-6eb9-4aad-ac5f-27e04e25ea7e";
+    "Player0
+Take:  (red:5 (1),)
+1873b7ad-4591-4398-824f-87b99cf57fca" -> "Player0
+Take:  (red:8 (1),)
+59ad54c3-fca9-471e-9d2d-1f781152b9e6";
+    "Player0
+Take:  (orange:0 (1),)
+515a2ab3-987b-49b1-a5f6-37c4197afe68" -> "Player0
+Take:  (blue:5 (1),)
+a7af9c31-de6d-4f90-935e-7be3581cbb59";
+    "Player0
+Take:  (orange:0 (1),)
+515a2ab3-987b-49b1-a5f6-37c4197afe68" -> "Player0
+Take:  (red:9 (1),)
+8675c8ed-f1d5-45d8-a61e-9cfd738364d7";
+}
