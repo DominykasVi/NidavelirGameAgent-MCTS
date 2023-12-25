@@ -13,6 +13,8 @@ import time
 from timeit import default_timer as timer
 import matplotlib.pyplot as plt
 from threading import Thread
+from multiprocessing import Process, Manager
+
 
 
 def print_game_results(players, colors):
@@ -66,8 +68,29 @@ def run_game_threaded(game_simulation, results, index):
     p0, p1 = game_simulation.run_game()
     results[index] = (p0, p1)
 
+def create_game(NUMBER_OF_PLAYERS, mode):
+    card_deck = CardDeck(NUMBER_OF_PLAYERS, True, '2')
+    bank = Bank(NUMBER_OF_PLAYERS)
+    playing_board = PlayingBoard(card_deck)
+    # colors = ['red', 'green', 'orange', 'violet', 'blue']
+
+    #here we can define random, MCTS or human players
+    players:List[Player] = []
+    players.append(MCTSPlayer(0, None, bank))
+    players.append(RandomPlayer(1, None, bank))
+    game_state = GameState(playing_board=playing_board,
+                        players=players,
+                        card_deck=card_deck,
+                        bank=bank, 
+                        turn=0,
+                        slot_index=0,
+                        slots=[],
+                        mode=mode)
+    game_simulation = Game(game_state, True)
+    return game_simulation
+
 if __name__ == "__main__":
-    turn = 0
+    # turn = 0
     NUMBER_OF_PLAYERS = 2
     # card_deck = CardDeck(NUMBER_OF_PLAYERS, True, '2')
     # bank = Bank(NUMBER_OF_PLAYERS)
@@ -93,7 +116,7 @@ if __name__ == "__main__":
     # mode 0 - run everything
     # mode 1 - make breaks, print turns
     # mode 2 - dont make breaks, print turns
-    mode = 0
+    # mode = 0
 
     
     # game_simulation = Game( players, playing_board, mode, True)
@@ -122,38 +145,34 @@ if __name__ == "__main__":
     # exit()
     ###########################################################
     # print(players)
-    results = []
+    num_simulations = 50
+    manager = Manager()
+    results = manager.list([None] * num_simulations)
+    processes = []
+
     start = timer()
-
-    threads = [None] * 10
-    results = [None] * 10
-    for i in range(10):
+    for i in range(num_simulations):
         print(f"SIMULATION {i}")
-        card_deck = CardDeck(NUMBER_OF_PLAYERS, True, '2')
-        bank = Bank(NUMBER_OF_PLAYERS)
-        playing_board = PlayingBoard(card_deck)
-        colors = ['red', 'green', 'orange', 'violet', 'blue']
+        game_simulation = create_game(NUMBER_OF_PLAYERS, 0)  # Replace with your actual game simulation class
+        process = Process(target=run_game_threaded, args=(game_simulation, results, i))
+        processes.append(process)
+        process.start()
 
-        #here we can define random, MCTS or human players
-        players:List[Player] = []
-        players.append(MCTSPlayer(0, None, bank))
-        players.append(RandomPlayer(1, None, bank))
-        game_state = GameState(playing_board=playing_board,
-                            players=players,
-                            card_deck=card_deck,
-                            bank=bank, 
-                            turn=0,
-                            slot_index=0,
-                            slots=[],
-                            mode=mode)
-        game_simulation = Game(game_state, True)
-        for i in range(len(threads)):
-            threads[i] = Thread(target=run_game_threaded, args=(game_simulation, results, i))
-            threads[i].start()
-        # p0, p1 = game_simulation.run_game()
-        # results.append((p0, p1))
-    for i in range(len(threads)):
-        threads[i].join()
+    for process in processes:
+        process.join()
+    # threads = [None] * 10
+    # results = [None] * 10
+    # for i in range(10):
+    #     
+
+    #     for i in range(len(threads)):
+           
+    #         threads[i] = Thread(target=run_game_threaded, args=(game_simulation, results, i))
+    #         threads[i].start()
+    #     # p0, p1 = game_simulation.run_game()
+    #     # results.append((p0, p1))
+    # for i in range(len(threads)):
+    #     threads[i].join()
 
     end = timer()
     interpret_data(results)

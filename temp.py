@@ -26,7 +26,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # Example data
-with open('100_200_MCTS.txt', 'r') as file:
+with open('100_50_MCTS.txt', 'r') as file:
     results = [tuple(map(int, line.strip().split(' '))) for line in file]
 
 # print(tuples_list_read)
@@ -58,7 +58,7 @@ plt.ylabel('Score')
 plt.title('Scores of Players in Each Game')
 plt.xticks(game_numbers)
 plt.legend()
-plt.savefig('100_200_MCTS.png')
+plt.savefig('100_50_MCTS.png')
 plt.close()
 
 print("Plot saved to '100_200_MCTS.png'")
