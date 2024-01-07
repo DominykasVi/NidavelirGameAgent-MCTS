@@ -1,58 +1,633 @@
 digraph tree {
     "Root
-6184a621-9e08-4be0-b668-e06f4bef74eb";
+f2add3e3-eedf-4d8f-aa8c-c945bb0f1c16";
     "Player0
-Take:  (red:5 (1),)
-1873b7ad-4591-4398-824f-87b99cf57fca";
+Take:  orange:1 (2)
+08765b83-d1e1-47d4-8f0e-05f63f7c79f9";
+    "Player1
+Take:  red:6 (2)
+243cbe3a-cbc0-4de8-a736-6681a4115fd1";
+    "
+ddb13ceb-a5d5-4acd-8c8d-fda11c5b386d";
+    "
+1fe39660-6311-4076-8560-c685913236a6";
+    "
+a9b94c55-9268-4356-945f-e6ab3d714373";
+    "
+cb7018d1-08d0-4388-8958-f8c02d78984d";
+    "
+119a1b24-20ba-456f-b7d7-2b66ddbf2085";
+    "
+34ea340f-ca0a-4919-9a29-e141c936f1db";
+    "
+5c0ebf8e-9032-47dc-9271-375ff029ef55";
+    "Player1
+Take:  coin:5 (2), increase 2
+9d3f0641-450d-4f0c-9cac-4aa98fb4ac78";
+    "
+db17dcf2-6dfb-4555-8383-f7f0783bfe11";
+    "
+c54ca5c1-17ff-4b23-8b2e-4410b1fbc487";
+    "
+709629e0-6876-43c9-b551-a3e636fe2c46";
+    "
+1c99d25b-9dda-4a4b-bd72-80171f499794";
+    "
+27e8b6bd-b851-44f6-8bf8-af424e11fd21";
+    "
+a9f5b1fd-f1db-45c2-a74b-e090f8470d2b";
+    "
+8b3f3d6a-f3ab-4494-9256-739e146a602c";
+    "Player1
+Take:  coin:5 (2), increase 3
+586cbd12-4bb1-4db2-b2d0-ec42ebdd1fa8";
+    "
+edbee07d-29d2-4e8d-b367-3a5e688aff8e";
+    "
+3999039a-b973-4724-85b6-0e4ba1913897";
+    "
+e42da126-ba30-4796-a2a1-ad2fc8d285a4";
+    "
+12a8fb94-8593-4507-9a27-458ddbad3cf9";
+    "
+230eb340-a8e2-4b08-ab0c-2321faf3fd99";
+    "
+d19af02d-f43f-4059-afc1-dd783f209285";
+    "
+1100657f-6bd4-41d5-8aa6-2a0f5468dad7";
+    "
+5dd88f02-2e03-4710-a637-25a024d68a96";
+    "
+c8399bde-c58a-4340-ae0e-f033ce5c40d5";
+    "Player1
+Take:  coin:5 (2), increase 4
+0288d1dd-e2e2-4d62-8d3d-9cb9f3a01c59";
+    "
+0f48fc07-9a24-4f02-8ead-7cbaf359ac9d";
+    "
+ef81e980-d74b-44b5-b54f-95f35edca265";
+    "
+7e9b8b55-c13b-41f9-9b5c-ec17b3a93ed5";
+    "
+cd15c6f0-6dd7-4598-9b2d-4863c63b566b";
+    "
+0be30f00-5be3-4ec2-9201-39ec1c8de722";
+    "
+dfdeb434-3915-4ff3-ac1d-d50db0befef7";
+    "
+2781f944-a198-4a61-b5ce-959a61d83ece";
+    "
+850f660f-fbd2-4bb4-a4f4-c0520e4cf6dd";
+    "Player1
+Take:  coin:5 (2), increase 15
+8974bd3d-8785-45ef-a87d-1d38c1d70629";
+    "
+5d495cf2-69c9-4042-aa88-318a2121968a";
+    "
+97e0396a-46ac-4242-9776-5d7402142781";
+    "
+f1710688-187b-410e-8b1d-800029a81360";
+    "
+984f88b9-78f0-41aa-aa29-06e3d2df2e35";
+    "
+7cf84bd9-0ad2-411e-8a6e-8de7657bf097";
+    "
+ae2825f0-4b28-48f5-9895-7c4388ca0c60";
+    "
+9c4849e4-f257-4d3a-bf2d-1ddd9636e59d";
+    "
+22b4c47c-cf54-4f65-9d12-78c3785977b5";
+    "
+d858a009-51e2-4df6-a747-272a80c645f0";
     "Player0
-Take:  (blue:5 (1),)
-c947b212-f29f-4055-b0bb-c657ebf12231";
+Take:  red:6 (2)
+98376454-929f-4718-860f-ad621eae905f";
+    "Player1
+Take:  orange:1 (2)
+4baf4fcb-b9c1-4b7c-9e76-5ba52170a43b";
+    "
+9f02b538-18c9-4b79-a38d-e12855cebf54";
+    "
+bab38fd8-cd97-4a11-bbcc-29cf60c6cf5c";
+    "
+6aa99455-6233-4340-b863-d73b73784221";
+    "Player1
+Take:  coin:5 (2), increase 2
+dd835d3a-cad1-4947-8ebe-88cdfea2de35";
+    "
+1c986c76-e893-460f-9576-e3c7ce0e070c";
+    "
+56a1854c-1167-4b28-ba80-9082a957f9eb";
+    "
+989ab1b8-acbc-41b6-a334-1728758bd04d";
+    "Player1
+Take:  coin:5 (2), increase 3
+be87b6e3-2222-4298-abc0-9681a1392f44";
+    "
+11b595ea-51fc-487e-8820-1bfcd3312236";
+    "
+e012c75e-b741-4be6-b02f-bc9cf62898f0";
+    "
+52851569-0276-4c0e-af00-59555bf6f301";
+    "Player1
+Take:  coin:5 (2), increase 4
+16698988-a445-4ff7-b416-2080b2a6190c";
+    "
+d03e0670-681b-4e86-a8e9-f20b08a33f32";
+    "
+607563c3-6046-4051-8566-f1caf1e8cc69";
+    "
+8c11e2ca-1598-4305-a819-c3a974afa1af";
+    "Player1
+Take:  coin:5 (2), increase 15
+4136598a-f5fa-49a3-b1e7-e025526abf93";
+    "
+aebc1b6c-7bfb-45f1-b4d3-3249fd30a564";
+    "
+c38292da-8652-4463-b9d2-4e9c40f6ccdf";
+    "
+f4572ca7-73d3-44a7-90b8-04dedd9bd930";
+    "
+ef2bc60c-9a81-4db1-9da9-a038eb4494b6";
     "Player0
-Take:  (red:9 (1),)
-53dfe4a9-6eb9-4aad-ac5f-27e04e25ea7e";
+Take:  coin:5 (2), increase 4
+47edcd16-f0ff-4cb2-bcf7-8045bc61f621";
+    "Player1
+Take:  orange:1 (2)
+7749b9dc-65ca-4b1e-aa59-37aeadcc738d";
+    "
+0a6eb7c2-4460-4562-a606-1b589b2a7f3a";
+    "
+54e36a1f-f998-4b63-896c-9fd1f2cabcf2";
+    "
+4e3b6c0f-d488-4bbf-a36b-24b23c0f7103";
+    "Player1
+Take:  red:6 (2)
+c94b4994-d6bd-41ae-a57e-5bbef889e428";
+    "
+e3882034-a6a4-4cfd-89b2-8a5e0d93b8bc";
+    "
+66a12901-0356-4c1a-83c8-a4b24a8231a9";
+    "
+494593ac-f2f1-48a9-8122-0f662bb558f4";
     "Player0
-Take:  (red:8 (1),)
-59ad54c3-fca9-471e-9d2d-1f781152b9e6";
+Take:  coin:5 (2), increase 10
+dada8871-ecb3-4f07-a48b-7ad39313bd6e";
+    "Player1
+Take:  orange:1 (2)
+55159db7-8443-40b5-b983-fdeae646ae6b";
+    "
+f55404ac-5e18-477d-a9ff-abfeef57a3aa";
+    "
+45a66fb0-8fa0-45cb-ad25-1b071aef565e";
+    "
+02968250-04ab-4632-addd-c289e51fcf82";
+    "
+08279ef5-a741-4b22-8ccf-7c89da9c50e2";
+    "Player1
+Take:  red:6 (2)
+4932deae-67fa-4331-a5cb-7ff460f5923f";
+    "
+89ab056a-58ec-40d3-8c94-5128debc7293";
+    "
+1acc0a61-3e0c-4bd6-a7b9-43ab0fe87300";
+    "
+5a5bbbbe-cb6b-4b59-94cd-f35259d25896";
+    "
+adcb6d42-07b2-4be5-92ee-f0b17f61e6cc";
     "Player0
-Take:  (orange:0 (1),)
-515a2ab3-987b-49b1-a5f6-37c4197afe68";
+Take:  coin:5 (2), increase 10
+1346a268-5afb-4886-bf21-0aeeeb45bf01";
+    "Player1
+Take:  orange:1 (2)
+86890f3b-1b04-445b-9486-2ad4375815bf";
+    "
+8789849f-56cc-4f76-8243-619fca1ac379";
+    "
+b175c35d-1ff2-48d0-b000-515254f40889";
+    "
+f124fbed-a12d-440d-afce-caffdd764414";
+    "
+c7a3ee25-04be-4617-b8af-83a02dc626c9";
+    "Player1
+Take:  red:6 (2)
+bbdc64bf-6f83-4f65-8951-f1eace4b6935";
+    "
+27b9fd08-6812-4a15-a3c7-a44efdcd9baf";
+    "
+eaef143a-2f48-4a62-b874-c7ac5f954cf8";
+    "
+10a03ff8-d25e-4628-8c75-7b544aa381a2";
+    "
+58011aaa-930d-4f2b-af40-5d3ea8cb67d1";
     "Player0
-Take:  (blue:5 (1),)
-a7af9c31-de6d-4f90-935e-7be3581cbb59";
-    "Player0
-Take:  (red:9 (1),)
-8675c8ed-f1d5-45d8-a61e-9cfd738364d7";
+Take:  coin:5 (2), increase 12
+29a58ddd-57f5-4dfc-8b8d-bd652f7e9e44";
+    "Player1
+Take:  orange:1 (2)
+4fff6b65-8e94-4e87-bfb5-164f87b5176a";
+    "
+cc058cc2-5ca7-4361-909d-031bac9f33b2";
+    "
+5b73e95c-ae59-451a-b947-c42a17752960";
+    "
+2ec48a4f-76c7-4e08-a737-b9f3edc245fe";
+    "
+1023f2d4-6d1d-4450-89cb-be2ef387c556";
+    "Player1
+Take:  red:6 (2)
+18e16acd-6633-437c-80cd-34b51af4236c";
+    "
+fa4b999e-d3bb-427c-bcc4-15523bb3a76a";
+    "
+efd3f03b-9ddc-4567-9b33-653105ea7fa8";
+    "
+eb007455-6284-4859-96f1-1ff0cbb3a3f5";
     "Root
-6184a621-9e08-4be0-b668-e06f4bef74eb" -> "Player0
-Take:  (red:5 (1),)
-1873b7ad-4591-4398-824f-87b99cf57fca";
+f2add3e3-eedf-4d8f-aa8c-c945bb0f1c16" -> "Player0
+Take:  orange:1 (2)
+08765b83-d1e1-47d4-8f0e-05f63f7c79f9";
     "Root
-6184a621-9e08-4be0-b668-e06f4bef74eb" -> "Player0
-Take:  (orange:0 (1),)
-515a2ab3-987b-49b1-a5f6-37c4197afe68";
+f2add3e3-eedf-4d8f-aa8c-c945bb0f1c16" -> "Player0
+Take:  red:6 (2)
+98376454-929f-4718-860f-ad621eae905f";
+    "Root
+f2add3e3-eedf-4d8f-aa8c-c945bb0f1c16" -> "Player0
+Take:  coin:5 (2), increase 4
+47edcd16-f0ff-4cb2-bcf7-8045bc61f621";
+    "Root
+f2add3e3-eedf-4d8f-aa8c-c945bb0f1c16" -> "Player0
+Take:  coin:5 (2), increase 10
+dada8871-ecb3-4f07-a48b-7ad39313bd6e";
+    "Root
+f2add3e3-eedf-4d8f-aa8c-c945bb0f1c16" -> "Player0
+Take:  coin:5 (2), increase 10
+1346a268-5afb-4886-bf21-0aeeeb45bf01";
+    "Root
+f2add3e3-eedf-4d8f-aa8c-c945bb0f1c16" -> "Player0
+Take:  coin:5 (2), increase 12
+29a58ddd-57f5-4dfc-8b8d-bd652f7e9e44";
     "Player0
-Take:  (red:5 (1),)
-1873b7ad-4591-4398-824f-87b99cf57fca" -> "Player0
-Take:  (blue:5 (1),)
-c947b212-f29f-4055-b0bb-c657ebf12231";
+Take:  orange:1 (2)
+08765b83-d1e1-47d4-8f0e-05f63f7c79f9" -> "Player1
+Take:  red:6 (2)
+243cbe3a-cbc0-4de8-a736-6681a4115fd1";
     "Player0
-Take:  (red:5 (1),)
-1873b7ad-4591-4398-824f-87b99cf57fca" -> "Player0
-Take:  (red:9 (1),)
-53dfe4a9-6eb9-4aad-ac5f-27e04e25ea7e";
+Take:  orange:1 (2)
+08765b83-d1e1-47d4-8f0e-05f63f7c79f9" -> "Player1
+Take:  coin:5 (2), increase 2
+9d3f0641-450d-4f0c-9cac-4aa98fb4ac78";
     "Player0
-Take:  (red:5 (1),)
-1873b7ad-4591-4398-824f-87b99cf57fca" -> "Player0
-Take:  (red:8 (1),)
-59ad54c3-fca9-471e-9d2d-1f781152b9e6";
+Take:  orange:1 (2)
+08765b83-d1e1-47d4-8f0e-05f63f7c79f9" -> "Player1
+Take:  coin:5 (2), increase 3
+586cbd12-4bb1-4db2-b2d0-ec42ebdd1fa8";
     "Player0
-Take:  (orange:0 (1),)
-515a2ab3-987b-49b1-a5f6-37c4197afe68" -> "Player0
-Take:  (blue:5 (1),)
-a7af9c31-de6d-4f90-935e-7be3581cbb59";
+Take:  orange:1 (2)
+08765b83-d1e1-47d4-8f0e-05f63f7c79f9" -> "Player1
+Take:  coin:5 (2), increase 4
+0288d1dd-e2e2-4d62-8d3d-9cb9f3a01c59";
     "Player0
-Take:  (orange:0 (1),)
-515a2ab3-987b-49b1-a5f6-37c4197afe68" -> "Player0
-Take:  (red:9 (1),)
-8675c8ed-f1d5-45d8-a61e-9cfd738364d7";
+Take:  orange:1 (2)
+08765b83-d1e1-47d4-8f0e-05f63f7c79f9" -> "Player1
+Take:  coin:5 (2), increase 15
+8974bd3d-8785-45ef-a87d-1d38c1d70629";
+    "Player1
+Take:  red:6 (2)
+243cbe3a-cbc0-4de8-a736-6681a4115fd1" -> "
+ddb13ceb-a5d5-4acd-8c8d-fda11c5b386d";
+    "
+ddb13ceb-a5d5-4acd-8c8d-fda11c5b386d" -> "
+1fe39660-6311-4076-8560-c685913236a6";
+    "
+1fe39660-6311-4076-8560-c685913236a6" -> "
+a9b94c55-9268-4356-945f-e6ab3d714373";
+    "
+a9b94c55-9268-4356-945f-e6ab3d714373" -> "
+cb7018d1-08d0-4388-8958-f8c02d78984d";
+    "
+cb7018d1-08d0-4388-8958-f8c02d78984d" -> "
+119a1b24-20ba-456f-b7d7-2b66ddbf2085";
+    "
+119a1b24-20ba-456f-b7d7-2b66ddbf2085" -> "
+34ea340f-ca0a-4919-9a29-e141c936f1db";
+    "
+34ea340f-ca0a-4919-9a29-e141c936f1db" -> "
+5c0ebf8e-9032-47dc-9271-375ff029ef55";
+    "Player1
+Take:  coin:5 (2), increase 2
+9d3f0641-450d-4f0c-9cac-4aa98fb4ac78" -> "
+db17dcf2-6dfb-4555-8383-f7f0783bfe11";
+    "
+db17dcf2-6dfb-4555-8383-f7f0783bfe11" -> "
+c54ca5c1-17ff-4b23-8b2e-4410b1fbc487";
+    "
+c54ca5c1-17ff-4b23-8b2e-4410b1fbc487" -> "
+709629e0-6876-43c9-b551-a3e636fe2c46";
+    "
+709629e0-6876-43c9-b551-a3e636fe2c46" -> "
+1c99d25b-9dda-4a4b-bd72-80171f499794";
+    "
+1c99d25b-9dda-4a4b-bd72-80171f499794" -> "
+27e8b6bd-b851-44f6-8bf8-af424e11fd21";
+    "
+27e8b6bd-b851-44f6-8bf8-af424e11fd21" -> "
+a9f5b1fd-f1db-45c2-a74b-e090f8470d2b";
+    "
+a9f5b1fd-f1db-45c2-a74b-e090f8470d2b" -> "
+8b3f3d6a-f3ab-4494-9256-739e146a602c";
+    "Player1
+Take:  coin:5 (2), increase 3
+586cbd12-4bb1-4db2-b2d0-ec42ebdd1fa8" -> "
+edbee07d-29d2-4e8d-b367-3a5e688aff8e";
+    "
+edbee07d-29d2-4e8d-b367-3a5e688aff8e" -> "
+3999039a-b973-4724-85b6-0e4ba1913897";
+    "
+3999039a-b973-4724-85b6-0e4ba1913897" -> "
+e42da126-ba30-4796-a2a1-ad2fc8d285a4";
+    "
+e42da126-ba30-4796-a2a1-ad2fc8d285a4" -> "
+12a8fb94-8593-4507-9a27-458ddbad3cf9";
+    "
+12a8fb94-8593-4507-9a27-458ddbad3cf9" -> "
+230eb340-a8e2-4b08-ab0c-2321faf3fd99";
+    "
+230eb340-a8e2-4b08-ab0c-2321faf3fd99" -> "
+d19af02d-f43f-4059-afc1-dd783f209285";
+    "
+d19af02d-f43f-4059-afc1-dd783f209285" -> "
+1100657f-6bd4-41d5-8aa6-2a0f5468dad7";
+    "
+1100657f-6bd4-41d5-8aa6-2a0f5468dad7" -> "
+5dd88f02-2e03-4710-a637-25a024d68a96";
+    "
+5dd88f02-2e03-4710-a637-25a024d68a96" -> "
+c8399bde-c58a-4340-ae0e-f033ce5c40d5";
+    "Player1
+Take:  coin:5 (2), increase 4
+0288d1dd-e2e2-4d62-8d3d-9cb9f3a01c59" -> "
+0f48fc07-9a24-4f02-8ead-7cbaf359ac9d";
+    "
+0f48fc07-9a24-4f02-8ead-7cbaf359ac9d" -> "
+ef81e980-d74b-44b5-b54f-95f35edca265";
+    "
+ef81e980-d74b-44b5-b54f-95f35edca265" -> "
+7e9b8b55-c13b-41f9-9b5c-ec17b3a93ed5";
+    "
+7e9b8b55-c13b-41f9-9b5c-ec17b3a93ed5" -> "
+cd15c6f0-6dd7-4598-9b2d-4863c63b566b";
+    "
+cd15c6f0-6dd7-4598-9b2d-4863c63b566b" -> "
+0be30f00-5be3-4ec2-9201-39ec1c8de722";
+    "
+0be30f00-5be3-4ec2-9201-39ec1c8de722" -> "
+dfdeb434-3915-4ff3-ac1d-d50db0befef7";
+    "
+dfdeb434-3915-4ff3-ac1d-d50db0befef7" -> "
+2781f944-a198-4a61-b5ce-959a61d83ece";
+    "
+2781f944-a198-4a61-b5ce-959a61d83ece" -> "
+850f660f-fbd2-4bb4-a4f4-c0520e4cf6dd";
+    "Player1
+Take:  coin:5 (2), increase 15
+8974bd3d-8785-45ef-a87d-1d38c1d70629" -> "
+5d495cf2-69c9-4042-aa88-318a2121968a";
+    "
+5d495cf2-69c9-4042-aa88-318a2121968a" -> "
+97e0396a-46ac-4242-9776-5d7402142781";
+    "
+97e0396a-46ac-4242-9776-5d7402142781" -> "
+f1710688-187b-410e-8b1d-800029a81360";
+    "
+f1710688-187b-410e-8b1d-800029a81360" -> "
+984f88b9-78f0-41aa-aa29-06e3d2df2e35";
+    "
+984f88b9-78f0-41aa-aa29-06e3d2df2e35" -> "
+7cf84bd9-0ad2-411e-8a6e-8de7657bf097";
+    "
+7cf84bd9-0ad2-411e-8a6e-8de7657bf097" -> "
+ae2825f0-4b28-48f5-9895-7c4388ca0c60";
+    "
+ae2825f0-4b28-48f5-9895-7c4388ca0c60" -> "
+9c4849e4-f257-4d3a-bf2d-1ddd9636e59d";
+    "
+9c4849e4-f257-4d3a-bf2d-1ddd9636e59d" -> "
+22b4c47c-cf54-4f65-9d12-78c3785977b5";
+    "
+22b4c47c-cf54-4f65-9d12-78c3785977b5" -> "
+d858a009-51e2-4df6-a747-272a80c645f0";
+    "Player0
+Take:  red:6 (2)
+98376454-929f-4718-860f-ad621eae905f" -> "Player1
+Take:  orange:1 (2)
+4baf4fcb-b9c1-4b7c-9e76-5ba52170a43b";
+    "Player0
+Take:  red:6 (2)
+98376454-929f-4718-860f-ad621eae905f" -> "Player1
+Take:  coin:5 (2), increase 2
+dd835d3a-cad1-4947-8ebe-88cdfea2de35";
+    "Player0
+Take:  red:6 (2)
+98376454-929f-4718-860f-ad621eae905f" -> "Player1
+Take:  coin:5 (2), increase 3
+be87b6e3-2222-4298-abc0-9681a1392f44";
+    "Player0
+Take:  red:6 (2)
+98376454-929f-4718-860f-ad621eae905f" -> "Player1
+Take:  coin:5 (2), increase 4
+16698988-a445-4ff7-b416-2080b2a6190c";
+    "Player0
+Take:  red:6 (2)
+98376454-929f-4718-860f-ad621eae905f" -> "Player1
+Take:  coin:5 (2), increase 15
+4136598a-f5fa-49a3-b1e7-e025526abf93";
+    "Player1
+Take:  orange:1 (2)
+4baf4fcb-b9c1-4b7c-9e76-5ba52170a43b" -> "
+9f02b538-18c9-4b79-a38d-e12855cebf54";
+    "
+9f02b538-18c9-4b79-a38d-e12855cebf54" -> "
+bab38fd8-cd97-4a11-bbcc-29cf60c6cf5c";
+    "
+bab38fd8-cd97-4a11-bbcc-29cf60c6cf5c" -> "
+6aa99455-6233-4340-b863-d73b73784221";
+    "Player1
+Take:  coin:5 (2), increase 2
+dd835d3a-cad1-4947-8ebe-88cdfea2de35" -> "
+1c986c76-e893-460f-9576-e3c7ce0e070c";
+    "
+1c986c76-e893-460f-9576-e3c7ce0e070c" -> "
+56a1854c-1167-4b28-ba80-9082a957f9eb";
+    "
+56a1854c-1167-4b28-ba80-9082a957f9eb" -> "
+989ab1b8-acbc-41b6-a334-1728758bd04d";
+    "Player1
+Take:  coin:5 (2), increase 3
+be87b6e3-2222-4298-abc0-9681a1392f44" -> "
+11b595ea-51fc-487e-8820-1bfcd3312236";
+    "
+11b595ea-51fc-487e-8820-1bfcd3312236" -> "
+e012c75e-b741-4be6-b02f-bc9cf62898f0";
+    "
+e012c75e-b741-4be6-b02f-bc9cf62898f0" -> "
+52851569-0276-4c0e-af00-59555bf6f301";
+    "Player1
+Take:  coin:5 (2), increase 4
+16698988-a445-4ff7-b416-2080b2a6190c" -> "
+d03e0670-681b-4e86-a8e9-f20b08a33f32";
+    "
+d03e0670-681b-4e86-a8e9-f20b08a33f32" -> "
+607563c3-6046-4051-8566-f1caf1e8cc69";
+    "
+607563c3-6046-4051-8566-f1caf1e8cc69" -> "
+8c11e2ca-1598-4305-a819-c3a974afa1af";
+    "Player1
+Take:  coin:5 (2), increase 15
+4136598a-f5fa-49a3-b1e7-e025526abf93" -> "
+aebc1b6c-7bfb-45f1-b4d3-3249fd30a564";
+    "
+aebc1b6c-7bfb-45f1-b4d3-3249fd30a564" -> "
+c38292da-8652-4463-b9d2-4e9c40f6ccdf";
+    "
+c38292da-8652-4463-b9d2-4e9c40f6ccdf" -> "
+f4572ca7-73d3-44a7-90b8-04dedd9bd930";
+    "
+f4572ca7-73d3-44a7-90b8-04dedd9bd930" -> "
+ef2bc60c-9a81-4db1-9da9-a038eb4494b6";
+    "Player0
+Take:  coin:5 (2), increase 4
+47edcd16-f0ff-4cb2-bcf7-8045bc61f621" -> "Player1
+Take:  orange:1 (2)
+7749b9dc-65ca-4b1e-aa59-37aeadcc738d";
+    "Player0
+Take:  coin:5 (2), increase 4
+47edcd16-f0ff-4cb2-bcf7-8045bc61f621" -> "Player1
+Take:  red:6 (2)
+c94b4994-d6bd-41ae-a57e-5bbef889e428";
+    "Player1
+Take:  orange:1 (2)
+7749b9dc-65ca-4b1e-aa59-37aeadcc738d" -> "
+0a6eb7c2-4460-4562-a606-1b589b2a7f3a";
+    "
+0a6eb7c2-4460-4562-a606-1b589b2a7f3a" -> "
+54e36a1f-f998-4b63-896c-9fd1f2cabcf2";
+    "
+54e36a1f-f998-4b63-896c-9fd1f2cabcf2" -> "
+4e3b6c0f-d488-4bbf-a36b-24b23c0f7103";
+    "Player1
+Take:  red:6 (2)
+c94b4994-d6bd-41ae-a57e-5bbef889e428" -> "
+e3882034-a6a4-4cfd-89b2-8a5e0d93b8bc";
+    "
+e3882034-a6a4-4cfd-89b2-8a5e0d93b8bc" -> "
+66a12901-0356-4c1a-83c8-a4b24a8231a9";
+    "
+66a12901-0356-4c1a-83c8-a4b24a8231a9" -> "
+494593ac-f2f1-48a9-8122-0f662bb558f4";
+    "Player0
+Take:  coin:5 (2), increase 10
+dada8871-ecb3-4f07-a48b-7ad39313bd6e" -> "Player1
+Take:  orange:1 (2)
+55159db7-8443-40b5-b983-fdeae646ae6b";
+    "Player0
+Take:  coin:5 (2), increase 10
+dada8871-ecb3-4f07-a48b-7ad39313bd6e" -> "Player1
+Take:  red:6 (2)
+4932deae-67fa-4331-a5cb-7ff460f5923f";
+    "Player1
+Take:  orange:1 (2)
+55159db7-8443-40b5-b983-fdeae646ae6b" -> "
+f55404ac-5e18-477d-a9ff-abfeef57a3aa";
+    "
+f55404ac-5e18-477d-a9ff-abfeef57a3aa" -> "
+45a66fb0-8fa0-45cb-ad25-1b071aef565e";
+    "
+45a66fb0-8fa0-45cb-ad25-1b071aef565e" -> "
+02968250-04ab-4632-addd-c289e51fcf82";
+    "
+02968250-04ab-4632-addd-c289e51fcf82" -> "
+08279ef5-a741-4b22-8ccf-7c89da9c50e2";
+    "Player1
+Take:  red:6 (2)
+4932deae-67fa-4331-a5cb-7ff460f5923f" -> "
+89ab056a-58ec-40d3-8c94-5128debc7293";
+    "
+89ab056a-58ec-40d3-8c94-5128debc7293" -> "
+1acc0a61-3e0c-4bd6-a7b9-43ab0fe87300";
+    "
+1acc0a61-3e0c-4bd6-a7b9-43ab0fe87300" -> "
+5a5bbbbe-cb6b-4b59-94cd-f35259d25896";
+    "
+5a5bbbbe-cb6b-4b59-94cd-f35259d25896" -> "
+adcb6d42-07b2-4be5-92ee-f0b17f61e6cc";
+    "Player0
+Take:  coin:5 (2), increase 10
+1346a268-5afb-4886-bf21-0aeeeb45bf01" -> "Player1
+Take:  orange:1 (2)
+86890f3b-1b04-445b-9486-2ad4375815bf";
+    "Player0
+Take:  coin:5 (2), increase 10
+1346a268-5afb-4886-bf21-0aeeeb45bf01" -> "Player1
+Take:  red:6 (2)
+bbdc64bf-6f83-4f65-8951-f1eace4b6935";
+    "Player1
+Take:  orange:1 (2)
+86890f3b-1b04-445b-9486-2ad4375815bf" -> "
+8789849f-56cc-4f76-8243-619fca1ac379";
+    "
+8789849f-56cc-4f76-8243-619fca1ac379" -> "
+b175c35d-1ff2-48d0-b000-515254f40889";
+    "
+b175c35d-1ff2-48d0-b000-515254f40889" -> "
+f124fbed-a12d-440d-afce-caffdd764414";
+    "
+f124fbed-a12d-440d-afce-caffdd764414" -> "
+c7a3ee25-04be-4617-b8af-83a02dc626c9";
+    "Player1
+Take:  red:6 (2)
+bbdc64bf-6f83-4f65-8951-f1eace4b6935" -> "
+27b9fd08-6812-4a15-a3c7-a44efdcd9baf";
+    "
+27b9fd08-6812-4a15-a3c7-a44efdcd9baf" -> "
+eaef143a-2f48-4a62-b874-c7ac5f954cf8";
+    "
+eaef143a-2f48-4a62-b874-c7ac5f954cf8" -> "
+10a03ff8-d25e-4628-8c75-7b544aa381a2";
+    "
+10a03ff8-d25e-4628-8c75-7b544aa381a2" -> "
+58011aaa-930d-4f2b-af40-5d3ea8cb67d1";
+    "Player0
+Take:  coin:5 (2), increase 12
+29a58ddd-57f5-4dfc-8b8d-bd652f7e9e44" -> "Player1
+Take:  orange:1 (2)
+4fff6b65-8e94-4e87-bfb5-164f87b5176a";
+    "Player0
+Take:  coin:5 (2), increase 12
+29a58ddd-57f5-4dfc-8b8d-bd652f7e9e44" -> "Player1
+Take:  red:6 (2)
+18e16acd-6633-437c-80cd-34b51af4236c";
+    "Player1
+Take:  orange:1 (2)
+4fff6b65-8e94-4e87-bfb5-164f87b5176a" -> "
+cc058cc2-5ca7-4361-909d-031bac9f33b2";
+    "
+cc058cc2-5ca7-4361-909d-031bac9f33b2" -> "
+5b73e95c-ae59-451a-b947-c42a17752960";
+    "
+5b73e95c-ae59-451a-b947-c42a17752960" -> "
+2ec48a4f-76c7-4e08-a737-b9f3edc245fe";
+    "
+2ec48a4f-76c7-4e08-a737-b9f3edc245fe" -> "
+1023f2d4-6d1d-4450-89cb-be2ef387c556";
+    "Player1
+Take:  red:6 (2)
+18e16acd-6633-437c-80cd-34b51af4236c" -> "
+fa4b999e-d3bb-427c-bcc4-15523bb3a76a";
+    "
+fa4b999e-d3bb-427c-bcc4-15523bb3a76a" -> "
+efd3f03b-9ddc-4567-9b33-653105ea7fa8";
+    "
+efd3f03b-9ddc-4567-9b33-653105ea7fa8" -> "
+eb007455-6284-4859-96f1-1ff0cbb3a3f5";
 }

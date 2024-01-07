@@ -1,6 +1,8 @@
 
+import random
 from typing import List
 from bank import Bank
+from card import Card
 from card_deck import CardDeck
 from coin import Coin
 from game import Game
@@ -14,7 +16,8 @@ from timeit import default_timer as timer
 import matplotlib.pyplot as plt
 from threading import Thread
 from multiprocessing import Process, Manager
-
+import time
+from datetime import datetime
 
 
 def print_game_results(players, colors):
@@ -67,8 +70,9 @@ def interpret_data(results):
 def run_game_threaded(game_simulation, results, index):
     p0, p1 = game_simulation.run_game()
     results[index] = (p0, p1)
+    print(f"SIMULATION {index} FINISHED")
 
-def create_game(NUMBER_OF_PLAYERS, mode):
+def create_game(NUMBER_OF_PLAYERS, mode, c_value, depth):
     card_deck = CardDeck(NUMBER_OF_PLAYERS, True, '2')
     bank = Bank(NUMBER_OF_PLAYERS)
     playing_board = PlayingBoard(card_deck)
@@ -76,8 +80,47 @@ def create_game(NUMBER_OF_PLAYERS, mode):
 
     #here we can define random, MCTS or human players
     players:List[Player] = []
-    players.append(MCTSPlayer(0, None, bank))
+    players.append(MCTSPlayer(0, None, bank, c_value=c_value, depth=depth))
     players.append(RandomPlayer(1, None, bank))
+    game_state = GameState(playing_board=playing_board,
+                        players=players,
+                        card_deck=card_deck,
+                        bank=bank, 
+                        turn=0,
+                        slot_index=0,
+                        slots=[],
+                        mode=mode)
+    give_players_crystals(game_state.players)
+    game_simulation = Game(game_state, True)
+    return game_simulation
+
+def get_crystals(NUMBER_OF_PLAYERS):
+        if NUMBER_OF_PLAYERS == 2:
+            crystals = [4, 5]
+        else:
+            crystals = [1, 2, 3, 4, 5]
+        return crystals
+
+def give_players_crystals(players):
+    number_of_players = len(players)
+    crystals = get_crystals(number_of_players)
+    for i in range(number_of_players):
+        crystal = random.choice(crystals)
+        crystals.remove(crystal)
+        players[i].set_crystal(crystal)
+
+def create_game_randoms(NUMBER_OF_PLAYERS, mode, c_value, depth):
+    card_deck = CardDeck(NUMBER_OF_PLAYERS, True, '2')
+    bank = Bank(NUMBER_OF_PLAYERS)
+    playing_board = PlayingBoard(card_deck)
+    # colors = ['red', 'green', 'orange', 'violet', 'blue']
+
+    #here we can define random, MCTS or human players
+    players:List[Player] = []
+    players.append(RandomPlayer(0, None, bank))
+    players.append(RandomPlayer(1, None, bank))
+    players[0].crystal = 4
+    players[1].crystal = 5
     game_state = GameState(playing_board=playing_board,
                         players=players,
                         card_deck=card_deck,
@@ -88,6 +131,29 @@ def create_game(NUMBER_OF_PLAYERS, mode):
                         mode=mode)
     game_simulation = Game(game_state, True)
     return game_simulation
+
+def save_scores(results, save_name):
+    with open(f'{save_name}.txt', 'w') as file:
+        for tup in results:
+            try:
+                line = ' '.join(map(str, tup)) + '\n'
+                file.write(line)
+            except:
+                continue
+
+    num_players = len(results[0])
+    total_scores = [0] * num_players
+    num_games = len(results)
+
+    for game in results:
+        for i, score in enumerate(game):
+            total_scores[i] += score
+
+    average_scores = [total / num_games for total in total_scores]
+
+    # Print average scores
+    for i, avg in enumerate(average_scores, 1):
+        print(f"Player {i} average score: {avg}")
 
 if __name__ == "__main__":
     # turn = 0
@@ -145,28 +211,45 @@ if __name__ == "__main__":
     # exit()
     ###########################################################
     # print(players)
-    num_simulations = 50
+    num_simulations = 100
     manager = Manager()
-    results = manager.list([None] * num_simulations)
-    processes = []
+    
+
+    # depths = [50, 100, 150, 200, 250, 300, 350, 400]
+    depths = [100]
+    c_values = [90, 100]
 
     start = timer()
-    for i in range(num_simulations):
-        print(f"SIMULATION {i}")
-        game_simulation = create_game(NUMBER_OF_PLAYERS, 0)  # Replace with your actual game simulation class
-        process = Process(target=run_game_threaded, args=(game_simulation, results, i))
-        processes.append(process)
-        process.start()
+    c_value = 0
+    for c_value in c_values:
+    # while c_value <= 0:
+        for depth in depths:
+            print(depth)
+            processes = []
+            results = manager.list([None] * num_simulations)
 
-    for process in processes:
-        process.join()
+            for i in range(num_simulations):
+                print(f"SIMULATION {i} C:{c_value} D:{depth}")
+                game_simulation = create_game(NUMBER_OF_PLAYERS, 0, c_value=c_value, depth=depth) 
+                process = Process(target=run_game_threaded, args=(game_simulation, results, i))
+                processes.append(process)
+                process.start()
+
+            for process in processes:
+                process.join()
+            now_ts = datetime.now()
+            ts = now_ts.strftime('%Y%m%d_%H%M%S')
+            save_scores(results=results, save_name=f'Results\\raw\\{ts}_{c_value}_{depth}')
+        c_value += 0.1
     # threads = [None] * 10
     # results = [None] * 10
     # for i in range(10):
     #     
 
     #     for i in range(len(threads)):
-           
+    # game_simulation = create_game(NUMBER_OF_PLAYERS, 2)
+    # p0, p1 = game_simulation.run_game()
+    # results[0] = (p0, p1)
     #         threads[i] = Thread(target=run_game_threaded, args=(game_simulation, results, i))
     #         threads[i].start()
     #     # p0, p1 = game_simulation.run_game()
@@ -175,7 +258,7 @@ if __name__ == "__main__":
     #     threads[i].join()
 
     end = timer()
-    interpret_data(results)
+    # interpret_data(results)
     # print_game_results(players, colors)
     print(f"Simulation time: {end - start}")
 

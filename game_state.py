@@ -1,5 +1,6 @@
 from copy import deepcopy
 import itertools
+import random
 from typing import List
 from bank import Bank
 from card_deck import CardDeck
@@ -8,7 +9,8 @@ from playing_board import PlayingBoard
 
 
 class GameState():
-    def __init__(self, playing_board:PlayingBoard, players:List[Player], card_deck:CardDeck, bank:Bank, turn:int, slot_index:int, slots, mode:int=0) -> None:
+    def __init__(self, playing_board:PlayingBoard, players:List[Player], card_deck:CardDeck, bank:Bank, turn:int, 
+                 slot_index:int, slots, mode:int=0) -> None:
         self.deck = card_deck
         self.turn = turn
         self.mode = mode
@@ -21,6 +23,8 @@ class GameState():
             self.turn_split = 4
         else:
             self.turn_split = 3
+
+        self.increase_meta_variable = None
 
 
     def __str__(self):
@@ -41,9 +45,14 @@ class GameState():
                          slot_index=deepcopy(self.slot_index),
                          slots=deepcopy(self.slots),
                          mode=self.mode)
-    
+    def shuffle_object(self, some_list):
+        random.shuffle(some_list)
+        return some_list
+
+
     def get_possible_card_choice(self, slot_index:int):
-        choice = itertools.permutations(self.slots[slot_index], 1)
+        random_cards = self.shuffle_object(self.slots[slot_index].copy())
+        choice = itertools.permutations(random_cards, 1)
         return choice
     
     def sort_players_by_crystal(self, players:List[Player]) -> List[Player]:
@@ -91,7 +100,8 @@ class GameState():
         else:
             selection_deck = self.playing_board.card_deck.get_age_two_cards().copy()
             
-        slots = itertools.permutations(selection_deck, 9)
+        random_cards = self.shuffle_object(selection_deck.copy())
+        slots = itertools.permutations(random_cards, 9)
         # slots = self.playing_board.generate_slots(self.turn_split, self.turn+1)
         # print(bets)
         return slots
@@ -99,10 +109,12 @@ class GameState():
     def get_next_state(self, custom_slot_index:int=None):
         # if self.slot_index < 4:
         for idx, player in enumerate(self.players):
-            if len(player.bets) == 0:
+            if player.bet_made == False:
                 # state_copy = self.copy_state()
                 # state_copy.players[idx].bets = self.get_possible_bet(idx)
                 return {'value':self.get_possible_bet(idx), 'type':'bets', 'player_index':idx}
+            elif player.bet_made == True and len(player.bets) < 3:
+                 return {'value':self.get_possible_partial_bet(idx), 'type':'bets', 'player_index':idx}
         # generate new state and increase slot index in the new state
         #TODO: should depend on player count  
         if len(self.slots[self.slot_index]) > 1:
@@ -144,6 +156,17 @@ class GameState():
         #        return self.get_possible_card_choice(self.players[0])
         
     def get_possible_bet(self, index:int):
-        bets = itertools.permutations(self.players[index].coins, 3)
+        random_coins = self.shuffle_object(self.players[index].coins.copy())
+        bets = itertools.permutations(random_coins, 3)
         # print(bets)
         return bets
+    
+            
+    def get_possible_partial_bet(self, index:int):
+        # showed_coins_count = len(self.players[index].bets)
+        # coins_to_be_taken = 3 - showed_coins_count
+        remaining_coins = [coin for coin in self.players[index].coins if coin not in self.players[index].bets]
+        random_remaining_coins = self.shuffle_object(remaining_coins.copy())
+        for permutation in itertools.permutations(random_remaining_coins, 3 - len(self.players[index].bets)):
+        # print(bets)
+            yield self.players[index].bets + list(permutation)

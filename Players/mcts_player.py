@@ -10,15 +10,26 @@ from mcts_simulation import MCTS
 from Players.player import Player
 
 class MCTSPlayer(Player):
-    def __init__(self, index: int, crystal: int, bank_reference: Bank) -> None:
+    def __init__(self, index: int, crystal: int, bank_reference: Bank, c_value, depth) -> None:
         super().__init__(index, crystal, bank_reference)
         self.player_type = 'MCTS'
         self.MCTS = MCTS()
+        self.c_value = c_value
+        self.depth = depth
+        self.coin_to_increase = -1
+        self.action_to_perform = None
 
     def make_bet(self, possible_choices:Dict[int, List[Card]], game_state:GameState, special_case:str=None) -> None:
+        self.action_to_perform = 'Bet'
         game_state_copy = game_state.copy_state()
+
+        for player in game_state_copy.players:
+            if player.index != self.index:
+                game_state_copy.players[player.index].bets = game_state_copy.players[player.index].bets[:game_state_copy.slot_index]
+        # game_state_copy.players[self.index].left_over_coins = []
+
         # possible_bets = list(itertools.permutations(self.coins, 3))
-        initial_coins = deepcopy(game_state.players[1].coins)
+        # initial_coins = deepcopy(game_state.players[1].coins)
         chosen_bets = self.MCTS.run_simulation(game_state=game_state_copy, mcts_player_index=self.index, special_case=special_case)
         #     # pass choices to mcts -> one choice
         #     # super
@@ -30,24 +41,35 @@ class MCTSPlayer(Player):
         # print("MCTS bets:", chosen_bets.players[self.index].bets)
         new_bet = chosen_bets.players[self.index].bets
         super().make_bet(new_bet)
+        self.action_to_perform = None
         # print('hi')
 
     
     def take_card(self, cards_to_choose: List[Card], game_state:GameState, special_case:str=None) -> List[Card]:
         #TODO: random copy
+        self.action_to_perform = 'Take'
         game_state_copy = game_state.copy_state()
+
+        for player in game_state_copy.players:
+            if player.index != self.index:
+                game_state_copy.players[player.index].bets = game_state_copy.players[player.index].bets[:game_state_copy.slot_index]
+
         if special_case is not None:
             special_case = ('distinction_selection', cards_to_choose)
         best_state = self.MCTS.run_simulation(game_state=game_state_copy, mcts_player_index=self.index, special_case=special_case)
 
         best_card = set(best_state.players[self.index].card_deck.cards) - set(self.card_deck.cards)
         best_card = next(iter(best_card))
+        if best_state.increase_meta_variable is not None:
+            self.coin_to_increase = best_state.increase_meta_variable
         return super().take_card(cards_to_choose, best_state.players[self.index].card_deck.cards[best_card])
+       
 
-    def increase_coin(self, value: int):
-        iterator = True
-        while iterator:
-            coin_to_increase = random.choice(self.coins)
-            if coin_to_increase.exchangeable == False:
-                iterator = False
-        super().increase_coin(value, coin_to_increase)
+    def increase_coin(self, value: int, in_bets=None):
+        if self.coin_to_increase == -1:
+            raise("No Coin set")
+        
+        coin_to_be_increased = self.coin_to_increase['coin']
+        in_bets = self.coin_to_increase['in_bets']
+        super().increase_coin(value, coin_to_be_increased, in_bets)
+        self.coin_to_increase = -1

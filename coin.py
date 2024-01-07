@@ -10,3 +10,5 @@ class Coin:
         return f"{self.value}({self.exchangeable})"
     def __eq__(self, __value: object) -> bool:
         return self.value == __value
+    def __hash__(self):
+        return hash((self.value, self.exchangeable))

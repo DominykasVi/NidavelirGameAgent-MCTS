@@ -25,9 +25,9 @@
 
 # 2023-12-24 darbai
 1. Run a lot of iterations and fix bugs (sekmadienis) DONE
-2. Create simulation for next slots (Pirmadienis)
+2. Create simulation for next slots (Pirmadienis) DONE 
 3. Simulaton for picking coins (???)
-2. Algorithm to handle big search spaces (pirmadienis/treciadienis)
+2. Algorithm to handle big search spaces (pirmadienis/treciadienis) STARTED
 3. Optimizing the C value (Ketviratadienis)
 4. Optimizing iteration count (Ketvirtadienis/Penktadienis)
 5. Run tests with highest visited node selection (Penktadienis)

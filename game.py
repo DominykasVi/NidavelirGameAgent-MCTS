@@ -14,21 +14,6 @@ from playing_board import PlayingBoard
 
 
 class Game:
-    def get_crystals(self, NUMBER_OF_PLAYERS):
-        if NUMBER_OF_PLAYERS == 2:
-            crystals = [4, 5]
-        else:
-            crystals = [1, 2, 3, 4, 5]
-        return crystals
-    
-    def give_players_crystals(self, players):
-            number_of_players = len(players)
-            crystals = self.get_crystals(number_of_players)
-            for i in range(number_of_players):
-                crystal = random.choice(crystals)
-                crystals.remove(crystal)
-                players[i].set_crystal(crystal)
-
     def calculate_turn_split(self) -> int:
         if self.NUMBER_OF_PLAYERS < 4:
             return 4
@@ -41,8 +26,8 @@ class Game:
         # SEED = 10
         self.players = game_state.players
         self.NUMBER_OF_PLAYERS = len(self.players)
-        if initialize:
-            self.give_players_crystals(self.players)
+        # if initialize:
+        #     self.give_players_crystals(self.players)
         # random.seed(SEED)#?? ar reikalingas
         self.card_deck = game_state.deck
         self.bank = game_state.bank

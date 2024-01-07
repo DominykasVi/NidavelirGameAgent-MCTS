@@ -39,12 +39,21 @@ class RandomPlayer(Player):
     def take_card(self, cards_to_choose: List[Card], taken_card=None, game_state=None, special_case=None) -> List[Card]:
         if taken_card is None:
             taken_card = random.choice(cards_to_choose)
+        # if taken_card.color == 'coin':
+        #     print('debug')
         return super().take_card(cards_to_choose, taken_card)
         
-    def increase_coin(self, value: int):
+    def increase_coin(self, value: int, coin_to_increase:Coin=None):
         iterator = True
-        while iterator:
-            coin_to_increase = random.choice(self.coins)
-            if coin_to_increase.exchangeable == False:
-                iterator = False
-        super().increase_coin(value, coin_to_increase)
+        if coin_to_increase is None:
+            while iterator:
+                coin_to_increase = random.choice(self.coins)
+                if coin_to_increase.exchangeable == False:
+                    iterator = False
+            if coin_to_increase in self.left_over_coins:
+                in_bets = False
+            elif coin_to_increase in self.bets:
+                in_bets = True
+            else:
+                in_bets = None
+        super().increase_coin(value, coin_to_increase, in_bets)

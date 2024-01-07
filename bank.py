@@ -30,24 +30,27 @@ class Bank:
 
         if coin_value > 25:
             coin_value = 25
-
-        if self.coins[coin_value] > 0:
-            self.coins[coin_value] -= 1
-            self.error_check()
-            return coin_value
-        else:
-            addition = 1
-            while(True):
-                if (coin_value+addition) < 26 and self.coins[(coin_value+addition)] > 0:
-                    self.coins[(coin_value+addition)] -= 1
-                    self.error_check()
-                    return (coin_value+addition)
-                elif (coin_value-addition) > 4 and self.coins[(coin_value-addition)] > 0:
-                    self.coins[(coin_value-addition)] -= 1
-                    self.error_check()
-                    return (coin_value-addition)
-                else:
-                    addition += 1
+        try:
+            if self.coins[coin_value] > 0:
+                self.coins[coin_value] -= 1
+                self.error_check()
+                return coin_value
+            else:
+                addition = 1
+                while(True):
+                    if (coin_value+addition) < 26 and self.coins[(coin_value+addition)] > 0:
+                        self.coins[(coin_value+addition)] -= 1
+                        self.error_check()
+                        return (coin_value+addition)
+                    elif (coin_value-addition) > 4 and self.coins[(coin_value-addition)] > 0:
+                        self.coins[(coin_value-addition)] -= 1
+                        self.error_check()
+                        return (coin_value-addition)
+                    else:
+                        addition += 1
+        except Exception as err:
+            print(err)
+            raise(err)
         # if self.coins[(coin_value+1)] > 0:
         #     self.coins[(coin_value+1)] -= 1
         #     self.error_check()

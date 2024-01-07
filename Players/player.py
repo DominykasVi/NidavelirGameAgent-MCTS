@@ -22,7 +22,7 @@ class Player:
         self.bonus_points = 0
         self.cards_taken = 0
         self.card_taken = False
-
+        self.bet_made = False
         # self.debug = 0
     def __eq__(self, __value:object) -> bool:
         return (self.name == __value.name and self.crystal == __value.crystal)
@@ -46,6 +46,7 @@ class Player:
             coins_copy.remove(bet)
         self.bets = bets
         self.left_over_coins = coins_copy
+        self.bet_made = True
         #TODO: can be removed later 
         try:  
             assert(len(self.bets)+len(self.left_over_coins) == 5)
@@ -62,10 +63,10 @@ class Player:
         self.card_taken = True
         return cards_to_choose, card_to_take
 
-    def add_card(self, card : Card) -> None:
+    def add_card(self, card : Card, in_bets:bool=None) -> None:
         if card.color == 'coin':
             self.card_deck.add_card(card)
-            self.increase_coin(card.value)
+            self.increase_coin(card.value, in_bets)
         else:
             self.card_deck.add_card(card)
             # TODO recruit_hero?
@@ -90,25 +91,29 @@ class Player:
 
     def remove_bets(self) -> None:
         self.bets.clear()
+        self.bet_made = False
 
-    def increase_coin(self, value: int, coin_to_increase:Coin) -> None:
-        if coin_to_increase.exchangeable == True:
-            raise Exception("Cannot increase an exchange coin")
+    def increase_coin(self, value: int, coin_to_increase:Coin, in_bets:bool) -> None:
+        try:
+            if coin_to_increase.exchangeable == True:
+                raise Exception("Cannot increase an exchange coin")
 
-        # print(f"{self.name} incresed coin {coin_to_increase} to", end=' ')
+            # print(f"{self.name} incresed coin {coin_to_increase} to", end=' ')
 
-        new_coin_value = self.bank.take_coin((coin_to_increase.value+value))
-        new_coin = Coin(new_coin_value)
+            new_coin_value = self.bank.take_coin((coin_to_increase.value+value))
+            new_coin = Coin(new_coin_value)
 
-        if coin_to_increase in self.bets:
-            coin_index = self.bets.index(coin_to_increase)
-            self.bets[coin_index] = new_coin
-        elif coin_to_increase in self.left_over_coins:
-            self.left_over_coins.remove(coin_to_increase)
-            self.left_over_coins.append(new_coin)
+            if in_bets:
+                coin_index = self.bets.index(coin_to_increase)
+                self.bets[coin_index] = new_coin
+            elif in_bets == False:
+                self.left_over_coins.remove(coin_to_increase)
+                self.left_over_coins.append(new_coin)
 
-        self.coins.remove(coin_to_increase)
-        self.coins.append(new_coin)
+            self.coins.remove(coin_to_increase)
+            self.coins.append(new_coin)
+        except Exception as err:
+            print(err)
         # print(new_coin)
 
     def get_coin_points(self) -> int:
