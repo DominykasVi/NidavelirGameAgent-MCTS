@@ -117,7 +117,7 @@ class GameState():
                  return {'value':self.get_possible_partial_bet(idx), 'type':'bets', 'player_index':idx}
         # generate new state and increase slot index in the new state
         #TODO: should depend on player count  
-        if len(self.slots[self.slot_index]) > 1:
+        if self.slot_index > 0 and len(self.slots[self.slot_index]) > 1:
             player_queue = self.create_player_queue(self.slot_index-1)
             for player in player_queue:
                 if player.card_taken == False:
@@ -126,7 +126,7 @@ class GameState():
             if self.slot_index > 4:
                 raise(f'Unexpected slot index {self.slot_index}')
             #No more cards to take and at the last slot
-            if self.slot_index == 3:
+            if self.slot_index == 3 or self.slot_index == 0:
                 #TODO: move to next turn
                 return {'value':self.get_possible_slot_choice(), 'type':'next_slots', 'player_index':player.index}
             else:

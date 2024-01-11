@@ -164,11 +164,14 @@ class Game:
 
         helper_dict = {}
         for player in self.players:
-            bet = player.bets[slot_number].value
-            if bet in helper_dict.keys():
-                helper_dict[bet].append(player)
-            else:
-                helper_dict[bet] = [player]
+            try:
+                bet = player.bets[slot_number].value
+                if bet in helper_dict.keys():
+                    helper_dict[bet].append(player)
+                else:
+                    helper_dict[bet] = [player]
+            except:
+                raise("DEBUG ERROR")
         sorted_helper_dict = dict(sorted(helper_dict.items(), reverse=True))
         # print(sorted_helper_dict)
 

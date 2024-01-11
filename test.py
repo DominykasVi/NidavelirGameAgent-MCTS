@@ -1,8 +1,7 @@
-a = 1
-b = 2
-c = 3
+with open('tests.py', 'r') as f:
+    text = f.read()
 
-abc = [1, 2, 3]
-print(abc[:a])
-print(abc[:b])
-print(abc[:c])
+lines = text.split('\n')
+for line in lines:
+    if 'def' in line:
+        print(line.replace('dev ', ''))

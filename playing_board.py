@@ -23,11 +23,14 @@ class PlayingBoard:
     def get_number_of_cards(self, limit, selection_deck:List[Card]) -> List[Card]:
         selected_cards = []
         for _ in range(limit):
-            card = random.choice(selection_deck)
-            selected_cards.append(card)
-            # TODO: may be optimized
-            self.card_deck.remove_card(card.index)
-            selection_deck.remove(card)
+            try:
+                card = random.choice(selection_deck)
+                selected_cards.append(card)
+                # TODO: may be optimized
+                self.card_deck.remove_card(card.index)
+                selection_deck.remove(card)
+            except Exception as e:
+                raise(e)
         return selected_cards
 
     def generate_slots(self, age_split:int, turn_number:int) -> Dict[int, List[Card]]:

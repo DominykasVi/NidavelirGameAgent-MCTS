@@ -52,6 +52,30 @@ class CardDeck:
             15: 225
         }
         
+    def debug_return_slots_with_coin(self) -> List[Card]:
+        return_list = []
+        coin_found = False
+        for card in self.get_age_two_cards():
+            if card.color == 'coin' and coin_found==False:
+                return_list.append(card)
+                self.remove_card(card.index)
+                coin_found = True
+            elif len(return_list) < 3 and coin_found == True and card.color != 'coin':
+                return_list.append(card)
+                self.remove_card(card.index)
+            elif len(return_list) > 3:
+                break
+
+        if len(return_list) < 3:
+            for card in self.get_age_two_cards():
+                if len(return_list) < 3:
+                    return_list.append(card)
+                    self.remove_card(card.index)
+                else:
+                    break
+
+        return return_list
+
     def put_cards_into_dict(self, age_one_cards_list, age_two_cards_list):
         index = 0
 

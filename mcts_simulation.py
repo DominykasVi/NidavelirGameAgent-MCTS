@@ -61,10 +61,13 @@ class Node:
     
     def update_parents(self, score:int) -> None:
         self.iterations += 1
-        if self.parent is not None:
+        node = self
+        while node.parent is not None:
+        # if self.parent is not None:
             self.parent.iterations += 1
             self.parent.score += score
-            self.parent.update_parents(score)
+            node = node.parent
+            # self.parent.update_parents(score)
         
     def find_max_child_node(self, total_runs:int) -> int:
         has_states_unexplored = False
@@ -111,7 +114,7 @@ class Node:
         if in_bets:
             coin_index = new_state.players[player_index].bets.index(player_coin)
             new_state.players[player_index].bets[coin_index] = new_coin
-        else:
+        elif in_bets==False:
             new_state.players[player_index].left_over_coins.remove(player_coin)
             new_state.players[player_index].left_over_coins.append(new_coin)
 
@@ -141,6 +144,25 @@ class Node:
         child_node = root_node
         root_node = root_node.parent
         coins_taken = 0
+
+        if additional_cards is not None:
+            for bet in new_game_state.players[player_index].coins:
+                if bet.exchangeable == False:
+                    if coins_taken != 0:
+                        new_node = Node(None, root_node.depth, constant=self.constant)
+                        new_node.parent = root_node
+                        root_node.children.append(new_node)
+                    else:
+                        new_node = child_node
+                    # meta parameters
+                    in_bets=None
+                    self.generate_increase_coin_state(new_node, bet, in_bets, player_index, coin, new_game_state, slot_index)
+                    if additional_cards is not None:
+                        for additional_card in additional_cards:
+                            new_node.game_state.playing_board.card_deck.add_card(additional_card)
+                    if coins_taken != 0:
+                        self.run_game_simulation(new_node, player_index)
+                    coins_taken += 1
         # for bet in new_game_state.players[player_index].coins:
         for bet in new_game_state.players[player_index].bets:
             if bet.exchangeable == False:
@@ -355,7 +377,7 @@ class MCTS:
                 root_node.run_game_simulation(new_node, mcts_player_index) 
 
     def save_run_info(self, time):
-        with open('Results\\raw\iterations_runs.txt', 'a') as f:
+        with open('Results\\raw\\Iterations_runs\\iterations_runs_1.txt', 'a') as f:
             f.write(f'{self.max_iterations}_{self.c_value}:{time}\n')
 
 
@@ -363,20 +385,26 @@ class MCTS:
         start = timer()
 
         return_type = game_state.players[mcts_player_index].action_to_perform
-        bet_made = game_state.players[mcts_player_index].bet_made
+        return_player = f'Player{mcts_player_index}'
         self.max_iterations = game_state.players[mcts_player_index].depth
         c_val = game_state.players[mcts_player_index].c_value
         self.c_value = c_val
 
-        game_state.players[mcts_player_index] = RandomPlayer(index=mcts_player_index,
-                                                              crystal=game_state.players[mcts_player_index].crystal,
-                                                              bank_reference=game_state.players[mcts_player_index].bank,
-                                                              coins=game_state.players[mcts_player_index].coins,
-                                                              bets=game_state.players[mcts_player_index].bets,
-                                                              left_over=game_state.players[mcts_player_index].left_over_coins,
-                                                              card_deck=game_state.players[mcts_player_index].card_deck)
-        game_state.players[mcts_player_index].bet_made = bet_made
-        game_state.mode = 0
+        for player in game_state.players:
+            if player.player_type == 'MCTS':
+                bet_made = game_state.players[player.index].bet_made
+                card_taken = game_state.players[player.index].card_taken
+                game_state.players[player.index] = RandomPlayer(index=player.index,
+                                                              crystal=game_state.players[player.index].crystal,
+                                                              bank_reference=game_state.players[player.index].bank,
+                                                              coins=game_state.players[player.index].coins,
+                                                              bets=game_state.players[player.index].bets,
+                                                              left_over=game_state.players[player.index].left_over_coins,
+                                                              card_deck=game_state.players[player.index].card_deck)
+                game_state.players[player.index].bet_made = bet_made
+                game_state.players[player.index].card_taken = card_taken
+                game_state.mode = 0
+
 
         root_node = Node(game_state, 0, 'Root', constant=c_val)
         
@@ -387,14 +415,8 @@ class MCTS:
         # for key in game_state.slots.keys():
         #     for card in game_state.slots[key]:
         #         if card.color == 'coin':
-        #             visualize = True
         for i in range(self.max_iterations):
-            # print("Iteration: ", i)
-            # if i == 60:
-            #     print('debug 60')
             root_node.simulate_run(self.total_runs, mcts_player_index)
-            # viz = Visualizer(root_node)
-            # viz.visualize()
             self.total_runs += 1
         end = timer()
         self.save_run_info(end - start)
@@ -402,12 +424,12 @@ class MCTS:
         return_index = -1
         return_node = root_node
         try:
-            while return_type not in return_node.name: 
+            while return_type not in return_node.name or return_player not in return_node.name: 
                 possible_scores = [node.score/node.iterations for node in return_node.children]
                 return_index = return_node.find_child_index_by_value(max(possible_scores))
                 return_node = return_node.children[return_index]
-        except:
-            print('debug')
+        except Exception as e:
+            raise(e)
         # if visualize:
         # viz = Visualizer(root_node)
         # viz.visualize()

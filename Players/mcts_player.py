@@ -6,14 +6,29 @@ from bank import Bank
 from card import Card
 from coin import Coin
 from game_state import GameState
-from mcts_simulation import MCTS
+import mcts_simulation
+import mcts_simulation_wl
+import mcts_simulation_lm
+import mcts_simulation_vs
+import mcts_simulation_ed
 from Players.player import Player
 
 class MCTSPlayer(Player):
-    def __init__(self, index: int, crystal: int, bank_reference: Bank, c_value, depth) -> None:
+    def __init__(self, index: int, crystal: int, bank_reference: Bank, c_value, depth, type:str='MCTS', max_child_nodes=None, manager=None) -> None:
         super().__init__(index, crystal, bank_reference)
         self.player_type = 'MCTS'
-        self.MCTS = MCTS()
+        if type == 'MCTS':
+            self.MCTS = mcts_simulation.MCTS()
+        elif type == 'MCTSWL':
+            self.MCTS = mcts_simulation_wl.MCTS()
+        elif type == 'MCTSLM':
+            self.MCTS = mcts_simulation_lm.MCTS()
+            self.max_child_nodes = max_child_nodes
+        elif type == 'MCTSVS':
+            self.MCTS = mcts_simulation_vs.MCTS()
+        elif type == 'MCTSED':
+            self.MCTS = mcts_simulation_ed.MCTS()
+            self.manager = manager
         self.c_value = c_value
         self.depth = depth
         self.coin_to_increase = -1
@@ -30,6 +45,7 @@ class MCTSPlayer(Player):
 
         # possible_bets = list(itertools.permutations(self.coins, 3))
         # initial_coins = deepcopy(game_state.players[1].coins)
+                
         chosen_bets = self.MCTS.run_simulation(game_state=game_state_copy, mcts_player_index=self.index, special_case=special_case)
         #     # pass choices to mcts -> one choice
         #     # super
