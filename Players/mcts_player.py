@@ -12,6 +12,8 @@ import mcts_simulation_lm
 import mcts_simulation_vs
 import mcts_simulation_ed
 from Players.player import Player
+from multiprocessing import Process, Manager
+
 
 class MCTSPlayer(Player):
     def __init__(self, index: int, crystal: int, bank_reference: Bank, c_value, depth, type:str='MCTS', max_child_nodes=None, manager=None) -> None:
@@ -28,7 +30,6 @@ class MCTSPlayer(Player):
             self.MCTS = mcts_simulation_vs.MCTS()
         elif type == 'MCTSED':
             self.MCTS = mcts_simulation_ed.MCTS()
-            self.manager = manager
         self.c_value = c_value
         self.depth = depth
         self.coin_to_increase = -1

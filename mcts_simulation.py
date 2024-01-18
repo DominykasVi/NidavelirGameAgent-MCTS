@@ -377,7 +377,7 @@ class MCTS:
                 root_node.run_game_simulation(new_node, mcts_player_index) 
 
     def save_run_info(self, time):
-        with open('Results\\raw\\Iterations_runs\\iterations_runs_1.txt', 'a') as f:
+        with open('Results\\raw\\Iterations_runs\\iterations_runs_2.txt', 'a') as f:
             f.write(f'{self.max_iterations}_{self.c_value}:{time}\n')
 
 

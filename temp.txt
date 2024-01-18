@@ -1,60 +1,64 @@
-[0, 2, 3]
-[0, 2, 4]
-[0, 2, 5]
-[0, 3, 2]
-[0, 3, 4]
-[0, 3, 5]
-[0, 4, 2]
-[0, 4, 3]
-[0, 4, 5]
-[0, 5, 2]
-[0, 5, 3]
-[0, 5, 4]
-[2, 0, 3]
-[2, 0, 4]
-[2, 0, 5]
-[2, 3, 0]
-[2, 3, 4]
-[2, 3, 5]
-[2, 4, 0]
-[2, 4, 3]
-[2, 4, 5]
-[2, 5, 0]
-[2, 5, 3]
-[2, 5, 4]
-[3, 0, 2]
-[3, 0, 4]
-[3, 0, 5]
-[3, 2, 0]
-[3, 2, 4]
-[3, 2, 5]
-[3, 4, 0]
-[3, 4, 2]
-[3, 4, 5]
-[3, 5, 0]
-[3, 5, 2]
-[3, 5, 4]
-[4, 0, 2]
-[4, 0, 3]
-[4, 0, 5]
-[4, 2, 0]
-[4, 2, 3]
-[4, 2, 5]
-[4, 3, 0]
-[4, 3, 2]
-[4, 3, 5]
-[4, 5, 0]
-[4, 5, 2]
-[4, 5, 3]
-[5, 0, 2]
-[5, 0, 3]
-[5, 0, 4]
-[5, 2, 0]
-[5, 2, 3]
-[5, 2, 4]
-[5, 3, 0]
-[5, 3, 2]
-[5, 3, 4]
-[5, 4, 0]
-[5, 4, 2]
-[5, 4, 3]
+Simulation of 1 took: 29.869808100003866
+Simulation of 1 took: 6.327206300004036
+Simulation of 1 took: 1.950864599995839
+Simulation of 1 took: 1.4925386000031722
+Simulation of 1 took: 29.909703500001342
+Simulation of 1 took: 6.759472800004005
+Simulation of 1 took: 1.968611399999645
+Simulation of 1 took: 1.4916977000029874
+Simulation of 1 took: 29.61192260000098
+Simulation of 1 took: 6.754027599999972
+Simulation of 1 took: 1.992919600001187
+Simulation of 1 took: 1.8945335000025807
+Simulation of 1 took: 29.14330070000142
+Simulation of 1 took: 6.52966049999668
+Simulation of 1 took: 1.8571744000000763
+Simulation of 1 took: 1.4264916000029189
+Simulation of 1 took: 29.496792800004187
+Simulation of 1 took: 3.9827112999992096
+Simulation of 1 took: 1.8577098000023398
+Simulation of 1 took: 1.9146535999971093
+Simulation of 1 took: 29.36552450000454
+Simulation of 1 took: 6.699460199997702
+Simulation of 1 took: 1.9835545000023558
+Simulation of 1 took: 2.042651299998397
+Simulation of 1 took: 29.352714900000137
+Simulation of 1 took: 6.242056799994316
+Simulation of 1 took: 2.068193999999494
+Simulation of 1 took: 1.5024266000036732
+Simulation of 1 took: 31.3699809000027
+Simulation of 1 took: 6.486486499998136
+Simulation of 1 took: 1.8698847999985446
+Simulation of 1 took: 2.7774403000003076
+Simulation of 1 took: 29.421512000000803
+Simulation of 1 took: 5.913473599997815
+Simulation of 1 took: 1.9837209000033909
+Simulation of 1 took: 1.9598179000022355
+Simulation of 1 took: 31.871478399996704
+Simulation of 1 took: 6.42367870000453
+Simulation of 1 took: 2.1138120999967214
+Simulation of 1 took: 1.9916623999961303
+Simulation of 1 took: 31.08692229999724
+Simulation of 1 took: 6.318604899999627
+Simulation of 1 took: 2.03547239999898
+Simulation of 1 took: 1.9953011999969021
+Simulation of 1 took: 30.932400300000154
+Simulation of 1 took: 6.144382900005439
+Simulation of 1 took: 1.9522895000045537
+Simulation of 1 took: 2.7755113000021083
+Simulation of 1 took: 31.31703540000308
+Simulation of 1 took: 7.204566100001102
+Simulation of 1 took: 1.9777018000022508
+Simulation of 1 took: 2.07417649999843
+Simulation of 1 took: 30.473804199995357
+Simulation of 1 took: 6.911997399998654
+Simulation of 1 took: 1.991478800002369
+Simulation of 1 took: 1.9165449000065564
+Simulation of 1 took: 29.912651799997548
+Simulation of 1 took: 6.165092700000969
+Simulation of 1 took: 1.9075202999956673
+Simulation of 1 took: 1.4532259999978123
+Simulation of 1 took: 32.66265659999772
+Simulation of 1 took: 6.9795250999959535
+Simulation of 1 took: 2.5340485999986413
+Simulation of 1 took: 1.4345810000013444

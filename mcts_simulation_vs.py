@@ -37,7 +37,8 @@ class Node:
 
     def find_child_index_by_value(self, max_value):
         for index, node in enumerate(self.children):
-            if node.iterations != 0 and node.score / node.iterations == max_value:
+            if node.iterations != 0 and node.iterations == max_value:
+            # if node.score / node.iterations == max_value:
                 return index
         return -1  # Return -1 if no class matches the max value
 

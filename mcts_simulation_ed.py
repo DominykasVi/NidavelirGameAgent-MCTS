@@ -385,7 +385,7 @@ class MCTS:
 
     def run_paralel_simulation(self, root_node:Node, child_node:Node, mcts_player_index, results, index):
         child_node.parent = None
-        for i in range(100):
+        for i in range(50):
             child_node.simulate_run(100, mcts_player_index)
         child_node.parent = root_node
         results[index] = child_node
