@@ -69,7 +69,7 @@ def interpret_data(results):
 
 def run_game_threaded(game_simulation, results, index):
     p0, p1 = game_simulation.run_game()
-    results[index] = (p0, p1)
+    # results[index] = (p0, p1)
     print(f"SIMULATION {index} FINISHED")
     # done = 0
     # for i in results:
@@ -86,7 +86,7 @@ def create_game(NUMBER_OF_PLAYERS, mode, c_value, depth):
 
     #here we can define random, MCTS or human players
     players:List[Player] = []
-    players.append(MCTSPlayer(0, None, bank, c_value=10, depth=depth, type='MCTS'))
+    players.append(MCTSPlayer(0, None, bank, c_value=4, depth=500, type='MCTS'))
     players.append(RandomPlayer(1, None, bank))
     game_state = GameState(playing_board=playing_board,
                         players=players,
@@ -476,7 +476,7 @@ if __name__ == "__main__":
     # card_deck = CardDeck(NUMBER_OF_PLAYERS, True, '2')
     # bank = Bank(NUMBER_OF_PLAYERS)
     # playing_board = PlayingBoard(card_deck)
-    # colors = ['red', 'green', 'orange', 'violet', 'blue']
+    colors = ['red', 'green', 'orange', 'violet', 'blue']
 
     # #here we can define random, MCTS or human players
     # players:List[Player] = []
@@ -558,25 +558,27 @@ if __name__ == "__main__":
         # print(max_child)
         
         
-    for i in range(50):
+    for i in range(1):
         print(f"SIMULATION {i}")
         # game_simulation = create_game_lm_random(NUMBER_OF_PLAYERS, 0, max_child) 
         # game_simulation = create_game_wl_random(NUMBER_OF_PLAYERS, 0) 
         results = []
         results.append(None)
-        game_simulation = create_game_ed(NUMBER_OF_PLAYERS, 0)
-        run_game_threaded(game_simulation, results, 0)
-        processes = []
-        results = manager.list([None] * num_simulations)
-        process = Process(target=run_game_threaded, args=(game_simulation, results, i))
-        processes.append(process)
-        process.start()
+        game_simulation = create_game(NUMBER_OF_PLAYERS, 0, 4, 500)
+        game_simulation.mode = 2
+        run_game_threaded(game_simulation, results, 2)
+        print_game_results(game_simulation.players, colors)
+        # processes = []
+        # results = manager.list([None] * num_simulations)
+        # process = Process(target=run_game_threaded, args=(game_simulation, results, i))
+        # processes.append(process)
+        # process.start()
 
         # for process in processes:
         #     process.join()
         now_ts = datetime.now()
         ts = now_ts.strftime('%Y%m%d_%H%M%S')
-        save_scores(results=results, save_name=f'Results\\raw\\ed\\ed_random_{ts}')
+        # save_scores(results=results, save_name=f'Results\\raw\\ed\\ed_random_{ts}')
     # threads = [None] * 10
     # results = [None] * 10
     # for i in range(10):

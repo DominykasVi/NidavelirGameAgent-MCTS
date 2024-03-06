@@ -63,3 +63,7 @@ Player 1 average score: 202.685
 Player 2 average score: 177.435
 Simulation time: 3404.554887999955
 170-30
+
+----
+
+Bakalauras
