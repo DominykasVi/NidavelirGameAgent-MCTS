@@ -68,4 +68,12 @@ Simulation time: 3404.554887999955
 
 # Bakalauras
 Todos:
+1. Paleisti zaidima su 5 zmonem/4/3
+2. Zaidimo teisingumo tikrinimas (log into files with Id)
+2.1  - Test if coins are correct
+2.2  - Test if cards are correct
+2.3 - Run 500 random simulations/ when all correct, run 1000
+3. Special korteliu pridejimas
 
+4. MCTS modification to work for more players
+5. MCTS modifiction for special cards

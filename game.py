@@ -8,8 +8,9 @@ from Players.player import Player
 from memory_profiler import profile
 import random
 from game_state import GameState
-
+import uuid
 from playing_board import PlayingBoard
+from datetime import datetime
 
 
 
@@ -26,9 +27,10 @@ class Game:
         # SEED = 10
         self.players = game_state.players
         self.NUMBER_OF_PLAYERS = len(self.players)
+        # self.game_id = str(uuid.uuid4())
+        self.game_id = datetime.strftime(datetime.now(), '%Y%m%d%H%M%S%f')
         # if initialize:
         #     self.give_players_crystals(self.players)
-        # random.seed(SEED)#?? ar reikalingas
         self.card_deck = game_state.deck
         self.bank = game_state.bank
         self.playing_board = game_state.playing_board
@@ -74,8 +76,8 @@ class Game:
             # if player.player_type == 'MCTS':
             #     print('debug')
             if len(player.bets) == 0 and player.can_skip == False:
-                if sorted(game_state.players[1].coins, key= lambda x: x.value) != sorted(self.players[1].coins, key= lambda x: x.value):
-                    raise('Players coins are not equal')
+                # if sorted(game_state.players[1].coins, key= lambda x: x.value) != sorted(self.players[1].coins, key= lambda x: x.value):
+                #     raise('Players coins are not equal')
                 player.make_bet(self.slots, game_state) #MCTS decision 
 
     def take_card(self, player:Player, bet_index:int) -> Card:
@@ -119,7 +121,7 @@ class Game:
                 self.print_player_bets()
                 self.print_function(f"SLOT {self.slot_index} : {self.slots[self.slot_index]}")
 
-                player_queue = self.create_player_queue(bet_index)
+                player_queue = self.create_player_queue(self.players, bet_index)
 
                 self.print_function(f"Player turns: {player_queue}")
                     
@@ -134,8 +136,9 @@ class Game:
                 for player in player_queue:
                     player.card_taken = False
                 # TODO: modify to depend on player count
-                if self.players[0].bets[bet_index] == self.players[1].bets[bet_index]:
-                    self.exchange_crystals_two_players(self.players)
+                self.exchange_crystals(self.players, bet_index)
+                # if self.players[0].bets[bet_index] == self.players[1].bets[bet_index]:
+                #     self.exchange_crystals_two_players(self.players)
                 
                 # self.slots.pop(slot_index)
                 self.slot_index += 1
@@ -164,11 +167,11 @@ class Game:
             if len(distinguished_players) == 1:
                 self.add_bonus_to_distinguished(distinguished_players[0], color, playing_board)
 
-    def create_player_queue(self, slot_number:int) -> List[Player]:
+    def create_player_queue(self, players:List[Player], slot_number:int) -> List[Player]:
         player_queue = []
 
         helper_dict = {}
-        for player in self.players:
+        for player in players:
             try:
                 bet = player.bets[slot_number].value
                 if bet in helper_dict.keys():
@@ -192,7 +195,7 @@ class Game:
     def sort_players_by_crystal(self, players:List[Player]) -> List[Player]:
         crystals = [(player.index, player.crystal) for player in players]
         # TEST
-        crystals.sort(key = lambda x: x[1])
+        crystals.sort(key = lambda x: x[1], reverse=True)
         # ---
         queue = []
         for crystal in crystals:
@@ -200,6 +203,37 @@ class Game:
                 if player.index == crystal[0]:
                     queue.append(player)
         return queue
+
+    def exchange_crystals(self, players:List[Player], bet_index:int) -> List[Player]:
+        bet_dict = {}
+        for player in players:
+            try:
+                bet = player.bets[bet_index].value
+                if bet in bet_dict.keys():
+                    bet_dict[bet].append(player)
+                else:
+                    bet_dict[bet] = [player]
+            except:
+                raise("DEBUG ERROR")
+        # sorted_helper_dict = dict(sorted(helper_dict.items(), reverse=True))
+        for bet, group in bet_dict.items():
+            n = len(group)
+            for i in range(n // 2):
+                group[i].crystal, group[n-i-1].crystal = group[n-i-1].crystal, group[i].crystal
+            # if len(bet_dict[bet]) % 2 == 0:
+            #     for i in range(0, len(group), 2):
+            #         group[i].crystal, group[i+1].crystal = group[i+1].crystal, group[i].crystal
+            # else:
+            #     if len(group) > 1:
+            #         group[0].crystal, group[-1].crystal = group[-1].crystal, group[0].crystal
+        
+        # players = []
+
+        # for bet in bet_dict.keys():
+        #     for player in bet_dict[bet]:
+        #         players.append(player)
+
+        # return players
 
 
 
@@ -255,18 +289,40 @@ class Game:
         
  #Helper output functions       
     def print_players_color_count(self, players:List[Player], color):
+        if self.mode == 0:
+            return
+        if self.mode == 4:
+            with open(f'Logs/{self.game_id}.txt', 'a') as f:
+                f.write(f"Players have number of {color}")
+                for player in players:
+                    f.write(f"{player}: {player.get_color_count(color)}"+ '\n')
+            return
         if self.mode > 0:
             print(f"Players have number of {color}")
             for player in players:
                 print(player, ": ", player.get_color_count(color))
 
     def print_player_bets(self):
+        if self.mode == 0:
+            return
+        if self.mode == 4:
+            with open(f'Logs/{self.game_id}.txt', 'a') as f:
+                for player in self.players:
+                    f.write(f"{player}, bets: {player.bets}, lefover: {player.left_over_coins}"+ '\n')
+            return
         if self.mode > 0:
             for player in self.players:
                 print(f"{player}, bets: ", player.bets, "lefover: ", player.left_over_coins)
 
     
     def print_score(self):
+        if self.mode == 0:
+            return
+        if self.mode == 4:
+            with open(f'Logs/{self.game_id}.txt', 'a') as f:
+                for player in self.players:
+                    f.write(player.print_player_points()+ '\n')
+            return
         if self.mode > 0:
             for player in self.players:
                 player.print_player_points()
@@ -281,6 +337,12 @@ class Game:
             input()
 
     def print_function(self, text:str) -> None:
+        if self.mode == 0:
+            return
+        if self.mode == 4:
+            with open(f'Logs/{self.game_id}.txt', 'a') as f:
+                f.write(text + '\n')
+            return
         if self.mode > 0:
             print(text)
 

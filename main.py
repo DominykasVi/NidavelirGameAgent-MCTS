@@ -63,8 +63,8 @@ def give_players_crystals(players):
 if __name__ == "__main__":
  
 
-    NUMBER_OF_PLAYERS = 5
-    mode = 1
+    NUMBER_OF_PLAYERS = 2
+    mode = 4
 
     start = timer()
 

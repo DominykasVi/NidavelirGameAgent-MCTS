@@ -1,0 +1,457 @@
+Turn 0
+{1: [green:None (1), green:None (1), violet:None (1), blue:6 (1), coin:3 (1)], 2: [red:5 (1), green:None (1), orange:2 (1), red:3 (1), green:None (1)], 3: [violet:None (1), orange:1 (1), red:7 (1), red:9 (1), violet:None (1)]}
+Turn 0
+Player0 (5), bets: [2(False), 0(True), 4(False)], lefover: [3(False), 5(False)]
+Player1 (3), bets: [5(False), 2(False), 4(False)], lefover: [0(True), 3(False)]
+Player2 (4), bets: [2(False), 3(False), 0(True)], lefover: [4(False), 5(False)]
+Player3 (2), bets: [5(False), 3(False), 0(True)], lefover: [2(False), 4(False)]
+Player4 (1), bets: [4(False), 0(True), 3(False)], lefover: [2(False), 5(False)]
+SLOT 1 : [green:None (1), green:None (1), violet:None (1), blue:6 (1), coin:3 (1)]
+Player turns: [Player1 (3), Player3 (2), Player4 (1), Player0 (5), Player2 (4)]
+Player1 (3)
+Taken card violet:None (1)
+Player1 (3) coins: [0(True), 2(False), 3(False), 4(False), 5(False)], [5(False), 2(False), 4(False)], [0(True), 3(False)]
+Player3 (2)
+Taken card coin:3 (1)
+Player3 (2) coins: [0(True), 2(False), 3(False), 4(False), 8(False)], [8(False), 3(False), 0(True)], [2(False), 4(False)]
+Player4 (1)
+Taken card blue:6 (1)
+Player4 (1) coins: [0(True), 2(False), 3(False), 4(False), 5(False)], [4(False), 0(True), 3(False)], [2(False), 5(False)]
+Player0 (5)
+Taken card green:None (1)
+Player0 (5) coins: [0(True), 2(False), 3(False), 4(False), 5(False)], [2(False), 0(True), 4(False)], [3(False), 5(False)]
+Player2 (4)
+Taken card green:None (1)
+Player2 (4) coins: [0(True), 2(False), 3(False), 4(False), 5(False)], [2(False), 3(False), 0(True)], [4(False), 5(False)]
+Turn 0
+Player0 (4), bets: [2(False), 0(True), 4(False)], lefover: [3(False), 5(False)]
+Player1 (3), bets: [5(False), 2(False), 4(False)], lefover: [0(True), 3(False)]
+Player2 (5), bets: [2(False), 3(False), 0(True)], lefover: [4(False), 5(False)]
+Player3 (2), bets: [8(False), 3(False), 0(True)], lefover: [2(False), 4(False)]
+Player4 (1), bets: [4(False), 0(True), 3(False)], lefover: [2(False), 5(False)]
+SLOT 2 : [red:5 (1), green:None (1), orange:2 (1), red:3 (1), green:None (1)]
+Player turns: [Player2 (5), Player3 (2), Player1 (3), Player0 (4), Player4 (1)]
+Player2 (5)
+Taken card green:None (1)
+Player2 (5) coins: [0(True), 2(False), 3(False), 4(False), 5(False)], [2(False), 3(False), 0(True)], [4(False), 5(False)]
+Player3 (2)
+Taken card orange:2 (1)
+Player3 (2) coins: [0(True), 2(False), 3(False), 4(False), 8(False)], [8(False), 3(False), 0(True)], [2(False), 4(False)]
+Player1 (3)
+Taken card red:3 (1)
+Player1 (3) coins: [0(True), 2(False), 3(False), 4(False), 5(False)], [5(False), 2(False), 4(False)], [0(True), 3(False)]
+Player0 (4)
+Taken card green:None (1)
+Player0 (4) coins: [0(True), 2(False), 3(False), 4(False), 8(False)], [2(False), 0(True), 4(False)], [3(False), 8(False)]
+Player4 (1)
+Taken card red:5 (1)
+Player4 (1) coins: [0(True), 2(False), 3(False), 4(False), 7(False)], [4(False), 0(True), 3(False)], [2(False), 7(False)]
+Turn 0
+Player0 (1), bets: [2(False), 0(True), 4(False)], lefover: [3(False), 8(False)]
+Player1 (3), bets: [5(False), 2(False), 4(False)], lefover: [0(True), 3(False)]
+Player2 (2), bets: [2(False), 3(False), 0(True)], lefover: [4(False), 5(False)]
+Player3 (5), bets: [8(False), 3(False), 0(True)], lefover: [2(False), 4(False)]
+Player4 (4), bets: [4(False), 0(True), 3(False)], lefover: [2(False), 7(False)]
+SLOT 3 : [violet:None (1), orange:1 (1), red:7 (1), red:9 (1), violet:None (1)]
+Player turns: [Player1 (3), Player0 (1), Player4 (4), Player3 (5), Player2 (2)]
+Player1 (3)
+Taken card red:7 (1)
+Player1 (3) coins: [0(True), 2(False), 3(False), 4(False), 5(False)], [5(False), 2(False), 4(False)], [0(True), 3(False)]
+Player0 (1)
+Taken card red:9 (1)
+Player0 (1) coins: [0(True), 2(False), 3(False), 4(False), 8(False)], [2(False), 0(True), 4(False)], [3(False), 8(False)]
+Player4 (4)
+Taken card violet:None (1)
+Player4 (4) coins: [0(True), 2(False), 3(False), 4(False), 7(False)], [4(False), 0(True), 3(False)], [2(False), 7(False)]
+Player3 (5)
+Taken card violet:None (1)
+Player3 (5) coins: [0(True), 2(False), 3(False), 8(False), 6(False)], [8(False), 3(False), 0(True)], [2(False), 6(False)]
+Player2 (2)
+Taken card orange:1 (1)
+Player2 (2) coins: [0(True), 2(False), 3(False), 4(False), 9(False)], [2(False), 3(False), 0(True)], [4(False), 9(False)]
+Turn 1
+{1: [green:None (1), orange:0 (1), green:None (1), orange:1 (1), violet:None (1)], 2: [blue:9 (1), red:6 (1), blue:12 (1), violet:None (1), red:6 (1)], 3: [coin:3 (1), violet:None (1), violet:None (1), violet:None (1), orange:1 (1)]}
+Turn 1
+Player0 (3), bets: [3(False), 4(False), 0(True)], lefover: [2(False), 8(False)]
+Player1 (1), bets: [2(False), 4(False), 0(True)], lefover: [3(False), 5(False)]
+Player2 (5), bets: [2(False), 9(False), 0(True)], lefover: [3(False), 4(False)]
+Player3 (2), bets: [2(False), 3(False), 0(True)], lefover: [8(False), 6(False)]
+Player4 (4), bets: [0(True), 4(False), 3(False)], lefover: [2(False), 7(False)]
+SLOT 1 : [green:None (1), orange:0 (1), green:None (1), orange:1 (1), violet:None (1)]
+Player turns: [Player0 (3), Player2 (5), Player3 (2), Player1 (1), Player4 (4)]
+Player0 (3)
+Taken card green:None (1)
+Player0 (3) coins: [0(True), 2(False), 3(False), 4(False), 8(False)], [3(False), 4(False), 0(True)], [2(False), 8(False)]
+Player2 (5)
+Taken card violet:None (1)
+Player2 (5) coins: [0(True), 2(False), 3(False), 4(False), 9(False)], [2(False), 9(False), 0(True)], [3(False), 4(False)]
+Player3 (2)
+Taken card orange:0 (1)
+Player3 (2) coins: [0(True), 2(False), 3(False), 8(False), 6(False)], [2(False), 3(False), 0(True)], [8(False), 6(False)]
+Player1 (1)
+Taken card orange:1 (1)
+Player1 (1) coins: [0(True), 2(False), 3(False), 4(False), 5(False)], [2(False), 4(False), 0(True)], [3(False), 5(False)]
+Player4 (4)
+Taken card green:None (1)
+Player4 (4) coins: [0(True), 2(False), 3(False), 4(False), 9(False)], [0(True), 4(False), 3(False)], [2(False), 9(False)]
+Turn 1
+Player0 (3), bets: [3(False), 4(False), 0(True)], lefover: [2(False), 8(False)]
+Player1 (2), bets: [2(False), 4(False), 0(True)], lefover: [3(False), 5(False)]
+Player2 (5), bets: [2(False), 9(False), 0(True)], lefover: [3(False), 4(False)]
+Player3 (1), bets: [2(False), 3(False), 0(True)], lefover: [8(False), 6(False)]
+Player4 (4), bets: [0(True), 4(False), 3(False)], lefover: [2(False), 9(False)]
+SLOT 2 : [blue:9 (1), red:6 (1), blue:12 (1), violet:None (1), red:6 (1)]
+Player turns: [Player2 (5), Player4 (4), Player0 (3), Player1 (2), Player3 (1)]
+Player2 (5)
+Taken card blue:9 (1)
+Player2 (5) coins: [0(True), 2(False), 3(False), 4(False), 9(False)], [2(False), 9(False), 0(True)], [3(False), 4(False)]
+Player4 (4)
+Taken card red:6 (1)
+Player4 (4) coins: [0(True), 2(False), 3(False), 4(False), 9(False)], [0(True), 4(False), 3(False)], [2(False), 9(False)]
+Player0 (3)
+Taken card red:6 (1)
+Player0 (3) coins: [0(True), 2(False), 3(False), 4(False), 8(False)], [3(False), 4(False), 0(True)], [2(False), 8(False)]
+Player1 (2)
+Taken card blue:12 (1)
+Player1 (2) coins: [0(True), 2(False), 3(False), 4(False), 5(False)], [2(False), 4(False), 0(True)], [3(False), 5(False)]
+Player3 (1)
+Taken card violet:None (1)
+Player3 (1) coins: [0(True), 2(False), 3(False), 8(False), 6(False)], [2(False), 3(False), 0(True)], [8(False), 6(False)]
+Turn 1
+Player0 (4), bets: [3(False), 4(False), 0(True)], lefover: [2(False), 8(False)]
+Player1 (2), bets: [2(False), 4(False), 0(True)], lefover: [3(False), 5(False)]
+Player2 (5), bets: [2(False), 9(False), 0(True)], lefover: [3(False), 4(False)]
+Player3 (1), bets: [2(False), 3(False), 0(True)], lefover: [8(False), 6(False)]
+Player4 (3), bets: [0(True), 4(False), 3(False)], lefover: [2(False), 9(False)]
+SLOT 3 : [coin:3 (1), violet:None (1), violet:None (1), violet:None (1), orange:1 (1)]
+Player turns: [Player4 (3), Player2 (5), Player0 (4), Player1 (2), Player3 (1)]
+Player4 (3)
+Taken card violet:None (1)
+Player4 (3) coins: [0(True), 2(False), 3(False), 4(False), 9(False)], [0(True), 4(False), 3(False)], [2(False), 9(False)]
+Player2 (5)
+Taken card violet:None (1)
+Player2 (5) coins: [0(True), 2(False), 3(False), 9(False), 7(False)], [2(False), 9(False), 0(True)], [3(False), 7(False)]
+Player0 (4)
+Taken card violet:None (1)
+Player0 (4) coins: [0(True), 2(False), 3(False), 4(False), 10(False)], [3(False), 4(False), 0(True)], [2(False), 10(False)]
+Player1 (2)
+Taken card orange:1 (1)
+Player1 (2) coins: [0(True), 2(False), 3(False), 4(False), 9(False)], [2(False), 4(False), 0(True)], [3(False), 9(False)]
+Player3 (1)
+Taken card coin:3 (1)
+Player3 (1) coins: [0(True), 2(False), 6(False), 6(False), 14(False)], [2(False), 6(False), 0(True)], [6(False), 14(False)]
+Turn 2
+{1: [blue:7 (1), red:8 (1), green:None (1), red:4 (1), blue:10 (1)], 2: [blue:8 (1), blue:11 (1), red:10 (1), violet:None (1), blue:5 (1)], 3: [green:None (1), orange:0 (1), orange:2 (1), violet:None (1), orange:0 (1)]}
+Turn 2
+Player0 (1), bets: [0(True), 2(False), 3(False)], lefover: [4(False), 10(False)]
+Player1 (5), bets: [9(False), 4(False), 3(False)], lefover: [0(True), 2(False)]
+Player2 (2), bets: [7(False), 9(False), 3(False)], lefover: [0(True), 2(False)]
+Player3 (4), bets: [6(False), 0(True), 2(False)], lefover: [6(False), 14(False)]
+Player4 (3), bets: [2(False), 4(False), 9(False)], lefover: [0(True), 3(False)]
+SLOT 1 : [blue:7 (1), red:8 (1), green:None (1), red:4 (1), blue:10 (1)]
+Player turns: [Player1 (5), Player2 (2), Player3 (4), Player4 (3), Player0 (1)]
+Player1 (5)
+Taken card blue:7 (1)
+Player1 (5) coins: [0(True), 2(False), 3(False), 4(False), 9(False)], [9(False), 4(False), 3(False)], [0(True), 2(False)]
+Player2 (2)
+Taken card blue:10 (1)
+Player2 (2) coins: [0(True), 2(False), 3(False), 9(False), 7(False)], [7(False), 9(False), 3(False)], [0(True), 2(False)]
+Player3 (4)
+Taken card green:None (1)
+Player3 (4) coins: [0(True), 2(False), 6(False), 6(False), 14(False)], [6(False), 0(True), 2(False)], [6(False), 14(False)]
+Player4 (3)
+Taken card red:4 (1)
+Player4 (3) coins: [0(True), 2(False), 3(False), 4(False), 9(False)], [2(False), 4(False), 9(False)], [0(True), 3(False)]
+Player0 (1)
+Taken card red:8 (1)
+Player0 (1) coins: [0(True), 2(False), 3(False), 4(False), 14(False)], [0(True), 2(False), 3(False)], [4(False), 14(False)]
+Turn 2
+Player0 (1), bets: [0(True), 2(False), 3(False)], lefover: [4(False), 14(False)]
+Player1 (5), bets: [9(False), 4(False), 3(False)], lefover: [0(True), 2(False)]
+Player2 (2), bets: [7(False), 9(False), 3(False)], lefover: [0(True), 2(False)]
+Player3 (4), bets: [6(False), 0(True), 2(False)], lefover: [6(False), 14(False)]
+Player4 (3), bets: [2(False), 4(False), 9(False)], lefover: [0(True), 3(False)]
+SLOT 2 : [blue:8 (1), blue:11 (1), red:10 (1), violet:None (1), blue:5 (1)]
+Player turns: [Player2 (2), Player1 (5), Player4 (3), Player0 (1), Player3 (4)]
+Player2 (2)
+Taken card blue:5 (1)
+Player2 (2) coins: [0(True), 2(False), 3(False), 9(False), 7(False)], [7(False), 9(False), 3(False)], [0(True), 2(False)]
+Player1 (5)
+Taken card red:10 (1)
+Player1 (5) coins: [0(True), 2(False), 3(False), 4(False), 9(False)], [9(False), 4(False), 3(False)], [0(True), 2(False)]
+Player4 (3)
+Taken card blue:11 (1)
+Player4 (3) coins: [0(True), 2(False), 3(False), 4(False), 9(False)], [2(False), 4(False), 9(False)], [0(True), 3(False)]
+Player0 (1)
+Taken card blue:8 (1)
+Player0 (1) coins: [0(True), 2(False), 3(False), 4(False), 14(False)], [0(True), 2(False), 3(False)], [4(False), 14(False)]
+Player3 (4)
+Taken card violet:None (1)
+Player3 (4) coins: [0(True), 2(False), 6(False), 6(False), 20(False)], [6(False), 0(True), 2(False)], [6(False), 20(False)]
+Turn 2
+Player0 (1), bets: [0(True), 2(False), 3(False)], lefover: [4(False), 14(False)]
+Player1 (3), bets: [9(False), 4(False), 3(False)], lefover: [0(True), 2(False)]
+Player2 (2), bets: [7(False), 9(False), 3(False)], lefover: [0(True), 2(False)]
+Player3 (4), bets: [6(False), 0(True), 2(False)], lefover: [6(False), 20(False)]
+Player4 (5), bets: [2(False), 4(False), 9(False)], lefover: [0(True), 3(False)]
+SLOT 3 : [green:None (1), orange:0 (1), orange:2 (1), violet:None (1), orange:0 (1)]
+Player turns: [Player4 (5), Player1 (3), Player2 (2), Player0 (1), Player3 (4)]
+Player4 (5)
+Taken card green:None (1)
+Player4 (5) coins: [0(True), 2(False), 3(False), 4(False), 9(False)], [2(False), 4(False), 9(False)], [0(True), 3(False)]
+Player1 (3)
+Taken card orange:0 (1)
+Player1 (3) coins: [0(True), 2(False), 3(False), 4(False), 9(False)], [9(False), 4(False), 3(False)], [0(True), 2(False)]
+Player2 (2)
+Taken card orange:2 (1)
+Player2 (2) coins: [0(True), 2(False), 3(False), 9(False), 7(False)], [7(False), 9(False), 3(False)], [0(True), 2(False)]
+Player0 (1)
+Taken card violet:None (1)
+Player0 (1) coins: [0(True), 2(False), 3(False), 4(False), 14(False)], [0(True), 2(False), 3(False)], [4(False), 14(False)]
+Player3 (4)
+Taken card orange:0 (1)
+Player3 (4) coins: [0(True), 2(False), 6(False), 6(False), 20(False)], [6(False), 0(True), 2(False)], [6(False), 20(False)]
+Turn 3
+Granting players distinction bonuses
+Players have number of redPlayer0 (2): 3
+Player1 (3): 3
+Player2 (1): 0
+Player3 (4): 0
+Player4 (5): 3
+Players have number of greenPlayer0 (2): 3
+Player1 (3): 0
+Player2 (1): 2
+Player3 (4): 1
+Player4 (5): 2
+Distinction card count: 0
+Giving bonus to player: Player0 (2)
+Players have number of orangePlayer0 (2): 0
+Player1 (3): 3
+Player2 (1): 2
+Player3 (4): 3
+Player4 (5): 0
+Players have number of violetPlayer0 (2): 2
+Player1 (3): 1
+Player2 (1): 2
+Player3 (4): 3
+Player4 (5): 2
+Distinction card count: 0
+Giving bonus to player: Player3 (4)
+Players have number of bluePlayer0 (2): 1
+Player1 (3): 2
+Player2 (1): 3
+Player3 (4): 0
+Player4 (5): 2
+Distinction card count: 0
+Giving bonus to player: Player2 (1)
+{1: [green:None (2), orange:1 (2), orange:0 (2), blue:6 (2), coin:5 (2)], 2: [orange:0 (2), blue:9 (2), violet:None (2), blue:5 (2), violet:None (2)], 3: [red:8 (2), green:None (2), green:None (2), blue:12 (2), violet:None (2)]}
+Turn 3
+Player0 (2), bets: [3(False), 3(True), 2(False)], lefover: [4(False), 14(False)]
+Player1 (3), bets: [9(False), 0(True), 4(False)], lefover: [2(False), 3(False)]
+Player2 (1), bets: [3(False), 7(False), 0(True)], lefover: [9(False), 7(False)]
+Player3 (4), bets: [0(True), 6(False), 20(False)], lefover: [2(False), 6(False)]
+Player4 (5), bets: [2(False), 3(False), 4(False)], lefover: [0(True), 9(False)]
+SLOT 1 : [green:None (2), orange:1 (2), orange:0 (2), blue:6 (2), coin:5 (2)]
+Player turns: [Player1 (3), Player0 (2), Player2 (1), Player4 (5), Player3 (4)]
+Player1 (3)
+Taken card blue:6 (2)
+Player1 (3) coins: [0(True), 2(False), 3(False), 4(False), 9(False)], [9(False), 0(True), 4(False)], [2(False), 3(False)]
+Player0 (2)
+Taken card orange:1 (2)
+Player0 (2) coins: [2(False), 3(False), 4(False), 14(False), 3(True)], [3(False), 3(True), 2(False)], [4(False), 14(False)]
+Player2 (1)
+Player2 (1) coins: [0(True), 3(False), 9(False), 7(False), 7(False)], [3(False), 7(False), 0(True)], [9(False), 7(False)]
+Player4 (5)
+Taken card orange:0 (2)
+Player4 (5) coins: [0(True), 2(False), 3(False), 4(False), 9(False)], [2(False), 3(False), 4(False)], [0(True), 9(False)]
+Player3 (4)
+Taken card green:None (2)
+Player3 (4) coins: [0(True), 2(False), 6(False), 20(False), 10(False)], [0(True), 6(False), 20(False)], [2(False), 10(False)]
+Turn 3
+Player0 (1), bets: [3(False), 3(True), 2(False)], lefover: [4(False), 14(False)]
+Player1 (3), bets: [9(False), 0(True), 4(False)], lefover: [2(False), 3(False)]
+Player2 (2), bets: [3(False), 7(False), 0(True)], lefover: [9(False), 7(False)]
+Player3 (4), bets: [0(True), 6(False), 20(False)], lefover: [2(False), 10(False)]
+Player4 (5), bets: [2(False), 3(False), 4(False)], lefover: [0(True), 9(False)]
+SLOT 2 : [orange:0 (2), blue:9 (2), violet:None (2), blue:5 (2), violet:None (2)]
+Player turns: [Player2 (2), Player3 (4), Player4 (5), Player0 (1), Player1 (3)]
+Player2 (2)
+Taken card blue:9 (2)
+Player2 (2) coins: [0(True), 3(False), 9(False), 7(False), 7(False)], [3(False), 7(False), 0(True)], [9(False), 7(False)]
+Player3 (4)
+Taken card blue:5 (2)
+Player3 (4) coins: [0(True), 2(False), 6(False), 20(False), 10(False)], [0(True), 6(False), 20(False)], [2(False), 10(False)]
+Player4 (5)
+Taken card violet:None (2)
+Player4 (5) coins: [0(True), 2(False), 3(False), 4(False), 9(False)], [2(False), 3(False), 4(False)], [0(True), 9(False)]
+Player0 (1)
+Taken card orange:0 (2)
+Player0 (1) coins: [2(False), 3(False), 4(False), 3(True), 18(False)], [3(False), 3(True), 2(False)], [4(False), 18(False)]
+Player1 (3)
+Taken card violet:None (2)
+Player1 (3) coins: [0(True), 2(False), 4(False), 9(False), 5(False)], [9(False), 0(True), 4(False)], [2(False), 5(False)]
+Turn 3
+Player0 (5), bets: [3(False), 3(True), 2(False)], lefover: [4(False), 18(False)]
+Player1 (3), bets: [9(False), 0(True), 4(False)], lefover: [2(False), 5(False)]
+Player2 (2), bets: [3(False), 7(False), 0(True)], lefover: [9(False), 7(False)]
+Player3 (4), bets: [0(True), 6(False), 20(False)], lefover: [2(False), 10(False)]
+Player4 (1), bets: [2(False), 3(False), 4(False)], lefover: [0(True), 9(False)]
+SLOT 3 : [red:8 (2), green:None (2), green:None (2), blue:12 (2), violet:None (2)]
+Player turns: [Player3 (4), Player1 (3), Player4 (1), Player0 (5), Player2 (2)]
+Player3 (4)
+Taken card green:None (2)
+Player3 (4) coins: [0(True), 2(False), 6(False), 20(False), 10(False)], [0(True), 6(False), 20(False)], [2(False), 10(False)]
+Player1 (3)
+Taken card blue:12 (2)
+Player1 (3) coins: [0(True), 2(False), 4(False), 9(False), 5(False)], [9(False), 0(True), 4(False)], [2(False), 5(False)]
+Player4 (1)
+Taken card red:8 (2)
+Player4 (1) coins: [0(True), 2(False), 3(False), 4(False), 9(False)], [2(False), 3(False), 4(False)], [0(True), 9(False)]
+Player0 (5)
+Taken card violet:None (2)
+Player0 (5) coins: [2(False), 3(False), 4(False), 3(True), 18(False)], [3(False), 3(True), 2(False)], [4(False), 18(False)]
+Player2 (2)
+Taken card green:None (2)
+Player2 (2) coins: [0(True), 3(False), 7(False), 7(False), 16(False)], [3(False), 7(False), 0(True)], [7(False), 16(False)]
+Turn 4
+{1: [orange:1 (2), blue:7 (2), blue:10 (2), violet:None (2), green:None (2)], 2: [violet:None (2), green:None (2), green:None (2), coin:5 (2), red:3 (2)], 3: [orange:2 (2), blue:11 (2), red:7 (2), orange:0 (2), blue:8 (2)]}
+Turn 4
+Player0 (5), bets: [18(False), 3(True), 2(False)], lefover: [4(False), 3(True)]
+Player1 (1), bets: [2(False), 0(True), 4(False)], lefover: [9(False), 5(False)]
+Player2 (2), bets: [3(False), 7(False), 0(True)], lefover: [7(False), 16(False)]
+Player3 (4), bets: [20(False), 6(False), 2(False)], lefover: [0(True), 10(False)]
+Player4 (3), bets: [3(False), 4(False), 0(True)], lefover: [2(False), 9(False)]
+SLOT 1 : [orange:1 (2), blue:7 (2), blue:10 (2), violet:None (2), green:None (2)]
+Player turns: [Player3 (4), Player0 (5), Player4 (3), Player2 (2), Player1 (1)]
+Player3 (4)
+Taken card violet:None (2)
+Player3 (4) coins: [0(True), 2(False), 6(False), 20(False), 10(False)], [20(False), 6(False), 2(False)], [0(True), 10(False)]
+Player0 (5)
+Taken card blue:10 (2)
+Player0 (5) coins: [2(False), 3(False), 4(False), 3(True), 18(False)], [18(False), 3(True), 2(False)], [4(False), 3(True)]
+Player4 (3)
+Taken card blue:7 (2)
+Player4 (3) coins: [0(True), 2(False), 3(False), 4(False), 9(False)], [3(False), 4(False), 0(True)], [2(False), 9(False)]
+Player2 (2)
+Taken card orange:1 (2)
+Player2 (2) coins: [0(True), 3(False), 7(False), 7(False), 16(False)], [3(False), 7(False), 0(True)], [7(False), 16(False)]
+Player1 (1)
+Taken card green:None (2)
+Player1 (1) coins: [0(True), 2(False), 4(False), 9(False), 5(False)], [2(False), 0(True), 4(False)], [9(False), 5(False)]
+Turn 4
+Player0 (5), bets: [18(False), 3(True), 2(False)], lefover: [4(False), 3(True)]
+Player1 (1), bets: [2(False), 0(True), 4(False)], lefover: [9(False), 5(False)]
+Player2 (3), bets: [3(False), 7(False), 0(True)], lefover: [7(False), 16(False)]
+Player3 (4), bets: [20(False), 6(False), 2(False)], lefover: [0(True), 10(False)]
+Player4 (2), bets: [3(False), 4(False), 0(True)], lefover: [2(False), 9(False)]
+SLOT 2 : [violet:None (2), green:None (2), green:None (2), coin:5 (2), red:3 (2)]
+Player turns: [Player2 (3), Player3 (4), Player4 (2), Player0 (5), Player1 (1)]
+Player2 (3)
+Taken card violet:None (2)
+Player2 (3) coins: [0(True), 3(False), 7(False), 7(False), 16(False)], [3(False), 7(False), 0(True)], [7(False), 16(False)]
+Player3 (4)
+Taken card coin:5 (2)
+Player3 (4) coins: [0(True), 2(False), 6(False), 20(False), 15(False)], [20(False), 6(False), 2(False)], [0(True), 15(False)]
+Player4 (2)
+Taken card red:3 (2)
+Player4 (2) coins: [0(True), 2(False), 3(False), 4(False), 9(False)], [3(False), 4(False), 0(True)], [2(False), 9(False)]
+Player0 (5)
+Taken card green:None (2)
+Player0 (5) coins: [2(False), 3(False), 3(True), 18(False), 5(False)], [18(False), 3(True), 2(False)], [3(True), 5(False)]
+Player1 (1)
+Taken card green:None (2)
+Player1 (1) coins: [0(True), 2(False), 4(False), 5(False), 13(False)], [2(False), 0(True), 4(False)], [5(False), 13(False)]
+Turn 4
+Player0 (5), bets: [18(False), 3(True), 2(False)], lefover: [3(True), 5(False)]
+Player1 (1), bets: [2(False), 0(True), 4(False)], lefover: [5(False), 13(False)]
+Player2 (3), bets: [3(False), 7(False), 0(True)], lefover: [7(False), 16(False)]
+Player3 (4), bets: [20(False), 6(False), 2(False)], lefover: [0(True), 15(False)]
+Player4 (2), bets: [3(False), 4(False), 0(True)], lefover: [2(False), 9(False)]
+SLOT 3 : [orange:2 (2), blue:11 (2), red:7 (2), orange:0 (2), blue:8 (2)]
+Player turns: [Player1 (1), Player0 (5), Player3 (4), Player2 (3), Player4 (2)]
+Player1 (1)
+Taken card blue:8 (2)
+Player1 (1) coins: [0(True), 2(False), 4(False), 5(False), 13(False)], [2(False), 0(True), 4(False)], [5(False), 13(False)]
+Player0 (5)
+Taken card orange:0 (2)
+Player0 (5) coins: [2(False), 3(False), 3(True), 18(False), 5(False)], [18(False), 3(True), 2(False)], [3(True), 5(False)]
+Player3 (4)
+Taken card blue:11 (2)
+Player3 (4) coins: [0(True), 2(False), 6(False), 20(False), 15(False)], [20(False), 6(False), 2(False)], [0(True), 15(False)]
+Player2 (3)
+Taken card red:7 (2)
+Player2 (3) coins: [0(True), 3(False), 7(False), 7(False), 23(False)], [3(False), 7(False), 0(True)], [7(False), 23(False)]
+Player4 (2)
+Taken card orange:2 (2)
+Player4 (2) coins: [0(True), 2(False), 3(False), 4(False), 11(False)], [3(False), 4(False), 0(True)], [2(False), 11(False)]
+Turn 5
+{1: [red:6 (2), violet:None (2), violet:None (2), green:None (2), orange:1 (2)], 2: [red:9 (2), green:None (2), violet:None (2), orange:2 (2), red:5 (2)], 3: [violet:None (2), red:10 (2), violet:None (2), red:4 (2), red:6 (2)]}
+Turn 5
+Player0 (4), bets: [3(True), 18(False), 3(True)], lefover: [2(False), 5(False)]
+Player1 (1), bets: [0(True), 13(False), 2(False)], lefover: [4(False), 5(False)]
+Player2 (2), bets: [7(False), 23(False), 0(True)], lefover: [3(False), 7(False)]
+Player3 (5), bets: [2(False), 15(False), 20(False)], lefover: [0(True), 6(False)]
+Player4 (3), bets: [2(False), 4(False), 0(True)], lefover: [3(False), 11(False)]
+SLOT 1 : [red:6 (2), violet:None (2), violet:None (2), green:None (2), orange:1 (2)]
+Player turns: [Player2 (2), Player0 (4), Player3 (5), Player4 (3), Player1 (1)]
+Player2 (2)
+Taken card orange:1 (2)
+Player2 (2) coins: [0(True), 3(False), 7(False), 7(False), 23(False)], [7(False), 23(False), 0(True)], [3(False), 7(False)]
+Player0 (4)
+Taken card red:6 (2)
+Player0 (4) coins: [2(False), 3(False), 3(True), 18(False), 11(False)], [3(True), 18(False), 3(True)], [2(False), 11(False)]
+Player3 (5)
+Taken card violet:None (2)
+Player3 (5) coins: [0(True), 2(False), 6(False), 20(False), 15(False)], [2(False), 15(False), 20(False)], [0(True), 6(False)]
+Player4 (3)
+Taken card green:None (2)
+Player4 (3) coins: [0(True), 2(False), 3(False), 4(False), 11(False)], [2(False), 4(False), 0(True)], [3(False), 11(False)]
+Player1 (1)
+Taken card violet:None (2)
+Player1 (1) coins: [0(True), 2(False), 4(False), 13(False), 11(False)], [0(True), 13(False), 2(False)], [4(False), 11(False)]
+Turn 5
+Player0 (4), bets: [3(True), 18(False), 3(True)], lefover: [2(False), 11(False)]
+Player1 (1), bets: [0(True), 13(False), 2(False)], lefover: [4(False), 11(False)]
+Player2 (2), bets: [7(False), 23(False), 0(True)], lefover: [3(False), 7(False)]
+Player3 (3), bets: [2(False), 15(False), 20(False)], lefover: [0(True), 6(False)]
+Player4 (5), bets: [2(False), 4(False), 0(True)], lefover: [3(False), 11(False)]
+SLOT 2 : [red:9 (2), green:None (2), violet:None (2), orange:2 (2), red:5 (2)]
+Player turns: [Player2 (2), Player0 (4), Player3 (3), Player1 (1), Player4 (5)]
+Player2 (2)
+Taken card orange:2 (2)
+Player2 (2) coins: [0(True), 3(False), 7(False), 7(False), 23(False)], [7(False), 23(False), 0(True)], [3(False), 7(False)]
+Player0 (4)
+Taken card red:9 (2)
+Player0 (4) coins: [2(False), 3(False), 3(True), 18(False), 11(False)], [3(True), 18(False), 3(True)], [2(False), 11(False)]
+Player3 (3)
+Taken card green:None (2)
+Player3 (3) coins: [0(True), 2(False), 6(False), 20(False), 15(False)], [2(False), 15(False), 20(False)], [0(True), 6(False)]
+Player1 (1)
+Taken card red:5 (2)
+Player1 (1) coins: [0(True), 2(False), 4(False), 13(False), 11(False)], [0(True), 13(False), 2(False)], [4(False), 11(False)]
+Player4 (5)
+Taken card violet:None (2)
+Player4 (5) coins: [0(True), 2(False), 3(False), 4(False), 11(False)], [2(False), 4(False), 0(True)], [3(False), 11(False)]
+Turn 5
+Player0 (4), bets: [3(True), 18(False), 3(True)], lefover: [2(False), 11(False)]
+Player1 (1), bets: [0(True), 13(False), 2(False)], lefover: [4(False), 11(False)]
+Player2 (2), bets: [7(False), 23(False), 0(True)], lefover: [3(False), 7(False)]
+Player3 (3), bets: [2(False), 15(False), 20(False)], lefover: [0(True), 6(False)]
+Player4 (5), bets: [2(False), 4(False), 0(True)], lefover: [3(False), 11(False)]
+SLOT 3 : [violet:None (2), red:10 (2), violet:None (2), red:4 (2), red:6 (2)]
+Player turns: [Player3 (3), Player0 (4), Player1 (1), Player4 (5), Player2 (2)]
+Player3 (3)
+Taken card violet:None (2)
+Player3 (3) coins: [0(True), 2(False), 6(False), 20(False), 15(False)], [2(False), 15(False), 20(False)], [0(True), 6(False)]
+Player0 (4)
+Taken card violet:None (2)
+Player0 (4) coins: [2(False), 3(False), 3(True), 18(False), 13(False)], [3(True), 18(False), 3(True)], [2(False), 13(False)]
+Player1 (1)
+Taken card red:10 (2)
+Player1 (1) coins: [0(True), 2(False), 4(False), 13(False), 11(False)], [0(True), 13(False), 2(False)], [4(False), 11(False)]
+Player4 (5)
+Taken card red:4 (2)
+Player4 (5) coins: [0(True), 2(False), 3(False), 4(False), 12(False)], [2(False), 4(False), 0(True)], [3(False), 12(False)]
+Player2 (2)
+Taken card red:6 (2)
+Player2 (2) coins: [0(True), 3(False), 7(False), 23(False), 12(False)], [7(False), 23(False), 0(True)], [3(False), 12(False)]
