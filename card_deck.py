@@ -2,13 +2,16 @@ from card import Card
 from typing import List, Dict
 
 class CardDeck:
-    def __init__(self, number_of_players:int=5, initialization:bool=False, card_file_name:str='2') -> None:
+    def __init__(self, number_of_players:int=5, initialization:bool=False) -> None:
 
         self.card_count:Dict[str, int] = {'red':0, 'green':0, 'orange':0, 'violet':0, 'blue':0, 'coin':0}
 
         if initialization:
             self.cards:Dict[int, Card] = {}
-            age_one_cards_list, age_two_cards_list = self.read_cards_from_file(card_file_name)
+            if number_of_players != 5:
+                age_one_cards_list, age_two_cards_list = self.read_cards_from_file('2')
+            else:
+                age_one_cards_list, age_two_cards_list = self.read_cards_from_file('5')
             self.put_cards_into_dict(age_one_cards_list, age_two_cards_list)
         else:
             self.cards:Dict[int, Card] = {}

@@ -4,7 +4,7 @@ class Bank:
     def __init__(self, number_of_players:int) -> None:
         # coins {value: count}
         self.coins:Dict[int, int] = self.get_coins_from_file()
-        if number_of_players == 2:
+        if number_of_players == 2 or number_of_players == 3:
             self.coins[7] -= 2
             self.coins[9] -= 2
             self.coins[11] -= 2

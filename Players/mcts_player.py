@@ -6,11 +6,11 @@ from bank import Bank
 from card import Card
 from coin import Coin
 from game_state import GameState
-import mcts_simulation
-import mcts_simulation_wl
-import mcts_simulation_lm
-import mcts_simulation_vs
-import mcts_simulation_ed
+import MCTS.mcts_simulation as mcts_simulation
+import MCTS.mcts_simulation_wl as mcts_simulation_wl
+import MCTS.mcts_simulation_lm as mcts_simulation_lm
+import MCTS.mcts_simulation_vs as mcts_simulation_vs
+import MCTS.mcts_simulation_ed as mcts_simulation_ed
 from Players.player import Player
 from multiprocessing import Process, Manager
 

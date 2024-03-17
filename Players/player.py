@@ -23,6 +23,7 @@ class Player:
         self.cards_taken = 0
         self.card_taken = False
         self.bet_made = False
+        self.can_skip = False
         # self.debug = 0
     def __eq__(self, __value:object) -> bool:
         return (self.name == __value.name and self.crystal == __value.crystal)

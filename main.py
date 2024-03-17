@@ -59,18 +59,25 @@ def give_players_crystals(players):
 
 
 
+
 if __name__ == "__main__":
-    NUMBER_OF_PLAYERS = 2
-    mode = 0
+ 
+
+    NUMBER_OF_PLAYERS = 5
+    mode = 1
 
     start = timer()
 
-    card_deck = CardDeck(NUMBER_OF_PLAYERS, True, '2')
+    card_deck = CardDeck(NUMBER_OF_PLAYERS, True)
     bank = Bank(NUMBER_OF_PLAYERS)
     playing_board = PlayingBoard(card_deck)
     players:List[Player] = []
-    players.append(RandomPlayer(0, None, bank))
-    players.append(RandomPlayer(1, None, bank))
+    for i in range(NUMBER_OF_PLAYERS):
+        players.append(RandomPlayer(i, None, bank))
+        print(f"Player {i} added")
+    # players.append(RandomPlayer(1, None, bank))
+    # players.append(MCTSPlayer(1, None, bank, 1.2, 200))
+
     game_state = GameState(playing_board=playing_board,
                         players=players,
                         card_deck=card_deck,
@@ -84,7 +91,7 @@ if __name__ == "__main__":
 
     game_simulation = Game(game_state, True)
     game_simulation.run_game()
-    print_game_results(game_simulation.players)
+    # print_game_results(game_simulation.players)
     end = timer()
 
     print(f"Simulation time: {end - start}")

@@ -5,7 +5,7 @@ from card import Card
 from card_deck import CardDeck
 from coin import Coin
 from Players.player import Player
-
+from memory_profiler import profile
 import random
 from game_state import GameState
 
@@ -14,7 +14,7 @@ from playing_board import PlayingBoard
 
 
 class Game:
-    def calculate_turn_split(self) -> int:
+    def calculate_age_split(self) -> int:
         if self.NUMBER_OF_PLAYERS < 4:
             return 4
         else:
@@ -33,15 +33,19 @@ class Game:
         self.bank = game_state.bank
         self.playing_board = game_state.playing_board
         self.turn = game_state.turn
-        self.turn_split = self.calculate_turn_split()
+        self.age_split = self.calculate_age_split()
         self.mode = game_state.mode
         self.slots = game_state.slots
         self.slot_index = game_state.slot_index
+        if self.NUMBER_OF_PLAYERS == 2:
+            self.number_of_slot_cards = 3
+        else:
+            self.number_of_slot_cards = self.NUMBER_OF_PLAYERS
 
     def get_possible_game_states(self):
-        if self.turn > self.turn_split*2:
+        if self.turn > self.age_split*2:
             raise Exception(f"Illegal game state {self.turn} reached")
-        if self.turn == self.turn_split*2:
+        if self.turn == self.age_split*2:
             return []
         if self.slots == []:
             pass
@@ -51,7 +55,7 @@ class Game:
             # return self.generate_possible_bet_slot_variations(self.slot_index, known_player_bets, know_player_coins)
 
     def generate_slots(self):
-        self.slots = self.playing_board.generate_slots(self.turn_split, self.turn)
+        self.slots = self.playing_board.generate_slots(self.turn, self.age_split, self.number_of_slot_cards)
         self.slot_index = 1
         self.print_function(str(self.slots))
 
@@ -65,12 +69,11 @@ class Game:
                          slots=self.slots,
                          mode=self.mode)
 
-    def make_player_bets(self):
+    def make_player_bets(self, game_state:GameState):
         for player in self.players:
             # if player.player_type == 'MCTS':
             #     print('debug')
-            if len(player.bets) == 0:
-                game_state = self.create_game_state()
+            if len(player.bets) == 0 and player.can_skip == False:
                 if sorted(game_state.players[1].coins, key= lambda x: x.value) != sorted(self.players[1].coins, key= lambda x: x.value):
                     raise('Players coins are not equal')
                 player.make_bet(self.slots, game_state) #MCTS decision 
@@ -82,15 +85,16 @@ class Game:
         return taken_card
 
 ##################################################################################################################
+    # @profile
     def run_game(self):
-        while self.turn < self.turn_split*2:
+        while self.turn < self.age_split*2:
             # in halfway point we award bonuses to players, no decision needed
             
             if self.slot_index == 0:
 
                 self.print_function(f"Turn {self.turn}")
 
-                if self.turn == self.turn_split:
+                if self.turn == self.age_split:
                     self.print_function("Granting players distinction bonuses")
                     self.award_distinction_cards(self.players, self.playing_board)
 
@@ -100,7 +104,8 @@ class Game:
             # here we can have update player function, which to MCTS player would pass the game state
             # for player in self.players:
             #     player.update_state(self.card_deck, self.players, self.bank, self.turn)
-            self.make_player_bets()
+            game_state = self.create_game_state()
+            self.make_player_bets(game_state)
             # else:
             #     self.check_if_bets_need_to_be_made()
 
@@ -143,7 +148,7 @@ class Game:
 
             for player in self.players:
                 player.remove_bets()
-            if self.turn == self.turn_split*2:
+            if self.turn == self.age_split*2:
                 red_highest_players = self.get_player_with_highest_count(self.players, 'red')
                 for player in red_highest_players:
                     player.add_red_bonus()
@@ -183,15 +188,21 @@ class Game:
                 player_queue.extend(sorted_helper_dict[key])
 
         return player_queue
-    
+    # TEST
     def sort_players_by_crystal(self, players:List[Player]) -> List[Player]:
-        if len(players) == 2:
-            if players[0].crystal > players[1].crystal:
-                # self.exchange_crystals_two_players(players)
-                return [players[0], players[1]]
-            else:
-                # self.exchange_crystals_two_players(players)
-                return [players[1], players[0]]
+        crystals = [(player.index, player.crystal) for player in players]
+        # TEST
+        crystals.sort(key = lambda x: x[1])
+        # ---
+        queue = []
+        for crystal in crystals:
+            for player in players:
+                if player.index == crystal[0]:
+                    queue.append(player)
+        return queue
+
+
+
             
     def exchange_crystals_two_players(self, players:List[Player]) -> None:
         if players[0].crystal != 6 and players[1].crystal != 6:
