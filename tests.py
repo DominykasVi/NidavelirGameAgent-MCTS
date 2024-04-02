@@ -473,6 +473,8 @@ def run_tests(results, iter_variable, game_state):
     for process in processes:
         process.join()
 
+        
+
 if __name__ == "__main__":
     # NUMBER_OF_PLAYERS = 2
     manager = Manager()

@@ -387,8 +387,7 @@ class MCTS:
         return_type = game_state.players[mcts_player_index].action_to_perform
         return_player = f'Player{mcts_player_index}'
         self.max_iterations = game_state.players[mcts_player_index].depth
-        c_val = game_state.players[mcts_player_index].c_value
-        self.c_value = c_val
+        self.c_value = game_state.players[mcts_player_index].c_value
 
         for player in game_state.players:
             if player.player_type == 'MCTS':
@@ -406,12 +405,12 @@ class MCTS:
                 game_state.mode = 0
 
 
-        root_node = Node(game_state, 0, 'Root', constant=c_val)
+        root_node = Node(game_state, 0, 'Root', constant=self.c_value)
         
         if special_case is not None:
             self.handle_special_case(root_node, special_case, mcts_player_index)
 
-        visualize = False
+        # visualize = False
         # for key in game_state.slots.keys():
         #     for card in game_state.slots[key]:
         #         if card.color == 'coin':
@@ -419,7 +418,7 @@ class MCTS:
             root_node.simulate_run(self.total_runs, mcts_player_index)
             self.total_runs += 1
         end = timer()
-        self.save_run_info(end - start)
+        # self.save_run_info(end - start)
         # print(f"Simulation of {self.total_runs} took: {end - start}")
         return_index = -1
         return_node = root_node

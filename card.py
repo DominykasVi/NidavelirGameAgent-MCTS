@@ -1,21 +1,31 @@
 class Card:
-    def __init__(self, color:str, value:int=None, age:int = 0, index:int = None) -> None:
+    def __init__(self, color:str, value:int=None, age:int = 0, index:int = None, rank:int = 1, name:str=None) -> None:
         self.color = color
         # print(color)
         # print(color != 'green' and color != 'violet')
 
-        if color != 'green' and color != 'violet':
+        if color != 'green' and color != 'violet' and color != 'black':
             self.value = int(value)
         else:
             self.value = value
         self.age = age
         self.index = index
+        self.rank = rank
+        self.name = name
 
     def __str__(self) -> str:
-        return f"{self.color}:{self.value} ({self.age})"
+        if self.name == None:
+            rep = f"{self.color}:{self.value} ({self.age})"
+        else:
+            rep = f"{self.name}:{self.value} ({self.rank})"
+        return rep
     
     def __repr__(self) -> str:
-        return f"{self.color}:{self.value} ({self.age})"
+        if self.name == None:
+            rep = f"{self.color}:{self.value} ({self.age})"
+        else:
+            rep = f"{self.name}:{self.value} ({self.rank})"
+        return rep
     
     def __eq__(self, other):
         if isinstance(other, Card):

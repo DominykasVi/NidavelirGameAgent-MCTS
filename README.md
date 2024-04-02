@@ -73,7 +73,33 @@ Todos:
 2.1  - Test if coins are correct
 2.2  - Test if cards are correct
 2.3 - Run 500 random simulations/ when all correct, run 1000
-3. Special korteliu pridejimas
+
+
+3. Special korteliu pridejimas (isskyrus uline, ylud, thrud)
 
 4. MCTS modification to work for more players
 5. MCTS modifiction for special cards
+6. MCTS tests agains random and itself, value optimizing?
+
+
+ 2. Tobulinama kursinio darbo metu parašyta skaitmeninė žaidimo versija, kad ja sugebėtų
+ žaisti iki 5 žaidėjų (įskaitant). Planuojama atlikti iki kovo 22 d.
+ Balandzio 1d. hero cards
+ Balandzio 1d. MCTS pradzia
+ Balandzio 2d. MCTS pabaiga
+ Balandzio 4-7 MCTS rework
+ Balandzio 7-9 test start
+ Balandzio 10-12 test end
+ Balandzio 12 susitkimas su destytoju
+
+ 3. MCTS algoritmo, sukurto kursinio darbo metu, tobulinimas, kad algoritmas sugebėtų
+ veikti iki 5 žaidėjų (įskaitant) žaidime. Planuojama atlikti iki balandžio 5 d.
+ 4. Sukurto MCTS žaidėjo testavimas prieš atsitiktinius ir kitus MCTS žaidėjus. Tobulinamų
+ sričių identifikavimas. Planuojama atlikti iki balandžio 12 d.
+ 5. MCTS agento optimizavimas pritaikant atrinktus metodus. Daroma prielaida, kad reikės
+ modifikuoti MCTSalgoritmodalis, lygiagretinti MCTS algoritmą arba pritaikayti mašininį
+ mokymąsi. Planuojama atlikti iki gegužės 3 d.
+ 3
+6. Patobulintų MCTS agentų testavimas prieš atsitiktinius ir kitus MCTS žaidėjus. Rezultatų
+ reikšmingumo įvertinimas ir rezultatų interpretacija. Planuojama atlikti iki Gegužės 17 d.
+ 7. Stilistinės baigiamojo darbo korekcijos. Planuojama atlikti iki gegužės 23 d.

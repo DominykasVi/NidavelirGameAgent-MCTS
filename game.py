@@ -13,7 +13,6 @@ from playing_board import PlayingBoard
 from datetime import datetime
 
 
-
 class Game:
     def calculate_age_split(self) -> int:
         if self.NUMBER_OF_PLAYERS < 4:
@@ -21,14 +20,14 @@ class Game:
         else:
             return 3
 
-                # players.append(Player(f"Player {i+1}", crystal, bank))
+            # players.append(Player(f"Player {i+1}", crystal, bank))
 
-    def __init__(self, game_state:GameState, initialize=False) -> None:
+    def __init__(self, game_state: GameState, initialize=False) -> None:
         # SEED = 10
         self.players = game_state.players
         self.NUMBER_OF_PLAYERS = len(self.players)
-        # self.game_id = str(uuid.uuid4())
-        self.game_id = datetime.strftime(datetime.now(), '%Y%m%d%H%M%S%f')
+        self.game_id = str(uuid.uuid4())
+        # self.game_id = datetime.strftime(datetime.now(), '%Y%m%d%H%M%S%f')
         # if initialize:
         #     self.give_players_crystals(self.players)
         self.card_deck = game_state.deck
@@ -57,7 +56,8 @@ class Game:
             # return self.generate_possible_bet_slot_variations(self.slot_index, known_player_bets, know_player_coins)
 
     def generate_slots(self):
-        self.slots = self.playing_board.generate_slots(self.turn, self.age_split, self.number_of_slot_cards)
+        self.slots = self.playing_board.generate_slots(
+            self.turn, self.age_split, self.number_of_slot_cards)
         self.slot_index = 1
         self.print_function(str(self.slots))
 
@@ -71,34 +71,38 @@ class Game:
                          slots=self.slots,
                          mode=self.mode)
 
-    def make_player_bets(self, game_state:GameState):
+    def make_player_bets(self, game_state: GameState):
         for player in self.players:
             # if player.player_type == 'MCTS':
             #     print('debug')
             if len(player.bets) == 0 and player.can_skip == False:
                 # if sorted(game_state.players[1].coins, key= lambda x: x.value) != sorted(self.players[1].coins, key= lambda x: x.value):
                 #     raise('Players coins are not equal')
-                player.make_bet(self.slots, game_state) #MCTS decision 
+                player.make_bet(self.slots, game_state)  # MCTS decision
 
-    def take_card(self, player:Player, bet_index:int) -> Card:
+    def take_card(self, player: Player, bet_index: int) -> Card:
         game_state = self.create_game_state()
-        self.slots[self.slot_index], taken_card = player.take_card(self.slots[self.slot_index], game_state=game_state) #MCTS decision
+        self.slots[self.slot_index], taken_card = player.take_card(
+            self.slots[self.slot_index], game_state=game_state)  # MCTS decision
         player.make_coin_exchange(bet_index)
         return taken_card
 
 ##################################################################################################################
     # @profile
     def run_game(self):
+        print(f'Game: {self.game_id}')
         while self.turn < self.age_split*2:
             # in halfway point we award bonuses to players, no decision needed
-            
+            self.coin_test()
+
             if self.slot_index == 0:
 
                 self.print_function(f"Turn {self.turn}")
 
                 if self.turn == self.age_split:
                     self.print_function("Granting players distinction bonuses")
-                    self.award_distinction_cards(self.players, self.playing_board)
+                    self.award_distinction_cards(
+                        self.players, self.playing_board)
 
             # take cards which will be shown to players
                 self.generate_slots()
@@ -111,39 +115,51 @@ class Game:
             # else:
             #     self.check_if_bets_need_to_be_made()
 
-
-
             # for slot_index in self.slots.keys():
             while self.slot_index < 4:
                 bet_index = self.slot_index - 1
-                
+
                 self.print_function(f"Turn {self.turn}")
                 self.print_player_bets()
-                self.print_function(f"SLOT {self.slot_index} : {self.slots[self.slot_index]}")
+                self.print_function(
+                    f"SLOT {self.slot_index} : {self.slots[self.slot_index]}")
 
-                player_queue = self.create_player_queue(self.players, bet_index)
+                player_queue = self.create_player_queue(
+                    self.players, bet_index)
 
                 self.print_function(f"Player turns: {player_queue}")
-                    
+
                 for player in player_queue:
                     self.print_function(str(player))
                     if player.card_taken == False:
                         taken_card = self.take_card(player, bet_index)
-
+                        if player.has_row() and len(self.card_deck.hero_cards) != 0:
+                            self.print_function('Row reached')
+                            self.playing_board.card_deck.hero_cards, hero = player.choose_hero(
+                                self.playing_board.card_deck.hero_cards)
+                            self.print_function(f'Taken card: {hero}')
+                            action = self.hero_has_action(hero)
+                            if action == 'Discard':
+                                self.print_function(f'Hero {hero.name} discards cards')
+                                # here finished add hero action parser
+                                discarded_cards = player.discard_cards(hero_card = hero)
+                                self.print_function(f'Hero discards cards {str(discarded_cards)}')
+                            elif action =='AddCoins':
+                                player.increase_coin(value=7)
+                        self.coin_test()
                         self.print_function(f"Taken card {taken_card}")
                         self.breakpoint()
-                    self.print_function(f"{player} coins: {player.coins}, {player.bets}, {player.left_over_coins}")
+                    self.print_function(
+                        f"{player} coins: {player.coins}, {player.bets}, {player.left_over_coins}")
                 for player in player_queue:
                     player.card_taken = False
-                # TODO: modify to depend on player count
                 self.exchange_crystals(self.players, bet_index)
                 # if self.players[0].bets[bet_index] == self.players[1].bets[bet_index]:
                 #     self.exchange_crystals_two_players(self.players)
-                
+
                 # self.slots.pop(slot_index)
                 self.slot_index += 1
                 self.clear_console()
-
 
             self.slots.clear()
             self.slot_index = 0
@@ -152,22 +168,76 @@ class Game:
             for player in self.players:
                 player.remove_bets()
             if self.turn == self.age_split*2:
-                red_highest_players = self.get_player_with_highest_count(self.players, 'red')
+                red_highest_players = self.get_player_with_highest_count(
+                    self.players, 'red')
                 for player in red_highest_players:
                     player.add_red_bonus()
+        self.print_game_results()
         return [player.get_player_points() for player in self.players]
 ##################################################################################################################
 
+    def hero_has_action(self, hero: Card):
+        if hero.name in ['DAGDA', 'BONFUR']:
+            return 'Discard'
+        if hero.name == ['GRID']:
+            return 'AddCoins'
+        return None
 
-    def award_distinction_cards(self, players:List[Player], playing_board:PlayingBoard) -> None:
+    def coin_test(self):
+        fives = self.NUMBER_OF_PLAYERS + 2
+        if self.NUMBER_OF_PLAYERS > 3:
+            sevens = 1
+            nines = 1
+            elevens = 1
+        else:
+            sevens = 3
+            nines = 3
+            elevens = 3
+
+        coin_limits = {
+            5: fives,
+            6: 2,
+            7: sevens,
+            8: 2,
+            9: nines,
+            10: 2,
+            11: elevens,
+            12: 2,
+            13: 2,
+            14: 2,
+            15: 1, 16: 1, 17: 1, 18: 1, 19: 1, 20: 1, 21: 1, 22: 1, 23: 1, 24: 1, 25: 1
+        }
+
+        all_coins = {}
+        for player in self.players:
+            for coin in player.coins:
+                if coin.value >= 5:
+                    if coin.value in all_coins.keys():
+                        all_coins[coin.value] += 1
+                    else:
+                        all_coins[coin.value] = 1
+
+        for bank_coin in self.bank.coins.keys():
+            if bank_coin in all_coins.keys():
+                all_coins[bank_coin] += self.bank.coins[bank_coin]
+            else:
+                all_coins[bank_coin] = self.bank.coins[bank_coin]
+
+        for coin_value in all_coins.keys():
+            if all_coins[coin_value] > coin_limits[coin_value]:
+                raise(Exception(f'Illegal value {coin_value}, should be {coin_limits[coin_value]}, is {all_coins[coin_value]}'))
+
+    def award_distinction_cards(self, players: List[Player], playing_board: PlayingBoard) -> None:
         colors = ['red', 'green', 'orange', 'violet', 'blue']
         for color in colors:
-            distinguished_players = self.get_player_with_highest_count(players,color)
+            distinguished_players = self.get_player_with_highest_count(
+                players, color)
             self.print_players_color_count(players, color)
             if len(distinguished_players) == 1:
-                self.add_bonus_to_distinguished(distinguished_players[0], color, playing_board)
+                self.add_bonus_to_distinguished(
+                    distinguished_players[0], color, playing_board)
 
-    def create_player_queue(self, players:List[Player], slot_number:int) -> List[Player]:
+    def create_player_queue(self, players: List[Player], slot_number: int) -> List[Player]:
         player_queue = []
 
         helper_dict = {}
@@ -179,23 +249,25 @@ class Game:
                 else:
                     helper_dict[bet] = [player]
             except:
-                raise("DEBUG ERROR")
+                raise ("DEBUG ERROR")
         sorted_helper_dict = dict(sorted(helper_dict.items(), reverse=True))
         # print(sorted_helper_dict)
 
         for key in sorted_helper_dict.keys():
             if len(sorted_helper_dict[key]) > 1:
-                sorted_players = self.sort_players_by_crystal(sorted_helper_dict[key])
+                sorted_players = self.sort_players_by_crystal(
+                    sorted_helper_dict[key])
                 player_queue.extend(sorted_players)
             else:
                 player_queue.extend(sorted_helper_dict[key])
 
         return player_queue
     # TEST
-    def sort_players_by_crystal(self, players:List[Player]) -> List[Player]:
+
+    def sort_players_by_crystal(self, players: List[Player]) -> List[Player]:
         crystals = [(player.index, player.crystal) for player in players]
         # TEST
-        crystals.sort(key = lambda x: x[1], reverse=True)
+        crystals.sort(key=lambda x: x[1], reverse=True)
         # ---
         queue = []
         for crystal in crystals:
@@ -204,29 +276,32 @@ class Game:
                     queue.append(player)
         return queue
 
-    def exchange_crystals(self, players:List[Player], bet_index:int) -> List[Player]:
+    def exchange_crystals(self, players: List[Player], bet_index: int) -> List[Player]:
         bet_dict = {}
         for player in players:
             try:
                 bet = player.bets[bet_index].value
+                if player.crystal == 6:
+                    continue
                 if bet in bet_dict.keys():
                     bet_dict[bet].append(player)
                 else:
                     bet_dict[bet] = [player]
             except:
-                raise("DEBUG ERROR")
+                raise ("DEBUG ERROR")
         # sorted_helper_dict = dict(sorted(helper_dict.items(), reverse=True))
         for bet, group in bet_dict.items():
             n = len(group)
             for i in range(n // 2):
-                group[i].crystal, group[n-i-1].crystal = group[n-i-1].crystal, group[i].crystal
+                group[i].crystal, group[n-i-1].crystal = group[n -
+                                                               i-1].crystal, group[i].crystal
             # if len(bet_dict[bet]) % 2 == 0:
             #     for i in range(0, len(group), 2):
             #         group[i].crystal, group[i+1].crystal = group[i+1].crystal, group[i].crystal
             # else:
             #     if len(group) > 1:
             #         group[0].crystal, group[-1].crystal = group[-1].crystal, group[0].crystal
-        
+
         # players = []
 
         # for bet in bet_dict.keys():
@@ -235,16 +310,13 @@ class Game:
 
         # return players
 
-
-
-            
-    def exchange_crystals_two_players(self, players:List[Player]) -> None:
+    def exchange_crystals_two_players(self, players: List[Player]) -> None:
         if players[0].crystal != 6 and players[1].crystal != 6:
             temp = players[0].crystal
             players[0].crystal = players[1].crystal
             players[1].crystal = temp
 
-    def get_player_with_highest_count(self, players:List[Player], color:str) -> Player:
+    def get_player_with_highest_count(self, players: List[Player], color: str) -> List[Player]:
         max_count = players[0].get_color_count(color)
         max_player = players[0]
         max_players = [players[0]]
@@ -258,16 +330,17 @@ class Game:
             elif new_count == max_count and player != max_player:
                 max_players.append(player)
 
-            
         return max_players
 
-    def add_bonus_to_distinguished(self, player:Player, color:str, playing_board:PlayingBoard) -> None:
-        self.print_function(f"Distinction card count: {player.distinction_cards}")
+    def add_bonus_to_distinguished(self, player: Player, color: str, playing_board: PlayingBoard) -> None:
+        self.print_function(
+            f"Distinction card count: {player.distinction_cards}")
         if player.distinction_cards == 0:
             self.print_function(f"Giving bonus to player: {player}")
             if color == 'red':
+                player.increase_coin(value=5)
                 player.distinction_cards += 1
-            elif color =='green':
+            elif color == 'green':
                 player.remove_zero_coin()
                 player.coins.append(Coin(3, True))
                 player.distinction_cards += 1
@@ -279,23 +352,28 @@ class Game:
                 player.add_card(Card('violet', 'None', 0, 102))
                 player.distinction_cards += 1
             elif color == 'blue':
-                card_to_choose_from = playing_board.get_number_of_cards(3, playing_board.card_deck.get_age_two_cards())
+                card_to_choose_from = playing_board.get_number_of_cards(
+                    3, playing_board.card_deck.get_age_two_cards())
                 game_state = self.create_game_state()
-                left_cards, _ = player.take_card(card_to_choose_from, game_state=game_state, special_case='distinction')
+                self.print_function(f'Cards to take {card_to_choose_from}')
+                left_cards, taken_card = player.take_card(
+                    card_to_choose_from, game_state=game_state, special_case='distinction')
+                self.print_function(f'Card taken {taken_card}')
                 for card in left_cards:
                     playing_board.card_deck.add_card(card)
                 player.distinction_cards += 1
-    
-        
- #Helper output functions       
-    def print_players_color_count(self, players:List[Player], color):
+                player.card_taken == False
+
+ # Helper output functions
+
+    def print_players_color_count(self, players: List[Player], color):
         if self.mode == 0:
             return
         if self.mode == 4:
             with open(f'Logs/{self.game_id}.txt', 'a') as f:
-                f.write(f"Players have number of {color}")
+                f.write(f"Players have number of {color}\n")
                 for player in players:
-                    f.write(f"{player}: {player.get_color_count(color)}"+ '\n')
+                    f.write(f"{player}: {player.get_color_count(color)}" + '\n')
             return
         if self.mode > 0:
             print(f"Players have number of {color}")
@@ -308,20 +386,21 @@ class Game:
         if self.mode == 4:
             with open(f'Logs/{self.game_id}.txt', 'a') as f:
                 for player in self.players:
-                    f.write(f"{player}, bets: {player.bets}, lefover: {player.left_over_coins}"+ '\n')
+                    f.write(
+                        f"{player}, bets: {player.bets}, lefover: {player.left_over_coins}" + '\n')
             return
         if self.mode > 0:
             for player in self.players:
-                print(f"{player}, bets: ", player.bets, "lefover: ", player.left_over_coins)
+                print(f"{player}, bets: ", player.bets,
+                      "lefover: ", player.left_over_coins)
 
-    
     def print_score(self):
         if self.mode == 0:
             return
         if self.mode == 4:
             with open(f'Logs/{self.game_id}.txt', 'a') as f:
                 for player in self.players:
-                    f.write(player.print_player_points()+ '\n')
+                    f.write(player.print_player_points() + '\n')
             return
         if self.mode > 0:
             for player in self.players:
@@ -329,14 +408,38 @@ class Game:
 
     def clear_console(self) -> None:
         if self.mode == 1:
-            clear = lambda: os.system('cls')
+            def clear(): return os.system('cls')
             clear()
 
     def breakpoint(self) -> None:
         if self.mode == 1:
             input()
 
-    def print_function(self, text:str) -> None:
+    def print_game_results(self):
+        if self.mode == 0:
+            return
+        self.print_function(
+            "################################################################################")
+        self.print_function("Results")
+        colors = self.card_deck.card_group.keys()
+        for player in self.players:
+            self.print_function(str(player))
+            self.print_function(str(player.coins))
+            self.print_function(player.card_deck.get_card_deck_string())
+            card_sum = 0
+            for color in colors:
+                color_count = player.get_color_count(color)
+                self.print_function(f"Has {player.card_deck.card_count[color]} of {color}")
+                self.print_function(f"Has {color_count} ranks of {color}")
+
+                card_sum += color_count
+            self.print_function(f"Has {str(player.card_deck.heroes)} heroes")
+            self.print_function(f"Has {str(len(player.card_deck.hero_cards))} hero cards")
+
+            self.print_function(f"Player has {card_sum} cards")
+            self.print_function(player.get_player_points_str())
+
+    def print_function(self, text: str) -> None:
         if self.mode == 0:
             return
         if self.mode == 4:
@@ -346,3 +449,56 @@ class Game:
         if self.mode > 0:
             print(text)
 
+    def coin_test(self):
+        fives = self.NUMBER_OF_PLAYERS + 2
+        if self.NUMBER_OF_PLAYERS < 4:
+            sevens = 1
+            nines = 1
+            elevens = 1
+        else:
+            sevens = 3
+            nines = 3
+            elevens = 3
+
+        coin_limits = {
+            5: fives,
+            6: 2,
+            7: sevens,
+            8: 2,
+            9: nines,
+            10: 2,
+            11: elevens,
+            12: 2,
+            13: 2,
+            14: 2,
+            15: 1,
+            16: 1,
+            17: 1,
+            18: 1,
+            19: 1,
+            20: 1,
+            21: 1,
+            22: 1,
+            23: 1,
+            24: 1,
+            25: 1,
+        }
+
+        all_coins = {}
+        for player in self.players:
+            for coin in player.coins:
+                if coin.value >= 5:
+                    if coin.value in all_coins.keys():
+                        all_coins[coin.value] += 1
+                    else:
+                        all_coins[coin.value] = 1
+
+        for bank_coin in self.bank.coins.keys():
+            if bank_coin in all_coins.keys():
+                all_coins[bank_coin] += self.bank.coins[bank_coin]
+            else:
+                all_coins[bank_coin] = self.bank.coins[bank_coin]
+
+        for coin_value in all_coins.keys():
+            if all_coins[coin_value] > coin_limits[coin_value]:
+                raise Exception("More coins than possible")

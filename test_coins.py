@@ -20,7 +20,9 @@ import time
 from datetime import datetime
 
 
-
+def run_game_threaded(game_simulation, index):
+    game_simulation.run_game()
+    print(f"Simulation {index} ended")
 
 
 def get_crystals(NUMBER_OF_PLAYERS):
@@ -42,28 +44,15 @@ def give_players_crystals(players):
         crystals.remove(crystal)
         players[i].set_crystal(crystal)
 
-
-
-
-
-if __name__ == "__main__":
- 
-
-    NUMBER_OF_PLAYERS = 4
+def create_game_simulation():
+    NUMBER_OF_PLAYERS = 5
     mode = 4
-
-    start = timer()
-
     card_deck = CardDeck(NUMBER_OF_PLAYERS, True)
     bank = Bank(NUMBER_OF_PLAYERS)
     playing_board = PlayingBoard(card_deck)
     players:List[Player] = []
     for i in range(NUMBER_OF_PLAYERS):
         players.append(RandomPlayer(i, None, bank))
-        print(f"Player {i} added")
-    # players.append(RandomPlayer(1, None, bank))
-    # players.append(MCTSPlayer(1, None, bank, 1.2, 200))
-
     game_state = GameState(playing_board=playing_board,
                         players=players,
                         card_deck=card_deck,
@@ -76,10 +65,20 @@ if __name__ == "__main__":
 
 
     game_simulation = Game(game_state, True)
-    game_simulation.run_game()
-    # print_game_results(game_simulation.players)
-    end = timer()
+    return game_simulation
 
-    print(f"Simulation time: {end - start}")
+if __name__ == '__main__':
+    manager = Manager()
 
+    processes = []
+    iter_variable = range(0, 100)
 
+    for i in iter_variable:
+        game_simulation = create_game_simulation()
+        process = Process(target=run_game_threaded, args=(game_simulation, i))
+        processes.append(process)
+        process.start()
+        print(f"Simulation {i} started")
+
+    for process in processes:
+        process.join()
