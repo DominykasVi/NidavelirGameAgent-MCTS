@@ -49,7 +49,6 @@ class Bank:
                     else:
                         addition += 1
         except Exception as err:
-            print(err)
             raise(err)
         # if self.coins[(coin_value+1)] > 0:
         #     self.coins[(coin_value+1)] -= 1

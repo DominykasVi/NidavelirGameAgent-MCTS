@@ -1,3 +1,4 @@
+from copy import deepcopy
 from card_deck import CardDeck
 from card import Card
 from typing import List, Dict, Tuple
@@ -26,6 +27,8 @@ class Player:
         self.card_taken = False
         self.bet_made = False
         self.can_skip = False
+        
+        # self.id = self
         # self.debug = 0
 
     def __eq__(self, __value: object) -> bool:
@@ -43,7 +46,7 @@ class Player:
         self.crystal = crystal
 
     def make_bet(self, bets: List[Coin]) -> None:
-        coins_copy = self.coins.copy()
+        coins_copy = deepcopy(self.coins)
         for bet in bets:
             if bet not in self.coins:
                 raise Exception("Trying to bet a coin that doesn't exist")
@@ -77,7 +80,7 @@ class Player:
         self.card_deck.heroes += 1
         return hero_cards, hero_to_take
 
-    def discard_cards(self, hero_card: Card, cards_to_discard: List[Card]) -> List[Card]:
+    def discard_cards(self, cards_to_discard: List[Card]) -> List[Card]:
         for card in cards_to_discard:
             self.card_deck.remove_card(card.index)
         return cards_to_discard
@@ -92,14 +95,14 @@ class Player:
         return cards_to_choose, card_to_take
 
     def add_card(self, card: Card, in_bets: bool = None) -> None:
-        if card.color == 'coin':
-            self.card_deck.add_card(card)
-            self.increase_coin(card.value, in_bets)
-        else:
-            self.card_deck.add_card(card)
+        # if card.color == 'coin':
+        self.card_deck.add_card(card)
+            # self.increase_coin(card.value, in_bets)
+        # else:
+            # self.card_deck.add_card(card)
             # TODO recruit_hero?
 
-    def make_coin_exchange(self, bet_index: int) -> None:
+    def make_coin_exchange(self, bet_index: int, bank: Bank) -> None:
         if self.bets[bet_index].exchangeable == True:
             # print("Made exchange. Player coins", self.coins,"\nLeft over coins:", self.left_over_coins)
             bigger_coin = max(self.left_over_coins, key=lambda x: x.value)
@@ -108,7 +111,7 @@ class Player:
             self.coins.remove(bigger_coin)
             self.left_over_coins.remove(bigger_coin)
 
-            new_coin_value = self.bank.take_coin(
+            new_coin_value = bank.take_coin(
                 (bigger_coin.value+lower_coin.value))
             new_coin = Coin(new_coin_value)
 
@@ -142,7 +145,7 @@ class Player:
             self.coins.remove(coin_to_increase)
             self.coins.append(new_coin)
         except Exception as err:
-            print(err)
+            raise(err)
         # print(new_coin)
 
     def get_coin_points(self) -> int:

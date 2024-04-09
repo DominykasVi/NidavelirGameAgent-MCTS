@@ -18,7 +18,7 @@ from threading import Thread
 from multiprocessing import Process, Manager
 import time
 from datetime import datetime
-
+from itertools import combinations
 
 def print_game_results(players):
     print("################################################################################")
@@ -103,6 +103,13 @@ def test_queue():
     print(players)
     print(game_simulation.create_player_queue(players, 0))
 
+
+def reset_players(NUMBER_OF_PLAYERS, bank) -> List[Player]:
+    players = []
+    for i in range(NUMBER_OF_PLAYERS):
+        players.append(RandomPlayer(i, None, bank))
+    return players
+
 def test_coin_excahnge():
     NUMBER_OF_PLAYERS = 5
     mode = 1
@@ -152,20 +159,76 @@ def test_coin_excahnge():
     
     # game_simulation.exchange_crystals(players, 0)
         print(players)
-        game_simulation.exchange_crystals(players, i)
+        Game.exchange_crystals(players, i, 1)
         print(players)
+
+
+        
+    i = 0
+    print(f'=============={i}=================')
+    players = reset_players(NUMBER_OF_PLAYERS, bank)
+    players[0].crystal = 2
+    players[1].crystal = 4
+    players[2].crystal = 3
+    players[3].crystal = 5
+    players[4].crystal = 1
+    players[0].bets = [coin_5]
+    players[1].bets = [coin_5]
+    players[2].bets = [coin_3]
+    players[3].bets = [coin_5]
+    players[4].bets = [coin_5]
+    print(players)
+    players = GameState.create_player_queue(players, 0)
+    print(players)
+    Game.exchange_crystals(players, i, 1)
+    print(players)
+        # Player0 (5), bets: [5(False), 3(False), 4(False)], lefover: [0(True), 2(False)]
+    # Player1 (1), bets: [3(False), 4(False), 0(True)], lefover: [2(False), 5(False)]
+    # Player2 (3), bets: [4(False), 2(False), 0(True)], lefover: [3(False), 5(False)]
+    # Player3 (4), bets: [3(False), 0(True), 2(False)], lefover: [4(False), 5(False)]
+    # Player4 (2), bets: [3(False), 0(True), 5(False)], lefover: [2(False), 4(False)]
+    # SLOT 1 : [red:4 (1), blue:7 (1), violet:None (1), blue:6 (1), violet:None (1)]
+    # Player turns: [Player0 (5), Player2 (3), Player3 (4), Player4 (2), Player1 (1)]
+    # Crystals changed: [Player0 (5), Player2 (3), Player3 (4), Player4 (1), Player1 (2)]
+    i = 0
+    players = reset_players(NUMBER_OF_PLAYERS, bank)
+    print(f'=============={i}=================')
+    players[0].crystal = 5
+    players[1].crystal = 1
+    players[2].crystal = 3
+    players[3].crystal = 4
+    players[4].crystal = 2
+    players[0].bets = [coin_5]
+    players[1].bets = [coin_3]
+    players[2].bets = [coin_4]
+    players[3].bets = [coin_3]
+    players[4].bets = [coin_3]
+    print(players)
+    players = GameState.create_player_queue(players, 0)
+    print(players)
+    Game.exchange_crystals(players, i, 1)
+    print(players)
         # print(f'=============={i}=================')
     # print(game_simulation.exchange_crystals(players, 1))
     # print(game_simulation.exchange_crystals(players, 2))
     # print(game_simulation.exchange_crystals(players, 3))
     # print(game_simulation.exchange_crystals(players, 4))
 
+def test_comb():
+    cards_to_take = 2
+    colors = ["red", "blue", "yellow"]
+    cards = {"red": ["a", "b"], "blue": ["c", "d"], "yellow": ["e", "f"]}
+    all_combinations = combinations(colors, cards_to_take)
+    results = []
+    for color_combination in all_combinations:
+        taken_cards = [(color, cards[color][-1]) for color in color_combination]
+        print(taken_cards)
 
 
 
 if __name__ == "__main__":
-    test_queue()
-
+    test_comb()
+    print([1, 2, 3, 4, 5] - [2, 3])
 
     # game_simulation = Game(game_state, True)
     # game_simulation.run_game()

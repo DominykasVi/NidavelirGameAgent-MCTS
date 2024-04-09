@@ -1,8 +1,6 @@
 class Card:
     def __init__(self, color:str, value:int=None, age:int = 0, index:int = None, rank:int = 1, name:str=None) -> None:
         self.color = color
-        # print(color)
-        # print(color != 'green' and color != 'violet')
 
         if color != 'green' and color != 'violet' and color != 'black':
             self.value = int(value)
