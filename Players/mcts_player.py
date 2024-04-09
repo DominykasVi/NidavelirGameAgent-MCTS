@@ -36,6 +36,7 @@ class MCTSPlayer(Player):
         self.coin_to_increase = None
         self.action_to_perform = None
         self.hero_to_take = None
+        
 
     def make_bet(self, possible_choices:Dict[int, List[Card]], game_state:GameState, special_case:str=None) -> None:
         self.action_to_perform = 'Bet'
@@ -63,11 +64,21 @@ class MCTSPlayer(Player):
             if player.index != self.index:
                 game_state_copy.players[player.index].bets = game_state_copy.players[player.index].bets[:game_state_copy.slot_index]
 
+        distinction = False
+        for card in cards_to_choose:
+            if card.index not in game_state_copy.card_deck.cards.keys():
+                game_state_copy.card_deck.add_card(card)
+                distinction = True
+        if distinction:
+            game_state_copy.distinction_take_cards = cards_to_choose
+
         best_node = self.MCTS.run_simulation(game_state=game_state_copy, mcts_player_index=self.index)
 
         card_to_take = best_node.meta_information['card']
         if 'coin_increased' in best_node.meta_information.keys():
             self.coin_to_increase = best_node.meta_information['coin_increased']
+            if self.coin_to_increase not in self.coins:
+                raise(Exception("Increasing coin not at hand"))
         if 'hero_taken' in best_node.meta_information.keys():
             self.hero_to_take = best_node.meta_information['hero_taken']
         if 'cards_dicarded' in best_node.meta_information.keys():

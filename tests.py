@@ -1,4 +1,5 @@
 
+import os
 import random
 from typing import List
 from bank import Bank
@@ -19,15 +20,26 @@ from multiprocessing import Process, Manager
 import time
 from datetime import datetime
 
+
 GLOBAL_DEPTH = 500 #Tested
 GLOBAL_C_VALUE = 4 #Tested
 NUMBER_OF_PLAYERS = 2
 C_VALUE_WL = 0.6 #Tested
 GLOBAL_MAX_NODES = 120 #Tested
 
-def run_game_threaded(game_simulation, results, index):
-    p0, p1 = game_simulation.run_game()
-    results[index] = (p0, p1)
+def run_game_threaded(game_simulation:Game, results, index):
+    try:
+        result = game_simulation.run_game()
+        mcts = []
+        for player in game_simulation.players:
+            if player.player_type == 'MCTS':
+                mcts.append(player.index)
+        result = result + [':'] + mcts
+        results[index] = result
+    except Exception as e:
+        time = datetime.now().strftime('%Y%m%d_%H%M%S')
+        with open(f'Logs/Failures/{time}.txt', 'w') as f:
+            f.write(str(e))
 
 
 def iteration_test(depth):
@@ -439,12 +451,49 @@ def c_value_wl(c_value):
     game_simulation = Game(game_state, True)
     return game_simulation
 
+def debug_mcts(NUMBER_OF_PLAYERS, number_of_mcts, c_value):
+    card_deck = CardDeck(NUMBER_OF_PLAYERS, True)
+    bank = Bank(NUMBER_OF_PLAYERS)
+    playing_board = PlayingBoard(card_deck)
+    players:List[Player] = []
+    for i in range(0, NUMBER_OF_PLAYERS):
+        players.append(RandomPlayer(i, None, bank))
+
+    random_indexes = []
+    for _ in range(number_of_mcts):
+        random_index = -1
+        while random_index == -1:
+            random_index = random.choice([i for i in range(0, NUMBER_OF_PLAYERS)])
+            if random_index in random_indexes:
+                random_index == -1
+                continue
+            players[random_index] = MCTSPlayer(random_index, None, bank, c_value, 200, 'MCTS')
+
+    # players.append(MCTSPlayer(0, None, bank, depth=GLOBAL_DEPTH, c_value=1.2, type='MCTS'))
+    # players.append(RandomPlayer(1, None, bank))
+    
+    game_state = GameState(playing_board=playing_board,
+                        players=players,
+                        card_deck=card_deck,
+                        bank=bank, 
+                        turn=0,
+                        slot_index=0,
+                        slots=[],
+                        mode=0)
+    give_players_crystals(game_state.players)
+    game_simulation = Game(game_state, True)
+    return game_simulation
+
 def get_crystals(NUMBER_OF_PLAYERS):
-        if NUMBER_OF_PLAYERS == 2:
-            crystals = [4, 5]
-        else:
-            crystals = [1, 2, 3, 4, 5]
-        return crystals
+    if NUMBER_OF_PLAYERS == 2:
+        return [4, 5]
+    if NUMBER_OF_PLAYERS == 3:
+        return [3, 4, 5]
+    if NUMBER_OF_PLAYERS == 4:
+        return [2, 3, 4, 5]
+    if NUMBER_OF_PLAYERS == 5:
+        return [1, 2, 3, 4, 5]
+    raise Exception("Not a valid number of players")
 
 def give_players_crystals(players):
     number_of_players = len(players)
@@ -455,18 +504,26 @@ def give_players_crystals(players):
         players[i].set_crystal(crystal)
 
 def save_scores(results, save_name):
+    folder_path = os.path.dirname(save_name)
+    # Check if the folder exists
+    if not os.path.exists(folder_path):
+        # If the folder does not exist, create it including any necessary parent directories
+        os.makedirs(folder_path)
+
     with open(f'{save_name}.txt', 'w') as file:
-        for tup in results:
+        for game in results:
+            print(game)
             try:
-                line = ' '.join(map(str, tup)) + '\n'
+                line = ' '.join([str(value) for value in game]) + '\n'
                 file.write(line)
             except:
                 continue
 
-def run_tests(results, iter_variable, game_state):
+def run_tests(results, iter_variable, function, parameter):
     processes = []
     for i in iter_variable:
-        process = Process(target=run_game_threaded, args=(game_state, results, i))
+        game_sim = function(*parameter)
+        process = Process(target=run_game_threaded, args=(game_sim, results, i))
         processes.append(process)
         process.start()
 
@@ -480,6 +537,14 @@ if __name__ == "__main__":
     manager = Manager()
 
     tests = [
+        {'name': 'different_counts_of_players','function':debug_mcts, 'mode':'paralel', 'result_size':30, 
+          'param': [(3, 1, 1.2), (4, 1, 1.2), (5, 1, 1.2)]},
+        {'name': 'differerent_c_values','function':debug_mcts, 'mode':'paralel', 'result_size':30, 
+          'param': [(5, 1, 100), (5, 1, 200), (5, 1, 10), (5, 1, 20), (5, 1, 2), (5, 1, 5)]},
+        {'name': 'mcts_vs_mcts','function':debug_mcts, 'mode':'paralel', 'result_size':30, 
+        'param': [(5, 2, 1.2), (5, 3, 1.2), (5, 4, 1.2), (5, 5, 1.2)]},
+        # {'name': 'debug_mcts','function':debug_mcts, 'mode':'paralel', 'result_size':30, 
+        # 'param': [5]},
         # {'name': 'IterationTests','function':iteration_test, 'mode':'paralel', 'result_size':100, 
         #  'param': [50, 100, 150, 200, 250, 300, 350, 400, 45s0, 500, 550, 600]}
         # {'name': 'CValueTests','function':c_value_test, 'mode':'paralel', 'result_size':100, 
@@ -502,8 +567,8 @@ if __name__ == "__main__":
         #  'param': [1]},
         # {'name': 'MCTS_WL','function':mcts_wl, 'mode':'paralel', 'result_size':100, 
         #  'param': [1]},
-        {'name': 'MCTSTimeTests','function':mcts_time_test, 'mode':'simple', 'result_size':20, 
-         'param': [50, 100, 150, 200, 250, 300, 350, 400, 450, 550, 600]},
+        # {'name': 'MCTSTimeTests','function':mcts_time_test, 'mode':'simple', 'result_size':20, 
+        #  'param': [50, 100, 150, 200, 250, 300, 350, 400, 450, 550, 600]},
         # {'name': 'Random_VS','function':random_vs, 'mode':'paralel', 'result_size':100, 
         #  'param': [1]},
         # {'name': 'Random_LIM','function':random_lim, 'mode':'paralel', 'result_size':100, 
@@ -535,10 +600,10 @@ if __name__ == "__main__":
 
             iter_variable = [i for i in range(test['result_size'])]
             if test['mode'] == 'paralel':
-                run_tests(results, iter_variable, test['function'](parameter))
+                run_tests(results, iter_variable, test['function'], parameter)
             else:
                 for idx in iter_variable:
-                    run_tests(results, [idx], test['function'](parameter))
+                    run_tests(results, [idx], test['function'], parameter)
 
             incomplete = True
             errors = 0
@@ -554,7 +619,7 @@ if __name__ == "__main__":
                     incomplete = False
                 else:
                     print(f"Only {good_results} of {test['result_size']}, run again {test['name']}, value={parameter}")
-                    run_tests(results, failed_in, test['function'](parameter))
+                    run_tests(results, failed_in, test['function'], parameter)
 
 
                 errors += 1
@@ -563,7 +628,7 @@ if __name__ == "__main__":
                     incomplete = False
                     break
             if incomplete == False:
-                save_scores(results=results, save_name=f'Results\\TestResults\\{test["name"]}\\{test_time}_{parameter}')
+                save_scores(results=results, save_name=f'Logs/TestResults/{test["name"]}/{test_time}_{str(parameter)}')
             end = timer()
             print(f"Success {test['name']}, value={parameter}")
             duration = end - start

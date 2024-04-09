@@ -46,6 +46,6 @@ def create_single_navigation_html(folder):
     return output_file_name  # Return the name of the generated HTML file
 
 # Example usage
-folder_name = "Logs/Visualizations/42ff2be7-6bf3-4061-add8-8b8e4d0dc896"  # Adjust this to the path of your folder
+folder_name = "Logs/Visualizations/e842217f-709d-42b3-8e9f-3ad8b49c0eeb"  # Adjust this to the path of your folder
 output_file = create_single_navigation_html(folder_name)
 print(f"Navigation HTML file created: {output_file}")

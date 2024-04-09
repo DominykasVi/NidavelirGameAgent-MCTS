@@ -111,7 +111,7 @@ class Player:
             self.coins.remove(bigger_coin)
             self.left_over_coins.remove(bigger_coin)
 
-            new_coin_value = bank.take_coin(
+            new_coin_value = bank.take_coin(bigger_coin.value,
                 (bigger_coin.value+lower_coin.value))
             new_coin = Coin(new_coin_value)
 
@@ -131,7 +131,7 @@ class Player:
 
             # print(f"{self.name} incresed coin {coin_to_increase} to", end=' ')
 
-            new_coin_value = self.bank.take_coin(
+            new_coin_value = self.bank.take_coin(coin_to_increase.value,
                 (coin_to_increase.value+value))
             new_coin = Coin(new_coin_value)
 

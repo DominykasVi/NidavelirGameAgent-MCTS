@@ -178,17 +178,17 @@ class MCTS:
             root_node.simulate_run(self.total_runs, mcts_player_index)
             self.total_runs += 1
         end = timer()
-        print(f"Simulation of {self.total_runs} took: {end - start}")
+        # print(f"Simulation of {self.total_runs} took: {end - start}")
         
-        viz = Visualizer(root_node, f'{str(game_state.game_id)}/{root_node.game_state.turn}_{return_type}')
-        viz.visualize()
+        # viz = Visualizer(root_node, f'{str(game_state.game_id)}/{root_node.game_state.turn}_{return_type}')
+        # viz.visualize()
 
         # self.save_run_info(end - start)
         return_index = -1
         return_node = root_node
         try:
             while return_type != return_node.meta_information['action'] or mcts_player_index != return_node.meta_information['player']: 
-                possible_scores = [node.score/node.iterations for node in return_node.children]
+                possible_scores = [node.score/node.iterations for node in return_node.children if node.meta_information['action'] == return_type]
                 return_index = return_node.find_child_index_by_value(max(possible_scores))
                 return_node = return_node.children[return_index]
         except Exception as e:

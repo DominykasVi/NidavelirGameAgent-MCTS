@@ -39,6 +39,7 @@ class Game:
         self.slots = game_state.slots
         self.slot_index = game_state.slot_index
         self.number_of_slot_cards = GameState.get_number_of_cards(self.NUMBER_OF_PLAYERS)
+        self.write_path = 'Logs/GameRuns'
 
     def generate_slots(self):
         self.slots = self.playing_board.generate_slots(
@@ -253,7 +254,7 @@ class Game:
         if self.mode == 0:
             return
         if self.mode == 4:
-            with open(f'Logs/{self.game_id}.txt', 'a') as f:
+            with open(f'{self.write_path}/{self.game_id}.txt', 'a') as f:
                 f.write(f"Players have number of {color}\n")
                 for player in players:
                     f.write(f"{player}: {player.get_color_count(color)}" + '\n')
@@ -267,7 +268,7 @@ class Game:
         if self.mode == 0:
             return
         if self.mode == 4:
-            with open(f'Logs/{self.game_id}.txt', 'a') as f:
+            with open(f'{self.write_path}/{self.game_id}.txt', 'a') as f:
                 for player in self.players:
                     f.write(
                         f"{player}, bets: {player.bets}, lefover: {player.left_over_coins}" + '\n')
@@ -281,7 +282,7 @@ class Game:
         if self.mode == 0:
             return
         if self.mode == 4:
-            with open(f'Logs/{self.game_id}.txt', 'a') as f:
+            with open(f'{self.write_path}/{self.game_id}.txt', 'a') as f:
                 for player in self.players:
                     f.write(player.print_player_points() + '\n')
             return
@@ -326,7 +327,7 @@ class Game:
         if self.mode == 0:
             return
         if self.mode == 4:
-            with open(f'Logs/{self.game_id}.txt', 'a') as f:
+            with open(f'{self.write_path}/{self.game_id}.txt', 'a') as f:
                 f.write(text + '\n')
             return
         if self.mode > 0:

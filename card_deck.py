@@ -157,9 +157,12 @@ class CardDeck:
         return [self.cards[key] for key in self.cards.keys() if self.cards[key].age == 2]
 
     def remove_card(self, index: int) -> None:
-        removed_card = self.cards.pop(index)
-        self.card_count[removed_card.color] -= removed_card.rank
-        self.remove_card_from_group(removed_card)
+        try:
+            removed_card = self.cards.pop(index)
+            self.card_count[removed_card.color] -= removed_card.rank
+            self.remove_card_from_group(removed_card)
+        except Exception as e:
+            raise(Exception(e))
 
     def remove_card_from_group(self, card: Card) -> None:
         self.card_group[card.color].remove(card)
@@ -273,7 +276,9 @@ class CardDeck:
 
         if self.card_count['violet'] > 15:
             self.card_count['violet'] = 15
+            color_counts['violet'] = 15
         if self.card_count['green'] > 15:
+            color_counts['green'] = 15
             self.card_count['green'] = 15
 
         card_sum = blue_sum + red_sum + \

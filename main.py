@@ -72,6 +72,10 @@ if __name__ == "__main__":
                         mode=mode)
     give_players_crystals(game_state.players)
 
+    # game_state.turn = 3
+    # players[0].card_deck.cards[14] = Card('blue', 5, 1, 14)
+    # players[0].card_deck.card_count['blue'] = 1
+
 
     game_simulation = Game(game_state, True)
     print(str(game_simulation.game_id))

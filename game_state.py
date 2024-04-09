@@ -29,7 +29,7 @@ class GameState():
 
         # self.increase_meta_variable = None
         self.distinction_applied = distinction_applied
-        self.distinction_needs_card= False
+        self.distinction_take_cards= None
         self.game_id = None
 
     def get_number_of_cards(number_of_players: int) -> int:
@@ -171,10 +171,12 @@ class GameState():
                 if self.players[mcts_index].bet_made == True:
                     raise(Exception('Root should not have a bet made'))
                 return self.child_bets_generator(mcts_index)
-            elif action_name == 'Take':
-                return self.child_card_generator(self.slot_index, mcts_index)
+            elif action_name == 'Take' and len(self.slots) > 0:
+                return self.child_card_generator(self.slot_index, mcts_index, coin_exchange=False)
             elif action_name == 'TakeCoin':
                 return self.child_distinction_generator()
+            elif action_name == 'Take' and len(self.slots) == 0:
+                return self.child_distinction_generator(self.distinction_take_cards)
             else:
                 raise(Exception('Root node has unknown action'))
         else:    
@@ -221,7 +223,7 @@ class GameState():
             # else:
             #     raise (Exception("Game not ended, no new states"))
         
-    def child_distinction_generator(self):
+    def child_distinction_generator(self, predefined_cards:List[Card]=None):
         new_state = self.copy_state()
         colors = ['red', 'green', 'orange', 'violet', 'blue']
         for color in colors:
@@ -245,9 +247,12 @@ class GameState():
                                             ,'player':player.index
                                             ,'coin_increased':coin}}
                 elif color == 'blue' and distinguished_players[0].distinction_cards == 0:
-                    possible_cards = new_state.playing_board.card_deck.get_age_two_cards()
-                    random_cards = new_state.shuffle_object(possible_cards.copy())
-                    possible_choices = itertools.permutations(random_cards, 3)
+                    if predefined_cards is None:
+                        possible_cards = new_state.playing_board.card_deck.get_age_two_cards()
+                        random_cards = new_state.shuffle_object(possible_cards.copy())
+                        possible_choices = itertools.permutations(random_cards, 3)
+                    else:
+                        possible_choices = [predefined_cards]
                     for possible_choice in possible_choices:
                         for card in possible_choice:
                             new__blue_state = new_state.copy_state()
@@ -259,7 +264,7 @@ class GameState():
                             player.card_taken == False
                             new__blue_state.distinction_applied = True
                             yield from new__blue_state.take_card_generator(taken_card, player.index
-                                                                ,f"Next_turn.Distinction_{distinguished_players[0]}_blue.Card_taken{taken_card}.")
+                                                                ,f"Next_turn.Distinction_{distinguished_players[0]}_blue.Card_taken_{taken_card}.")
         new_state.distinction_applied = True
         yield {'state': new_state, 'name': f"Next_turn.Distinction_no_decisions",
                'return':{'action':'Distinction'
@@ -421,7 +426,7 @@ class GameState():
                             ,'player':player_index
                             ,'card':taken_card}}
 
-    def child_card_generator(self, slot_index: int, player_index: int, move_slot:bool=False):
+    def child_card_generator(self, slot_index: int, player_index: int, move_slot:bool=False, coin_exchange=True):
         temp_state = self.copy_state()
         # If moving onto the next slot
         if move_slot:
@@ -433,7 +438,8 @@ class GameState():
             taken_card = iter_card[0]
             new_state = temp_state.copy_state()
             GameState.exchange_crystals(new_state.players, slot_index-1, 1)
-            new_state.players[player_index].make_coin_exchange(slot_index-1, new_state.bank)
+            if coin_exchange:
+                new_state.players[player_index].make_coin_exchange(slot_index-1, new_state.bank)
             new_state.slots[slot_index], taken_card = new_state.players[player_index].take_card(
                 new_state.slots[slot_index], taken_card=taken_card)
             yield from new_state.take_card_generator(taken_card, player_index, f'Player{player_index}_take_{taken_card}.')

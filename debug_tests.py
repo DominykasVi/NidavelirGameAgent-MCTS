@@ -227,9 +227,13 @@ def test_comb():
 
 
 if __name__ == "__main__":
-    test_comb()
-    print([1, 2, 3, 4, 5] - [2, 3])
-
+    # test_comb()
+    # print([':'] + [1, 2])
+    # print([1, 2, 3, 4, 5] + [':'] + [1, 2])
+    lst = [i for i in range(0, 5)]
+    random_index = random.choice(lst)
+    print(lst)
+    print(str((1, 20, 3)))
     # game_simulation = Game(game_state, True)
     # game_simulation.run_game()
     # # print_game_results(game_simulation.players)
