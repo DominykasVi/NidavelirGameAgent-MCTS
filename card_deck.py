@@ -165,7 +165,7 @@ class CardDeck:
             raise(Exception(e))
 
     def remove_card_from_group(self, card: Card) -> None:
-        self.card_group[card.color].remove(card)
+        self.card_group[card.color] = [existing_card for existing_card in self.card_group[card.color] if existing_card.index != card.index]
 
     def add_card(self, card: Card) -> None:
         if card.index < 200:
@@ -252,7 +252,7 @@ class CardDeck:
                 color_counts['green'] += self.cards[key].rank
             elif self.cards[key].color == 'violet':
                 color_counts['violet'] += self.cards[key].rank
-            if self.cards[key].color == 'blue':
+            elif self.cards[key].color == 'blue':
                 blue_sum += self.cards[key].value
                 color_counts['blue'] += self.cards[key].rank
             elif self.cards[key].color == 'red':
@@ -274,10 +274,10 @@ class CardDeck:
         #     raise (Exception('Red card count is off'))
         # # --------------------
 
-        if self.card_count['violet'] > 15:
+        if self.card_count['violet'] > 15 or color_counts['violet'] > 15:
             self.card_count['violet'] = 15
             color_counts['violet'] = 15
-        if self.card_count['green'] > 15:
+        if self.card_count['green'] > 15 or color_counts['green'] > 15:
             color_counts['green'] = 15
             self.card_count['green'] = 15
 

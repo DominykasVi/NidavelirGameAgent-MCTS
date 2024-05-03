@@ -14,10 +14,13 @@ import MCTS.mcts_simulation_ed as mcts_simulation_ed
 from Players.player import Player
 from multiprocessing import Process, Manager
 from MCTS.mcts_simulation import Node
-
+import math
 
 class MCTSPlayer(Player):
-    def __init__(self, index: int, crystal: int, bank_reference: Bank, c_value, depth, type:str='MCTS', max_child_nodes=None, manager=None) -> None:
+    def __init__(self, index: int, crystal: int, bank_reference: Bank, c_value:float, depth:int, 
+                 type:str='MCTS', max_child_nodes:int=None
+                 ,pw:bool=False, c:float=2, alpha:float=0.5
+                 ,oma:bool=False, eq_param:float = math.e) -> None:
         super().__init__(index, crystal, bank_reference)
         self.player_type = 'MCTS'
         if type == 'MCTS':
@@ -36,7 +39,17 @@ class MCTSPlayer(Player):
         self.coin_to_increase = None
         self.action_to_perform = None
         self.hero_to_take = None
-        
+        self.pw = pw
+        self.c = c
+        self.alpha = alpha
+        self.oma = oma
+        self.eq_param = eq_param
+
+    def run_simulation(self, game_state):
+        try:
+            return self.MCTS.run_simulation(game_state=game_state, mcts_player_index=self.index, pw=self.pw, c=self.c, alpha=self.alpha, oma=self.oma, eq_param = self.eq_param)
+        except Exception as e:
+            raise(e)
 
     def make_bet(self, possible_choices:Dict[int, List[Card]], game_state:GameState, special_case:str=None) -> None:
         self.action_to_perform = 'Bet'
@@ -47,7 +60,7 @@ class MCTSPlayer(Player):
             if player.index != self.index:
                 game_state_copy.players[player.index].bets = game_state_copy.players[player.index].bets[:game_state_copy.slot_index]
                 
-        chosen_bets = self.MCTS.run_simulation(game_state=game_state_copy, mcts_player_index=self.index)
+        chosen_bets = self.run_simulation(game_state_copy)
         new_bet = chosen_bets.meta_information['bet']
         if chosen_bets.meta_information['bet'] != chosen_bets.game_state.players[self.index].bets:
             raise(Exception('Bets differ from selected'))
@@ -72,7 +85,7 @@ class MCTSPlayer(Player):
         if distinction:
             game_state_copy.distinction_take_cards = cards_to_choose
 
-        best_node = self.MCTS.run_simulation(game_state=game_state_copy, mcts_player_index=self.index)
+        best_node = self.run_simulation(game_state_copy)
 
         card_to_take = best_node.meta_information['card']
         if 'coin_increased' in best_node.meta_information.keys():
@@ -94,7 +107,7 @@ class MCTSPlayer(Player):
             game_state_copy = game_state.copy_state()
             game_state_copy.game_id = game_state.game_id
             
-            best_node = self.MCTS.run_simulation(game_state=game_state_copy, mcts_player_index=self.index)
+            best_node = self.run_simulation(game_state_copy)
             if 'coin_increased' not in best_node.meta_information.keys():
                 raise(Exception('Wrong state taken'))
             self.coin_to_increase = best_node.meta_information['coin_increased']

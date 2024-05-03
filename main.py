@@ -45,7 +45,7 @@ def give_players_crystals(players):
 if __name__ == "__main__":
  
 
-    NUMBER_OF_PLAYERS = 5
+    NUMBER_OF_PLAYERS = 2
     mode = 4
 
     start = timer()
@@ -58,7 +58,8 @@ if __name__ == "__main__":
         players.append(RandomPlayer(i, None, bank))
         print(f"Player {i} added")
 
-    players[0] = MCTSPlayer(0, None, bank, 1.2, 200)
+    players[0] = MCTSPlayer(0, None, bank, 200, 500, oma=True,
+                            pw=True, c=2, alpha=0.5)
     # players.append(RandomPlayer(1, None, bank))
     # players.append()
 
@@ -80,6 +81,7 @@ if __name__ == "__main__":
     game_simulation = Game(game_state, True)
     print(str(game_simulation.game_id))
     game_simulation.run_game()
+    # print(str(game_simulation.game_id))
     # print_game_results(game_simulation.players)
     end = timer()
 

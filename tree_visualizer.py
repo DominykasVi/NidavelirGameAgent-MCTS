@@ -43,7 +43,13 @@ class Visualizer():
         return anytree_node
     
     def conver_to_plotly(self, node, parent=None):
+        node.oma = False
         new_node = NewNode(str(node.id), '\n'.join(node.name.split('.')) + '\n' + str(node.calculate_node_value(self.total_runs)), parent)
+        node.oma = True
+        if node.mcts is True:
+            new_node.name = new_node.name + f'\nHash_value: {node.history}'
+            
+
         # new_node = NewNode(str(node.id), ''.join(e for e in node.name if e.isalnum() or e.isspace()) , parent)
 
         for child in node.children:

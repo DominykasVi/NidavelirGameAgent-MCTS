@@ -1,7 +1,7 @@
 from copy import deepcopy
 import itertools
 import math
-from typing import List, Any
+from typing import Dict, List, Any
 from card import Card
 from coin import Coin
 from game import Game
@@ -13,7 +13,7 @@ from tree_visualizer import Visualizer
 from game import Game
 
 class Node:
-    def __init__(self, game_state:GameState, depth:int, name:str='', parent=None, constant=None) -> None:
+    def __init__(self, game_state:GameState, depth:int, name:str='', parent=None, constant=None, pw=False, c=2, alpha=0.5, oma=False, eq_param=math.e) -> None:
         self.score = 0
         self.iterations = 0
         self.parent = parent
@@ -31,6 +31,14 @@ class Node:
         self.child_states = None
         self.meta_information = {}
         self.action = None
+        self.pw = pw
+        self.c = c
+        self.alpha = alpha
+        self.oma = oma
+        self.mcts = False
+        # if oma:
+        self.history = hash(0)
+        self.eq_param = eq_param
 
     def find_child_index_by_value(self, max_value):
         for index, node in enumerate(self.children):
@@ -53,10 +61,20 @@ class Node:
         except Exception as e2:
             raise(e2)
 
-    def calculate_node_value(self, total_runs:int) -> int:
+    def calculate_node_value(self, total_runs:int, hashes:Dict[int, Dict[str, float]]={}) -> int:
         if self.iterations == 0:
             return -1
-        return (self.score/self.iterations) + self.constant * math.sqrt(math.log(total_runs)/self.iterations)
+        if self.oma and self.mcts:
+            try:
+                e = math.sqrt(self.eq_param / (3*self.iterations) + self.eq_param)
+                # print(hashes.keys())
+                # print(self.history)
+                return e*(hashes[self.history]['scores']/hashes[self.history]['iterations']) + \
+                        (1-e)*(self.score/self.iterations) + self.constant * math.sqrt(math.log(total_runs)/self.iterations)
+            except Exception as e:
+                raise(e)
+        else:
+            return (self.score/self.iterations) + self.constant * math.sqrt(math.log(total_runs)/self.iterations)
     
     def update_parents(self, score:int) -> None:
         self.iterations += 1
@@ -66,13 +84,13 @@ class Node:
             self.parent.score += score
             node = node.parent
         
-    def find_max_child_node(self, total_runs:int) -> int:
+    def find_max_child_node(self, total_runs:int, hashes:Dict[int, Dict[str, float]]={}, ignore_leftover:bool=False) -> int:
         has_states_unexplored, self.child_states = self.has_next(self.child_states)
 
-        if has_states_unexplored is True:
+        if has_states_unexplored is True and ignore_leftover is False:
             return -1
         else:
-            possible_state_scores = [node.calculate_node_value(total_runs) for node in self.children]
+            possible_state_scores = [node.calculate_node_value(total_runs, hashes) for node in self.children]
             selected_state = possible_state_scores.index(max(possible_state_scores))
         
         return selected_state
@@ -83,23 +101,31 @@ class Node:
         return node
 
             
-    def generate_child_state(self):
+    def generate_child_state(self, mcts_player_index:int):
         states_left, self.child_states = self.has_next(self.child_states)
         if states_left:
             child_object = next(self.child_states)
             new_node = Node(game_state=child_object['state']
                             ,depth=self.depth
                             ,parent=self
-                            ,constant=self.constant)
+                            ,constant=self.constant
+                            ,pw = self.pw
+                            ,alpha=self.alpha
+                            ,c=self.c
+                            ,oma=self.oma
+                            ,eq_param=self.eq_param)
             self.children.append(new_node)
             new_node.name = child_object['name']
             new_node.obj_name = child_object['name']
             new_node.meta_information = child_object['return']
+            if mcts_player_index == child_object['return']['player']:
+                new_node.mcts = True
+                new_node.history = hash(self.history + hash(child_object['name']))
             return new_node
         # child_object = next(self.child_states)
         raise("No new child state")
 
-    def run_game_simulation(self, new_node, mcts_player_index):
+    def run_game_simulation(self, new_node, mcts_player_index:int, hashes:Dict[int, Dict[str, int]]=None):
         # if new_node.game_state is None:
         #     print('debug')
         try:
@@ -108,47 +134,75 @@ class Node:
             raise(err)
         game_scores = game.run_game()
         new_node.score += game_scores[mcts_player_index]
+        if hashes is not None:
+            if new_node.history in hashes.keys():
+                hashes[new_node.history]['scores'] += new_node.score
+                hashes[new_node.history]['iterations'] += 1
+            else:
+                hashes[new_node.history] = {}
+                hashes[new_node.history]['scores'] = new_node.score
+                hashes[new_node.history]['iterations'] = 1
         #backpropagation
         new_node.update_parents(new_node.score)
 
-    def simulate_run(self, total_runs:int, mcts_player_index:int):
+    def progressive_widening(node) -> int:
+        t = node.iterations + 1
+        k = math.ceil(node.c * t ** node.alpha)
+        return k
+
+
+    def simulate_run(self, total_runs:int, mcts_player_index:int, hashes:Dict[int, Dict[str, int]]):
         #expansion
         if len(self.children) == 0:
-            if self.meta_information['player'] == 4:
-                pass
+
             if self.action is not None:
                 action_information = (self.action, self.meta_information['player'])
                 child_states = self.game_state.get_next_state(action_information)
             else:
                 child_states = self.game_state.get_next_state()
+            
             if child_states is None:
                 self.update_parents(0)
-                # self.run_game_simulation(se;f, mcts_player_index)
             else:
                 self.child_states = child_states
-                new_node = self.generate_child_state()
-                self.run_game_simulation(new_node, mcts_player_index)  
+                new_node = self.generate_child_state(mcts_player_index)
+                self.run_game_simulation(new_node, mcts_player_index, hashes)  
         else:   
             #selection
-            selected_state = self.find_max_child_node(total_runs)
-            if selected_state == -1:
-                new_node = self.generate_child_state()
-                self.run_game_simulation(new_node, mcts_player_index)
+            selected_state = self.find_max_child_node(total_runs, hashes)
+            if self.pw:
+                if selected_state == -1:
+                    # print(f'{len(self.children)}/{self.progressive_widening()}')
+                    if len(self.children) < self.progressive_widening():
+                        new_node = self.generate_child_state(mcts_player_index)
+                        self.run_game_simulation(new_node, mcts_player_index, hashes)
+                    else:
+                        selected_state = self.find_max_child_node(total_runs, hashes, ignore_leftover=True)
+                        self.children[selected_state].simulate_run(total_runs, mcts_player_index, hashes)
+                else:
+                    self.children[selected_state].simulate_run(total_runs, mcts_player_index, hashes)
             else:
-                self.children[selected_state].simulate_run(total_runs, mcts_player_index)
+                if selected_state == -1:
+                    new_node = self.generate_child_state(mcts_player_index)
+                    self.run_game_simulation(new_node, mcts_player_index, hashes)
+                else:
+                    self.children[selected_state].simulate_run(total_runs, mcts_player_index, hashes)
 
 class MCTS:
     def __init__(self) -> None:
         self.total_runs = 1
         self.max_iterations = 100
         self.c_value = 0
+        self.hashes = {}
 
     # def save_run_info(self, time):
     #     with open('Results\\raw\\Iterations_runs\\iterations_runs_2.txt', 'a') as f:
     #         f.write(f'{self.max_iterations}_{self.c_value}:{time}\n')
 
 
-    def run_simulation(self, game_state:GameState, mcts_player_index:int) -> Node:
+    def run_simulation(self, game_state:GameState, mcts_player_index:int
+                       ,pw:bool=False, alpha=0.5, c=2
+                       ,oma=False, eq_param:float = math.e) -> Node:
         self.total_runs = 0
         start = timer()
 
@@ -171,16 +225,19 @@ class MCTS:
                 game_state.players[player.index].card_taken = card_taken
         game_state.mode = -1
 
-        root_node = Node(game_state, 0, 'Root', constant=self.c_value)
+        root_node = Node(game_state, 0, 'Root', constant=self.c_value, pw=pw, alpha=alpha, c=c, oma=oma, eq_param=eq_param)
         root_node.action = return_type
         root_node.meta_information = {'action':'None', 'player':mcts_player_index}
         for i in range(self.max_iterations):
-            root_node.simulate_run(self.total_runs, mcts_player_index)
+            try:
+                root_node.simulate_run(self.total_runs, mcts_player_index, self.hashes)
+            except Exception as e:
+                raise(e)
             self.total_runs += 1
         end = timer()
         # print(f"Simulation of {self.total_runs} took: {end - start}")
         
-        # viz = Visualizer(root_node, f'{str(game_state.game_id)}/{root_node.game_state.turn}_{return_type}')
+        # viz = Visualizer(root_node, f'{str(game_state.game_id)}/{root_node.game_state.turn}_{root_node.game_state.slot_index}_{return_type}')
         # viz.visualize()
 
         # self.save_run_info(end - start)

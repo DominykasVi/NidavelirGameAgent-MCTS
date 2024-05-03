@@ -16,10 +16,11 @@ import time
 from timeit import default_timer as timer
 import matplotlib.pyplot as plt
 from threading import Thread
-from multiprocessing import Process, Manager
+from multiprocessing import Pool, Process, Manager
 import time
 from datetime import datetime
-
+import psutil
+from time import sleep
 
 GLOBAL_DEPTH = 500 #Tested
 GLOBAL_C_VALUE = 4 #Tested
@@ -27,17 +28,26 @@ NUMBER_OF_PLAYERS = 2
 C_VALUE_WL = 0.6 #Tested
 GLOBAL_MAX_NODES = 120 #Tested
 
-def run_game_threaded(game_simulation:Game, results, index):
+# def run_game_threaded(game_simulation:Game, results, index):
+def run_game_threaded(index_function_parameter):
     try:
+        # print(f"Starting process {os.getpid()}") 
+        index, function, parameters = index_function_parameter 
+        game_simulation = function(*parameters)
+        
         result = game_simulation.run_game()
         mcts = []
         for player in game_simulation.players:
             if player.player_type == 'MCTS':
                 mcts.append(player.index)
         result = result + [':'] + mcts
-        results[index] = result
+        # print(mcts)
+        # print(result)
+        # results[index] = result
+        return result
     except Exception as e:
         time = datetime.now().strftime('%Y%m%d_%H%M%S')
+        print(e)
         with open(f'Logs/Failures/{time}.txt', 'w') as f:
             f.write(str(e))
 
@@ -180,7 +190,6 @@ def lim_vs(temp):
     give_players_crystals(game_state.players)
     game_simulation = Game(game_state, True)
     return game_simulation
-
 
 def lim_wl(temp):
     card_deck = CardDeck(NUMBER_OF_PLAYERS, True, '2')
@@ -452,6 +461,11 @@ def c_value_wl(c_value):
     return game_simulation
 
 def debug_mcts(NUMBER_OF_PLAYERS, number_of_mcts, c_value):
+    # print(datetime.now())
+    # print(datetime.now().timestamp())
+    # print(os.getpid())
+
+
     card_deck = CardDeck(NUMBER_OF_PLAYERS, True)
     bank = Bank(NUMBER_OF_PLAYERS)
     playing_board = PlayingBoard(card_deck)
@@ -459,18 +473,20 @@ def debug_mcts(NUMBER_OF_PLAYERS, number_of_mcts, c_value):
     for i in range(0, NUMBER_OF_PLAYERS):
         players.append(RandomPlayer(i, None, bank))
 
+    unique_seed = int.from_bytes(os.urandom(8), 'big')
+
+    random.seed(unique_seed)
     random_indexes = []
     for _ in range(number_of_mcts):
         random_index = -1
         while random_index == -1:
-            random_index = random.choice([i for i in range(0, NUMBER_OF_PLAYERS)])
+            random_index = random.randint(0, NUMBER_OF_PLAYERS-1)
             if random_index in random_indexes:
-                random_index == -1
-                continue
-            players[random_index] = MCTSPlayer(random_index, None, bank, c_value, 200, 'MCTS')
-
-    # players.append(MCTSPlayer(0, None, bank, depth=GLOBAL_DEPTH, c_value=1.2, type='MCTS'))
-    # players.append(RandomPlayer(1, None, bank))
+                random_index = -1
+            else:
+                players[random_index] = MCTSPlayer(random_index, None, bank, c_value, 200, 'MCTS')
+                random_indexes.append(random_index)
+    
     
     game_state = GameState(playing_board=playing_board,
                         players=players,
@@ -480,6 +496,7 @@ def debug_mcts(NUMBER_OF_PLAYERS, number_of_mcts, c_value):
                         slot_index=0,
                         slots=[],
                         mode=0)
+    # print(random_indexes)
     give_players_crystals(game_state.players)
     game_simulation = Game(game_state, True)
     return game_simulation
@@ -516,19 +533,32 @@ def save_scores(results, save_name):
             try:
                 line = ' '.join([str(value) for value in game]) + '\n'
                 file.write(line)
-            except:
+            except Exception as e:
+                raise(e)
                 continue
 
-def run_tests(results, iter_variable, function, parameter):
-    processes = []
-    for i in iter_variable:
-        game_sim = function(*parameter)
-        process = Process(target=run_game_threaded, args=(game_sim, results, i))
-        processes.append(process)
-        process.start()
+def run_tests(function, parameters, result_size):
+    num_processes = os.cpu_count()
+    with Pool(num_processes) as pool:
+        # Create a list of tuples for each task
+        tasks = [(i, function, parameters) for i in range(result_size)]
+        
+        # Use pool.map to process tasks
+        results = pool.map(run_game_threaded, tasks)
+    
+    return results
+    # processes = []
+    # for i in iter_variable:
+    #     game_sim = function(*parameter)
+    #     process = Process(target=run_game_threaded, args=(game_sim, results, i))
+    #     processes.append(process)
+        
+    #     process.start()
 
-    for process in processes:
-        process.join()
+
+    # for process in processes:
+    #     process.join()
+        # print(f"Process {process.pid} joined")  # Confirm process joins
 
         
 
@@ -537,12 +567,16 @@ if __name__ == "__main__":
     manager = Manager()
 
     tests = [
-        {'name': 'different_counts_of_players','function':debug_mcts, 'mode':'paralel', 'result_size':30, 
-          'param': [(3, 1, 1.2), (4, 1, 1.2), (5, 1, 1.2)]},
-        {'name': 'differerent_c_values','function':debug_mcts, 'mode':'paralel', 'result_size':30, 
-          'param': [(5, 1, 100), (5, 1, 200), (5, 1, 10), (5, 1, 20), (5, 1, 2), (5, 1, 5)]},
-        {'name': 'mcts_vs_mcts','function':debug_mcts, 'mode':'paralel', 'result_size':30, 
-        'param': [(5, 2, 1.2), (5, 3, 1.2), (5, 4, 1.2), (5, 5, 1.2)]},
+        # {'name': 'different_counts_of_players','function':debug_mcts, 'mode':'paralel', 'result_size':30, 
+        #   'param': [(3, 1, 1.2), (4, 1, 1.2), (5, 1, 1.2)]},
+        {'name': 'debug_mcts','function':debug_mcts, 'mode':'paralel', 'result_size':300, 
+          'param': [(5, 1, 100)]}#, (5, 2, 200), (5, 3, 200), (5, 4, 200), (5, 5, 200)]}
+        #   , (5, 1, 100), (5, 1, 150), (5, 1, 200), (5, 1, 250), (5, 1, 300),
+        #             (5, 1, 350), (5, 1, 400), (5, 1, 450), (5, 1, 500)]},
+        # {'name': 'mcts_vs_mcts','function':debug_mcts, 'mode':'paralel', 'result_size':30, 
+        # 'param': [(5, 5, 1.2), (5, 4, 1.2), (5, 3, 1.2), (5, 2, 1.2), (5, 1, 1.2)]},
+         
+        # 'param': [(5, 2, 1.2), (5, 3, 1.2), (5, 4, 1.2), (5, 5, 1.2)]},
         # {'name': 'debug_mcts','function':debug_mcts, 'mode':'paralel', 'result_size':30, 
         # 'param': [5]},
         # {'name': 'IterationTests','function':iteration_test, 'mode':'paralel', 'result_size':100, 
@@ -600,10 +634,10 @@ if __name__ == "__main__":
 
             iter_variable = [i for i in range(test['result_size'])]
             if test['mode'] == 'paralel':
-                run_tests(results, iter_variable, test['function'], parameter)
-            else:
-                for idx in iter_variable:
-                    run_tests(results, [idx], test['function'], parameter)
+                results = run_tests(test['function'], parameter, test['result_size'])
+            # else:
+            #     for idx in iter_variable:
+            #         run_tests(results, [idx], test['function'], parameter)
 
             incomplete = True
             errors = 0

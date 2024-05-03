@@ -103,3 +103,17 @@ Todos:
 6. Patobulintų MCTS agentų testavimas prieš atsitiktinius ir kitus MCTS žaidėjus. Rezultatų
  reikšmingumo įvertinimas ir rezultatų interpretacija. Planuojama atlikti iki Gegužės 17 d.
  7. Stilistinės baigiamojo darbo korekcijos. Planuojama atlikti iki gegužės 23 d.
+
+ 5. Tobulinimas ir preliminarus testai
+ 5. 1. Progressive widening
+ 5. 2. ONP ?
+ 5. 3. Lygiagretumas
+ Backlog
+ C reiksmes analize - sestadienis
+1. Run su C reiksme/ieskoti kur fail
+2. Progressive widening implementation
+2. 5. Suzinoti kodel ta pati random reikme generuojama 
+3. SA nakciai
+4. Test to chekc how many child nodes are really created
+
+ 
