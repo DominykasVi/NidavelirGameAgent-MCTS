@@ -156,6 +156,7 @@ class Player:
             if coin.value == 0:
                 self.coins.remove(coin)
                 break
+        # raise(Exception('Did not find 0 coin'))
 
     def add_hero_points(self):
         bonus_points = 0

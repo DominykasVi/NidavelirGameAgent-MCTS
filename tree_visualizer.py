@@ -1,10 +1,12 @@
 import plotly.graph_objects as go
-# from anytree import Node, RenderTree
-# from anytree.exporter import UniqueDotExporter
-# from anytree.exporter import DotExporter
+from anytree import Node, RenderTree
+from anytree.exporter import UniqueDotExporter
+from anytree.exporter import DotExporter
 import subprocess
 import networkx as nx
 import os
+import numpy as np
+
 
 class NewNode:
     def __init__(self, id, name, parent=None):
@@ -27,6 +29,23 @@ class Visualizer():
         if not os.path.exists(folder_path):
             # If the folder does not exist, create it including any necessary parent directories
             os.makedirs(folder_path)
+
+
+    def calculate_angular_positions(depths):
+        # Get unique depths and their counts to estimate angular span
+        unique_depths = sorted(set(depths))
+        max_depth = max(unique_depths)
+        angle_increment = 2 * np.pi / max_depth  # Full circle divided by number of layers
+        positions = {}
+
+        for depth in unique_depths:
+            radius = depth / max_depth  # Normalize radius
+            angle = np.pi / 2 - (depth - 1) * angle_increment  # Position at the start of each layer
+            x = radius * np.cos(angle)
+            y = radius * np.sin(angle)
+            positions[depth] = (x, y, angle)
+        
+        return positions
 
 # Function to extract edges and nodes for plotting
     def extract_edges_nodes(self, node, nodes=[], edges=[], level=0, pos=0):
@@ -73,6 +92,30 @@ class Visualizer():
             parents.extend(child_data["parents"])
 
         return {"ids": ids, "labels": labels, "parents": parents}
+    
+    def convert_to_plotly_format_2(node, depth=1):
+        if not node.children:
+            return {
+                "ids": [node.id],
+                "labels": [f"{node.name} ({depth})"],  # Include depth in label
+                "parents": [node.parent.id if node.parent else ""],
+                "depths": [depth]
+            }
+
+        ids = [node.id]
+        labels = [f"{node.name} ({depth})"]  # Include depth in label
+        parents = [node.parent.id if node.parent else ""]
+        depths = [depth]
+
+        for child in node.children:
+            child_data = Visualizer.convert_to_plotly_format_2(child, depth + 1)
+            ids.extend(child_data["ids"])
+            labels.extend(child_data["labels"])
+            parents.extend(child_data["parents"])
+            depths.extend(child_data["depths"])
+
+        return {"ids": ids, "labels": labels, "parents": parents, "depths": depths}
+
 
     
     def traverse_node(node, ids=[], labels=[], parents=[]):
@@ -165,35 +208,91 @@ class Visualizer():
 
 
 
-
+        #v1
         plotly_data = self.convert_to_plotly_format(test)
-        # fig = go.Figure(go.Treemap(
-        #     ids=plotly_data['ids'],
-        #     labels=plotly_data['labels'],
-        #     parents=plotly_data['parents'],
-        #     root_color="lightgrey"
-        # ))
         fig = go.Figure(go.Sunburst(
             ids=plotly_data['ids'],
             labels=plotly_data['labels'],
             parents=plotly_data['parents'],
         ))
-        # for obj in plotly_data['ids']:
-        #     if not isinstance(obj, str):
-        #         print(f'ids {obj}')
-        # for obj in plotly_data['labels']:
-        #     if not isinstance(obj, str):
-        #         print(f'labels {obj}')
-        # for obj in plotly_data['parents']:
-        #     if not isinstance(obj, str):
-        #         print(f'parents {obj}')
+        fig.write_html(f"{self.save_path.replace('.html', '_b.html')}")
+        # fig.write_image(f"{self.save_path.replace('.html', '_b.png')}")
 
+        
+        plotly_data = Visualizer.convert_to_plotly_format_2(test)  # Replace with your actual function call
+        # Define colors for each layer
+        layer_colors = {
+            1: '#ffffff',   # white for depth 1
+            2: '#1f77b4',   # muted blue
+            3: '#ff7f0e',   # safety orange
+            4: '#2ca02c',   # cooked asparagus green
+            5: '#d62728',   # brick red
+            6: '#9467bd',   # muted purple
+            7: '#8c564b',   # chestnut brown
+            8: '#e377c2',   # raspberry yogurt pink
+            9: '#7f7f7f',   # middle gray
+            10: '#bcbd22',  # curry yellow-green
+            11: '#17becf',  # blue-teal
+            12: '#aec7e8',  # soft blue
+            13: '#ffbb78',  # soft orange
+            14: '#98df8a',  # pale green
+            15: '#ff9896',  # pale red
+            16: '#c5b0d5',  # soft purple
+            17: '#c49c94',  # pale brown
+            18: '#f7b6d2',  # pale pink
+            19: '#c7c7c7',  # light gray
+            20: '#dbdb8d'   # faded yellow
+        }
+
+        # Create color array for sunburst chart
+        colors = [layer_colors.get(depth, '#ddd') for depth in plotly_data['depths']]
+
+        # Generate the sunburst chart
+        fig = go.Figure(go.Sunburst(
+            ids=plotly_data['ids'],
+            labels=plotly_data['labels'],
+            parents=plotly_data['parents'],
+            branchvalues="total",
+            marker=dict(colors=colors),  # Assign colors directly
+        ))
+
+        legend_x = 1.05  # x position for legend (a little to the right of the sunburst)
+        legend_y_start = 1  # starting y position for the legend
+        max_depth = max(plotly_data['depths'])
+        # Add legend entries as scatter plot markers and text annotations
+        for i, (depth, color) in enumerate(sorted(layer_colors.items(), key=lambda x: x[0]), 1):
+            # Add color block as a rectangle annotation
+            if int(depth) <= max_depth:
+                fig.add_annotation(
+                    x=legend_x, xref="paper",
+                    y=legend_y_start - 0.05 * i, yref="paper",
+                    xanchor="left", yanchor="middle",
+                    text="&#9608;",  # Unicode character for a solid block
+                    font=dict(family="Arial", size=16, color=color),
+                    showarrow=False
+                )
+
+                # Add text next to the color block
+                fig.add_annotation(
+                    x=legend_x + 0.02, xref="paper",
+                    y=legend_y_start - 0.05 * i, yref="paper",
+                    xanchor="left", yanchor="middle",
+                    text=f"Depth {depth}",
+                    font=dict(family="Arial", size=12, color='black'),
+                    showarrow=False
+                )
+        fig.update_layout(
+            margin=dict(t=0, l=0, r=200, b=0)  # Adjust right margin to fit legend
+        )
         fig.write_html(f"{self.save_path}")
-        # good code
+        # fig.write_image(f"{self.save_path.replace('.html', '.png')}")
+        print('Drawn')
+
+        # # good code
         # anytree_root = self.convert_to_anytree(self.root)
         # # # Export to Dot format
         # DotExporter(anytree_root).to_dotfile("tree.dot")
-        # subprocess.call(['dot', '-Tpdf', 'tree.dot', '-o' 'tree.pdf'])
+        # subprocess.call(['dot', '-Tpdf', 'tree.dot', '-o', f"{self.save_path.replace('.html', '.pdf')}"])
 
 
 

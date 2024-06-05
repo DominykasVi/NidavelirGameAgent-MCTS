@@ -15,6 +15,7 @@ from Players.player import Player
 from multiprocessing import Process, Manager
 from MCTS.mcts_simulation import Node
 import math
+from timeit import default_timer as timer
 
 class MCTSPlayer(Player):
     def __init__(self, index: int, crystal: int, bank_reference: Bank, c_value:float, depth:int, 
@@ -47,7 +48,15 @@ class MCTSPlayer(Player):
 
     def run_simulation(self, game_state):
         try:
-            return self.MCTS.run_simulation(game_state=game_state, mcts_player_index=self.index, pw=self.pw, c=self.c, alpha=self.alpha, oma=self.oma, eq_param = self.eq_param)
+            start = timer()
+            res = self.MCTS.run_simulation(game_state=game_state, mcts_player_index=self.index
+                                           , pw=self.pw, c=self.c, alpha=self.alpha
+                                           , oma=self.oma, eq_param = self.eq_param
+                                           ,parallel=False)
+            end = timer()
+            with open(r'Logs\TestResults\times\3.txt', 'a') as f:
+                f.write(f'{end-start}\n')
+            return res
         except Exception as e:
             raise(e)
 

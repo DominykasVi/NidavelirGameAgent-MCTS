@@ -203,8 +203,10 @@ class GameState():
                 for player in player_queue:
                     if player.card_taken == False:
                         return self.child_card_generator(self.slot_index, player.index)
-            elif self.turn >= (self.turn_split*2)-1 and \
-                    (len(self.slots[1]) == 0 and len(self.slots[2]) == 0 and len(self.slots[3]) == 0):
+            elif (self.turn >= (self.turn_split*2)-1 and \
+                    (len(self.slots[1]) == 0 and len(self.slots[2]) == 0 and len(self.slots[3]) == 0)) \
+                or (self.turn >= (self.turn_split*2)-1 and len(self.players) == 2 and \
+                    (len(self.slots[1]) == 1 and len(self.slots[2]) == 1 and len(self.slots[3]) == 1)): 
                 return None
             else:
                 if self.slot_index > 3:
@@ -480,18 +482,18 @@ class GameState():
                 game.print_function(f"Giving bonus to player: {player}")
             if color == 'red':
                 player.increase_coin(value=5, game_state=game.create_game_state())
-                player.distinction_cards += 1
+                player.distinction_cards = 1
             elif color == 'green':
                 player.remove_zero_coin()
                 player.coins.append(Coin(3, True))
-                player.distinction_cards += 1
+                player.distinction_cards = 1
             elif color == 'orange':
                 player.crystal = 6
-                player.distinction_cards += 1
+                player.distinction_cards = 1
             elif color == 'violet':
                 player.add_card(Card('violet', 'None', 0, 101))
                 player.add_card(Card('violet', 'None', 0, 102))
-                player.distinction_cards += 1
+                player.distinction_cards = 1
             elif color == 'blue':
                 card_to_choose_from = playing_board.get_number_of_cards(
                     3, playing_board.card_deck.get_age_two_cards())
@@ -504,5 +506,5 @@ class GameState():
                     game.print_function(f'Card taken {taken_card}')
                 for card in left_cards:
                     playing_board.card_deck.add_card(card)
-                player.distinction_cards += 1
+                player.distinction_cards = 1
                 player.card_taken == False

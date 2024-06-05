@@ -45,8 +45,8 @@ def give_players_crystals(players):
 if __name__ == "__main__":
  
 
-    NUMBER_OF_PLAYERS = 2
-    mode = 4
+    NUMBER_OF_PLAYERS = 5
+    mode = 0
 
     start = timer()
 
@@ -58,8 +58,9 @@ if __name__ == "__main__":
         players.append(RandomPlayer(i, None, bank))
         print(f"Player {i} added")
 
-    players[0] = MCTSPlayer(0, None, bank, 200, 500, oma=True,
-                            pw=True, c=2, alpha=0.5)
+# {"score": 227.4, "c_value": 3.4680925162101737, "c": 0.5604952853346341, "alpha": 1.4473637176345078, "e": 0.05281024338707091, "date": "2024-05-13 02:03:27"}
+    idx = 2
+    players[idx] = MCTSPlayer(idx, None, bank, 3.4680925162101737, 500)#, pw=True, c=0.5604952853346341, eq_param=0.05281024338707091, alpha=1.4473637176345078, oma=True)
     # players.append(RandomPlayer(1, None, bank))
     # players.append()
 
@@ -80,11 +81,36 @@ if __name__ == "__main__":
 
     game_simulation = Game(game_state, True)
     print(str(game_simulation.game_id))
-    game_simulation.run_game()
+    print(game_simulation.run_game())
     # print(str(game_simulation.game_id))
     # print_game_results(game_simulation.players)
+    # print(game_simulation.result)
     end = timer()
+    
+    
 
     print(f"Simulation time: {end - start}")
+
+#     {
+#   "textPayload": "[[{'type': 'random'}, {'type': 'random'}, {'type': 'MCTS-PW-OMA', 'iterations': 500, 'c_value': 2.8612678080814935, 'eq': 0.5400455966221653, 'c': 1.3423930766078094, 'alpha': 0.380030259109943}, {'type': 'random'}, {'type': 'random'}]]",
+#   "insertId": "663b00ec000845126a52be99",
+#   "resource": {
+#     "type": "cloud_run_revision",
+#     "labels": {
+#       "project_id": "butu-414613",
+#       "configuration_name": "test3",
+#       "location": "europe-central2",
+#       "service_name": "test3",
+#       "revision_name": "test3-00024-gus"
+#     }
+#   },
+#   "timestamp": "2024-05-08T04:34:52.541970Z",
+#   "labels": {
+#     "goog-managed-by": "cloudfunctions",
+#     "instanceId": "00f46b9285462037ee110ffd5758d17a2fa5a0ae1824eac63083e9f3617fe689314d755fcae2acc0929976d83fa1cb7fe807927fbaf0b4efb629452dd5f16d2555"
+#   },
+#   "logName": "projects/butu-414613/logs/run.googleapis.com%2Fstdout",
+#   "receiveTimestamp": "2024-05-08T04:34:52.544921010Z"
+# }
 
 

@@ -1,4 +1,7 @@
 
+from copy import deepcopy
+import json
+import math
 import os
 import random
 from typing import List
@@ -21,6 +24,9 @@ import time
 from datetime import datetime
 import psutil
 from time import sleep
+import signal
+import sys
+import time
 
 GLOBAL_DEPTH = 500 #Tested
 GLOBAL_C_VALUE = 4 #Tested
@@ -32,19 +38,27 @@ GLOBAL_MAX_NODES = 120 #Tested
 def run_game_threaded(index_function_parameter):
     try:
         # print(f"Starting process {os.getpid()}") 
+        global EXECUTE
         index, function, parameters = index_function_parameter 
-        game_simulation = function(*parameters)
-        
-        result = game_simulation.run_game()
-        mcts = []
-        for player in game_simulation.players:
-            if player.player_type == 'MCTS':
-                mcts.append(player.index)
-        result = result + [':'] + mcts
+        game_simulation, players = function(parameters)
+        print(f"{index}: Started {game_simulation.game_id}")
+        if EXECUTE:
+            with open(f'Logs/StrategyAnalysis/{game_simulation.game_id}.txt', 'a') as f:
+                f.write(json.dumps(players))
+            game_simulation.write_path = 'Logs/StrategyAnalysis'
+            result = game_simulation.run_game(main=True)
+        else:
+            return ('stop', [-10])
+        # mcts = []
+        # for player in game_simulation.players:
+        #     if player.player_type == 'MCTS':
+        #         mcts.append(player.index)
+        # result = result + [':'] + mcts
         # print(mcts)
         # print(result)
         # results[index] = result
-        return result
+        print(f"{index}: End {game_simulation.game_id}")
+        return (game_simulation.game_id, result)
     except Exception as e:
         time = datetime.now().strftime('%Y%m%d_%H%M%S')
         print(e)
@@ -52,415 +66,8 @@ def run_game_threaded(index_function_parameter):
             f.write(str(e))
 
 
-def iteration_test(depth):
-    card_deck = CardDeck(2, True, '2')
-    bank = Bank(2)
-    playing_board = PlayingBoard(card_deck)
-    players:List[Player] = []
-    players.append(MCTSPlayer(0, None, bank, c_value=10, depth=depth, type='MCTS'))
-    players.append(RandomPlayer(1, None, bank))
-    game_state = GameState(playing_board=playing_board,
-                        players=players,
-                        card_deck=card_deck,
-                        bank=bank, 
-                        turn=0,
-                        slot_index=0,
-                        slots=[],
-                        mode=0)
-    give_players_crystals(game_state.players)
-    game_simulation = Game(game_state, True)
-    return game_simulation
-
-def c_value_test(c_value):
-    card_deck = CardDeck(2, True, '2')
-    bank = Bank(2)
-    playing_board = PlayingBoard(card_deck)
-    players:List[Player] = []
-    players.append(MCTSPlayer(0, None, bank, c_value=c_value, depth=GLOBAL_DEPTH, type='MCTS'))
-    players.append(RandomPlayer(1, None, bank))
-    game_state = GameState(playing_board=playing_board,
-                        players=players,
-                        card_deck=card_deck,
-                        bank=bank, 
-                        turn=0,
-                        slot_index=0,
-                        slots=[],
-                        mode=0)
-    give_players_crystals(game_state.players)
-    game_simulation = Game(game_state, True)
-    return game_simulation
-
-def ed_vs(manager):
-    card_deck = CardDeck(2, True, '2')
-    bank = Bank(2)
-    playing_board = PlayingBoard(card_deck)
-    players:List[Player] = []
-    players.append(MCTSPlayer(0, None, bank, depth=GLOBAL_DEPTH, c_value=GLOBAL_C_VALUE, type='MCTSED', manager=manager))
-    players.append(MCTSPlayer(1, None, bank, c_value=GLOBAL_C_VALUE, depth=GLOBAL_DEPTH, type='MCTSVS'))
-    game_state = GameState(playing_board=playing_board,
-                        players=players,
-                        card_deck=card_deck,
-                        bank=bank, 
-                        turn=0,
-                        slot_index=0,
-                        slots=[],
-                        mode=0)
-    give_players_crystals(game_state.players)
-    game_simulation = Game(game_state, True)
-    return game_simulation
-
-def ed_wl(manager):
-    card_deck = CardDeck(NUMBER_OF_PLAYERS, True, '2')
-    bank = Bank(NUMBER_OF_PLAYERS)
-    playing_board = PlayingBoard(card_deck)
-    players:List[Player] = []
-    players.append(MCTSPlayer(0, None, bank, depth=GLOBAL_DEPTH, c_value=GLOBAL_C_VALUE, type='MCTSED', manager=None))
-    players.append(MCTSPlayer(1, None, bank, c_value=C_VALUE_WL, depth=GLOBAL_DEPTH, type='MCTSWL'))
-    game_state = GameState(playing_board=playing_board,
-                        players=players,
-                        card_deck=card_deck,
-                        bank=bank, 
-                        turn=0,
-                        slot_index=0,
-                        slots=[],
-                        mode=0)
-    give_players_crystals(game_state.players)
-    game_simulation = Game(game_state, True)
-    return game_simulation
-
-def ed_time_test(manager):
-    card_deck = CardDeck(NUMBER_OF_PLAYERS, True, '2')
-    bank = Bank(NUMBER_OF_PLAYERS)
-    playing_board = PlayingBoard(card_deck)
-    players:List[Player] = []
-    players.append(MCTSPlayer(0, None, bank, depth=GLOBAL_DEPTH, c_value=GLOBAL_C_VALUE, type='MCTSED', manager=manager))
-    players.append(RandomPlayer(1, None, bank))
-    game_state = GameState(playing_board=playing_board,
-                        players=players,
-                        card_deck=card_deck,
-                        bank=bank, 
-                        turn=0,
-                        slot_index=0,
-                        slots=[],
-                        mode=0)
-    give_players_crystals(game_state.players)
-    game_simulation = Game(game_state, True)
-    return game_simulation
-
-def lim_ed(manager):
-    card_deck = CardDeck(NUMBER_OF_PLAYERS, True, '2')
-    bank = Bank(NUMBER_OF_PLAYERS)
-    playing_board = PlayingBoard(card_deck)
-    # colors = ['red', 'green', 'orange', 'violet', 'blue']
-
-    #here we can define random, MCTS or human players
-    players:List[Player] = []
-    players.append(MCTSPlayer(0, None, bank, depth=GLOBAL_DEPTH, c_value=GLOBAL_C_VALUE, type='MCTSLM', max_child_nodes=GLOBAL_MAX_NODES))
-    players.append(MCTSPlayer(1, None, bank, depth=GLOBAL_DEPTH, c_value=GLOBAL_C_VALUE, type='MCTSED', manager=manager))
-    game_state = GameState(playing_board=playing_board,
-                        players=players,
-                        card_deck=card_deck,
-                        bank=bank, 
-                        turn=0,
-                        slot_index=0,
-                        slots=[],
-                        mode=0)
-    give_players_crystals(game_state.players)
-    game_simulation = Game(game_state, True)
-    return game_simulation
-
-def lim_vs(temp):
-    card_deck = CardDeck(NUMBER_OF_PLAYERS, True, '2')
-    bank = Bank(NUMBER_OF_PLAYERS)
-    playing_board = PlayingBoard(card_deck)
-    # colors = ['red', 'green', 'orange', 'violet', 'blue']
-
-    #here we can define random, MCTS or human players
-    players:List[Player] = []
-    players.append(MCTSPlayer(0, None, bank, depth=GLOBAL_DEPTH, c_value=GLOBAL_C_VALUE, type='MCTSLM', max_child_nodes=GLOBAL_MAX_NODES))
-    players.append(MCTSPlayer(1, None, bank, depth=GLOBAL_DEPTH, c_value=GLOBAL_C_VALUE, type='MCTSVS'))
-    game_state = GameState(playing_board=playing_board,
-                        players=players,
-                        card_deck=card_deck,
-                        bank=bank, 
-                        turn=0,
-                        slot_index=0,
-                        slots=[],
-                        mode=0)
-    give_players_crystals(game_state.players)
-    game_simulation = Game(game_state, True)
-    return game_simulation
-
-def lim_wl(temp):
-    card_deck = CardDeck(NUMBER_OF_PLAYERS, True, '2')
-    bank = Bank(NUMBER_OF_PLAYERS)
-    playing_board = PlayingBoard(card_deck)
-    # colors = ['red', 'green', 'orange', 'violet', 'blue']
-
-    #here we can define random, MCTS or human players
-    players:List[Player] = []
-    players.append(MCTSPlayer(0, None, bank, depth=GLOBAL_DEPTH, c_value=GLOBAL_C_VALUE, type='MCTSLM', max_child_nodes=GLOBAL_MAX_NODES))
-    players.append(MCTSPlayer(1, None, bank, depth=GLOBAL_DEPTH, c_value=C_VALUE_WL, type='MCTSWL'))
-    game_state = GameState(playing_board=playing_board,
-                        players=players,
-                        card_deck=card_deck,
-                        bank=bank, 
-                        turn=0,
-                        slot_index=0,
-                        slots=[],
-                        mode=0)
-    give_players_crystals(game_state.players)
-    game_simulation = Game(game_state, True)
-    return game_simulation
-
-def limit_test(limit):
-    card_deck = CardDeck(NUMBER_OF_PLAYERS, True, '2')
-    bank = Bank(NUMBER_OF_PLAYERS)
-    playing_board = PlayingBoard(card_deck)
-    players:List[Player] = []
-    players.append(MCTSPlayer(0, None, bank, depth=GLOBAL_DEPTH, c_value=GLOBAL_C_VALUE, type='MCTSLM', max_child_nodes=limit))
-    players.append(RandomPlayer(1, None, bank))
-    game_state = GameState(playing_board=playing_board,
-                        players=players,
-                        card_deck=card_deck,
-                        bank=bank, 
-                        turn=0,
-                        slot_index=0,
-                        slots=[],
-                        mode=0)
-    give_players_crystals(game_state.players)
-    game_simulation = Game(game_state, True)
-    return game_simulation
-
-def mcts_ed(manager):
-    card_deck = CardDeck(NUMBER_OF_PLAYERS, True, '2')
-    bank = Bank(NUMBER_OF_PLAYERS)
-    playing_board = PlayingBoard(card_deck)
-    players:List[Player] = []
-    players.append(MCTSPlayer(0, None, bank, depth=GLOBAL_DEPTH, c_value=GLOBAL_C_VALUE, type='MCTS'))
-    players.append(MCTSPlayer(1, None, bank, depth=GLOBAL_DEPTH, c_value=GLOBAL_C_VALUE, type='MCTSED', manager=manager))
-    game_state = GameState(playing_board=playing_board,
-                        players=players,
-                        card_deck=card_deck,
-                        bank=bank, 
-                        turn=0,
-                        slot_index=0,
-                        slots=[],
-                        mode=0)
-    give_players_crystals(game_state.players)
-    game_simulation = Game(game_state, True)
-    return game_simulation
-
-def mcts_lim(temp):
-    card_deck = CardDeck(NUMBER_OF_PLAYERS, True, '2')
-    bank = Bank(NUMBER_OF_PLAYERS)
-    playing_board = PlayingBoard(card_deck)
-    players:List[Player] = []
-    players.append(MCTSPlayer(0, None, bank, depth=GLOBAL_DEPTH, c_value=GLOBAL_C_VALUE, type='MCTS'))
-    players.append(MCTSPlayer(1, None, bank, depth=GLOBAL_DEPTH, c_value=GLOBAL_C_VALUE, type='MCTSLM', max_child_nodes=GLOBAL_MAX_NODES))
-    game_state = GameState(playing_board=playing_board,
-                        players=players,
-                        card_deck=card_deck,
-                        bank=bank, 
-                        turn=0,
-                        slot_index=0,
-                        slots=[],
-                        mode=0)
-    give_players_crystals(game_state.players)
-    game_simulation = Game(game_state, True)
-    return game_simulation
-
-def mcts_vs(temp):
-    card_deck = CardDeck(NUMBER_OF_PLAYERS, True, '2')
-    bank = Bank(NUMBER_OF_PLAYERS)
-    playing_board = PlayingBoard(card_deck)
-    players:List[Player] = []
-    players.append(MCTSPlayer(0, None, bank, depth=GLOBAL_DEPTH, c_value=GLOBAL_C_VALUE, type='MCTS'))
-    players.append(MCTSPlayer(1, None, bank, depth=GLOBAL_DEPTH, c_value=GLOBAL_C_VALUE, type='MCTSVS'))
-    game_state = GameState(playing_board=playing_board,
-                        players=players,
-                        card_deck=card_deck,
-                        bank=bank, 
-                        turn=0,
-                        slot_index=0,
-                        slots=[],
-                        mode=0)
-    give_players_crystals(game_state.players)
-    game_simulation = Game(game_state, True)
-    return game_simulation
-
-def mcts_wl(temp):
-    card_deck = CardDeck(NUMBER_OF_PLAYERS, True, '2')
-    bank = Bank(NUMBER_OF_PLAYERS)
-    playing_board = PlayingBoard(card_deck)
-    players:List[Player] = []
-    players.append(MCTSPlayer(0, None, bank, depth=GLOBAL_DEPTH, c_value=GLOBAL_C_VALUE, type='MCTS'))
-    players.append(MCTSPlayer(1, None, bank, depth=GLOBAL_DEPTH, c_value=C_VALUE_WL, type='MCTSWL'))
-    game_state = GameState(playing_board=playing_board,
-                        players=players,
-                        card_deck=card_deck,
-                        bank=bank, 
-                        turn=0,
-                        slot_index=0,
-                        slots=[],
-                        mode=0)
-    give_players_crystals(game_state.players)
-    game_simulation = Game(game_state, True)
-    return game_simulation
-
-def mcts_time_test(depth):
-    card_deck = CardDeck(NUMBER_OF_PLAYERS, True, '2')
-    bank = Bank(NUMBER_OF_PLAYERS)
-    playing_board = PlayingBoard(card_deck)
-    players:List[Player] = []
-    players.append(MCTSPlayer(0, None, bank, depth=depth, c_value=GLOBAL_C_VALUE, type='MCTS'))
-    players.append(RandomPlayer(1, None, bank))
-    game_state = GameState(playing_board=playing_board,
-                        players=players,
-                        card_deck=card_deck,
-                        bank=bank, 
-                        turn=0,
-                        slot_index=0,
-                        slots=[],
-                        mode=0)
-    give_players_crystals(game_state.players)
-    game_simulation = Game(game_state, True)
-    return game_simulation
-
-def random_ed(manager):
-    card_deck = CardDeck(NUMBER_OF_PLAYERS, True, '2')
-    bank = Bank(NUMBER_OF_PLAYERS)
-    playing_board = PlayingBoard(card_deck)
-    players:List[Player] = []
-    players.append(MCTSPlayer(0, None, bank, depth=GLOBAL_DEPTH, c_value=GLOBAL_C_VALUE, type='MCTSED'))
-    players.append(RandomPlayer(1, None, bank))
-    game_state = GameState(playing_board=playing_board,
-                        players=players,
-                        card_deck=card_deck,
-                        bank=bank, 
-                        turn=0,
-                        slot_index=0,
-                        slots=[],
-                        mode=0)
-    give_players_crystals(game_state.players)
-    game_simulation = Game(game_state, True)
-    return game_simulation
-
-def random_lim(temp):
-    card_deck = CardDeck(NUMBER_OF_PLAYERS, True, '2')
-    bank = Bank(NUMBER_OF_PLAYERS)
-    playing_board = PlayingBoard(card_deck)
-    players:List[Player] = []
-    players.append(MCTSPlayer(0, None, bank, depth=GLOBAL_DEPTH, c_value=GLOBAL_C_VALUE, type='MCTSLM', max_child_nodes=GLOBAL_MAX_NODES))
-    players.append(RandomPlayer(1, None, bank))
-    game_state = GameState(playing_board=playing_board,
-                        players=players,
-                        card_deck=card_deck,
-                        bank=bank, 
-                        turn=0,
-                        slot_index=0,
-                        slots=[],
-                        mode=0)
-    give_players_crystals(game_state.players)
-    game_simulation = Game(game_state, True)
-    return game_simulation
-
-def random_mcts(temp):
-    card_deck = CardDeck(NUMBER_OF_PLAYERS, True, '2')
-    bank = Bank(NUMBER_OF_PLAYERS)
-    playing_board = PlayingBoard(card_deck)
-    players:List[Player] = []
-    players.append(MCTSPlayer(0, None, bank, depth=GLOBAL_DEPTH, c_value=GLOBAL_C_VALUE, type='MCTS'))
-    players.append(RandomPlayer(1, None, bank))
-    game_state = GameState(playing_board=playing_board,
-                        players=players,
-                        card_deck=card_deck,
-                        bank=bank, 
-                        turn=0,
-                        slot_index=0,
-                        slots=[],
-                        mode=0)
-    give_players_crystals(game_state.players)
-    game_simulation = Game(game_state, True)
-    return game_simulation
-
-def random_vs(temp):
-    card_deck = CardDeck(NUMBER_OF_PLAYERS, True, '2')
-    bank = Bank(NUMBER_OF_PLAYERS)
-    playing_board = PlayingBoard(card_deck)
-    players:List[Player] = []
-    players.append(MCTSPlayer(0, None, bank, depth=GLOBAL_DEPTH, c_value=GLOBAL_C_VALUE, type='MCTSVS'))
-    players.append(RandomPlayer(1, None, bank))
-    game_state = GameState(playing_board=playing_board,
-                        players=players,
-                        card_deck=card_deck,
-                        bank=bank, 
-                        turn=0,
-                        slot_index=0,
-                        slots=[],
-                        mode=0)
-    give_players_crystals(game_state.players)
-    game_simulation = Game(game_state, True)
-    return game_simulation
-
-def random_wl(temp):
-    card_deck = CardDeck(NUMBER_OF_PLAYERS, True, '2')
-    bank = Bank(NUMBER_OF_PLAYERS)
-    playing_board = PlayingBoard(card_deck)
-    players:List[Player] = []
-    players.append(MCTSPlayer(0, None, bank, depth=GLOBAL_DEPTH, c_value=C_VALUE_WL, type='MCTSWL'))
-    players.append(RandomPlayer(1, None, bank))
-    game_state = GameState(playing_board=playing_board,
-                        players=players,
-                        card_deck=card_deck,
-                        bank=bank, 
-                        turn=0,
-                        slot_index=0,
-                        slots=[],
-                        mode=0)
-    give_players_crystals(game_state.players)
-    game_simulation = Game(game_state, True)
-    return game_simulation
-
-def wl_vs(temp):
-    card_deck = CardDeck(NUMBER_OF_PLAYERS, True, '2')
-    bank = Bank(NUMBER_OF_PLAYERS)
-    playing_board = PlayingBoard(card_deck)
-    players:List[Player] = []
-    players.append(MCTSPlayer(0, None, bank, depth=GLOBAL_DEPTH, c_value=C_VALUE_WL, type='MCTSWL'))
-    players.append(MCTSPlayer(1, None, bank, depth=GLOBAL_DEPTH, c_value=GLOBAL_C_VALUE, type='MCTSVS'))
-    game_state = GameState(playing_board=playing_board,
-                        players=players,
-                        card_deck=card_deck,
-                        bank=bank, 
-                        turn=0,
-                        slot_index=0,
-                        slots=[],
-                        mode=0)
-    give_players_crystals(game_state.players)
-    game_simulation = Game(game_state, True)
-    return game_simulation
-
-def c_value_wl(c_value):
-    card_deck = CardDeck(NUMBER_OF_PLAYERS, True, '2')
-    bank = Bank(NUMBER_OF_PLAYERS)
-    playing_board = PlayingBoard(card_deck)
-    players:List[Player] = []
-    players.append(MCTSPlayer(0, None, bank, depth=GLOBAL_DEPTH, c_value=c_value, type='MCTSWL'))
-    players.append(RandomPlayer(1, None, bank))
-    game_state = GameState(playing_board=playing_board,
-                        players=players,
-                        card_deck=card_deck,
-                        bank=bank, 
-                        turn=0,
-                        slot_index=0,
-                        slots=[],
-                        mode=0)
-    give_players_crystals(game_state.players)
-    game_simulation = Game(game_state, True)
-    return game_simulation
-
-def debug_mcts(NUMBER_OF_PLAYERS, number_of_mcts, c_value):
+def debug_mcts(NUMBER_OF_PLAYERS, number_of_mcts, c_value, iterations
+               , pw_param=None):
     # print(datetime.now())
     # print(datetime.now().timestamp())
     # print(os.getpid())
@@ -484,7 +91,10 @@ def debug_mcts(NUMBER_OF_PLAYERS, number_of_mcts, c_value):
             if random_index in random_indexes:
                 random_index = -1
             else:
-                players[random_index] = MCTSPlayer(random_index, None, bank, c_value, 200, 'MCTS')
+                if pw_param is not None:
+                    players[random_index] = MCTSPlayer(random_index, None, bank, c_value, iterations, 'MCTS', pw=True, c=pw_param['c'], alpha=pw_param['alpha'])
+                else:
+                    players[random_index] = MCTSPlayer(random_index, None, bank, c_value, iterations, 'MCTS')
                 random_indexes.append(random_index)
     
     
@@ -520,26 +130,88 @@ def give_players_crystals(players):
         crystals.remove(crystal)
         players[i].set_crystal(crystal)
 
-def save_scores(results, save_name):
-    folder_path = os.path.dirname(save_name)
-    # Check if the folder exists
-    if not os.path.exists(folder_path):
-        # If the folder does not exist, create it including any necessary parent directories
-        os.makedirs(folder_path)
+#new
+def save_scores(results, save_name, data):
+    check_and_create_folder(save_name)
 
-    with open(f'{save_name}.txt', 'w') as file:
-        for game in results:
-            print(game)
-            try:
-                line = ' '.join([str(value) for value in game]) + '\n'
-                file.write(line)
-            except Exception as e:
-                raise(e)
-                continue
+    player_names = []
+    for player in data:
+        inserted = False
+        id = 0
+        while not inserted:
+            if f"{player['type']}{id}" in player_names:
+                id += 1
+            else:
+                player_names.append(f"{player['type']}{id}")
+                inserted = True
+
+    res_json = []
+    for result in results:
+        for idx, player_name in enumerate(player_names):
+            new_res = {'name':player_name, 'points':result['scores'][idx], 'game_id':result['game_id']}
+            if 'MCTS' in player_name:
+                new_res['c_value'] = data[idx]['c_value']
+                new_res['iterations'] = data[idx]['iterations']
+
+                if 'PW' in player_name:
+                    new_res['c'] = data[idx]['c']
+                    new_res['alpha'] = data[idx]['alpha']
+                else:
+                    new_res['c'] = None
+                    new_res['alpha'] = None
+
+                if 'OMA' in player_name:
+                    new_res['eq'] = data[idx]['eq']
+                else:
+                    new_res['eq'] = None
+
+            else:
+                new_res['c_value'] = None
+                new_res['iterations'] = None
+                new_res['c'] = None
+                new_res['alpha'] = None
+                new_res['eq'] = None
+            res_json.append(new_res)
+        
+
+    with open(save_name, 'w') as f:
+        f.write(json.dumps(res_json))
+
+    # now_ts = datetime.now()
+    # print(f"Time: {now_ts.strftime('%Y-%m-%d_%H:%M:%S')}, Test {save_name}")
+
+
+# def save_scores(results, save_name):
+#     folder_path = os.path.dirname(save_name)
+#     # Check if the folder exists
+#     if not os.path.exists(folder_path):
+#         # If the folder does not exist, create it including any necessary parent directories
+#         os.makedirs(folder_path)
+
+
+#     save_name = save_name.replace(':', '=')
+
+#     with open(f'{save_name}.txt', 'w') as file:
+#         for game in results:
+#             print(game)
+#             try:
+#                 line = ' '.join([str(value) for value in game]) + '\n'
+#                 file.write(line)
+#             except Exception as e:
+#                 raise(e)
+#                 continue
+
+def check_and_create_folder(file_path: str) -> None:
+    if '/' in file_path:
+        folder_path = '/'.join(file_path.split('/')[:-1])
+    else:
+        folder_path = file_path
+    if not os.path.exists(folder_path):
+        os.makedirs(folder_path)
 
 def run_tests(function, parameters, result_size):
     num_processes = os.cpu_count()
-    with Pool(num_processes) as pool:
+    with Pool(3) as pool:
         # Create a list of tuples for each task
         tasks = [(i, function, parameters) for i in range(result_size)]
         
@@ -560,19 +232,105 @@ def run_tests(function, parameters, result_size):
     #     process.join()
         # print(f"Process {process.pid} joined")  # Confirm process joins
 
+def create_mcts(player_templates:List):
+    templates = deepcopy(player_templates)
+    random.shuffle(templates)
+    # print(templates)
+    card_deck = CardDeck(len(templates), True)
+    bank = Bank(len(templates))
+    playing_board = PlayingBoard(card_deck)
+    players:List[Player] = []
+    for idx, player in enumerate(templates):
+        if player['type'] == 'random':
+            players.append(RandomPlayer(idx, None, bank))
+        elif player['type'] == 'MCTS':
+            players.append(MCTSPlayer(idx, None, bank, player['c_value'], player['iterations'], 'MCTS'))
+        elif player['type'] == 'MCTS-PW':
+            players.append(MCTSPlayer(idx, None, bank, player['c_value'], player['iterations'], 'MCTS', pw=True
+                                      , c=player['c'], alpha=player['alpha']))
+        elif player['type'] == 'MCTS-OMA':
+            players.append(MCTSPlayer(idx, None, bank, player['c_value'], player['iterations'], 'MCTS', oma=True, eq_param=player['eq']))
+        elif player['type'] == 'MCTS-PW-OMA':
+            players.append(MCTSPlayer(idx, None, bank, player['c_value'], player['iterations'], 'MCTS', pw=True
+                                     , c=player['c'], alpha=player['alpha']
+                                     , oma=True, eq_param=player['eq']))
+
+    game_state = GameState(playing_board=playing_board,
+                        players=players,
+                        card_deck=card_deck,
+                        bank=bank, 
+                        turn=0,
+                        slot_index=0,
+                        slots=[],
+                        mode=0)
+    give_players_crystals(game_state.players)
+    game_simulation = Game(game_state, True)
+    return game_simulation, templates
         
+def check_and_create_folder(file_path: str) -> None:
+    if '/' in file_path:
+        folder_path = '/'.join(file_path.split('/')[:-1])
+    else:
+        folder_path = file_path
+    if not os.path.exists(folder_path):
+        os.makedirs(folder_path)
+
+
+def signal_handler(sig, frame):
+    global EXECUTE
+    EXECUTE= False
+    print('You pressed Ctrl+C!')
+    # sys.exit(0)
+
+def main():
+    signal.signal(signal.SIGINT, signal_handler)
+
+EXECUTE = True
 
 if __name__ == "__main__":
     # NUMBER_OF_PLAYERS = 2
-    manager = Manager()
+    main()
+    
 
+    manager = Manager()
     tests = [
         # {'name': 'different_counts_of_players','function':debug_mcts, 'mode':'paralel', 'result_size':30, 
         #   'param': [(3, 1, 1.2), (4, 1, 1.2), (5, 1, 1.2)]},
-        {'name': 'debug_mcts','function':debug_mcts, 'mode':'paralel', 'result_size':300, 
-          'param': [(5, 1, 100)]}#, (5, 2, 200), (5, 3, 200), (5, 4, 200), (5, 5, 200)]}
+        # {'name': 'iterations_5_1','function':debug_mcts, 'mode':'paralel', 'result_size':100, 
+        #   'param': [(5, 1, 48, 100), (5, 1, 48, 150), (5, 1, 48, 200), (5, 1, 48, 250), (5, 1, 48, 300)
+        #             , (5, 1, 48, 350), (5, 1, 48, 400), (5, 1, 48, 450), (5, 1, 48, 500), (5, 1, 48, 550)
+        #             , (5, 1, 48, 600)]}
+        # {'name': 'optimize_pw','function':debug_mcts, 'mode':'paralel', 'result_size':100, 
+        #   'param': [
+        #       (5, 1, 1.2, 500, {'c':2, 'alpha':0.5}),
+        #       (5, 1, 1.2, 500, {'c':1, 'alpha':0.5}),
+        #       (5, 1, 1.2, 500, {'c':1, 'alpha':1}),
+        #       (5, 1, 1.2, 500, {'c':2, 'alpha':2}),
+
+        #             ]}
+
+        # {'data':[
+        #         {'type':'random'},
+        #         {'type':'MCTS', 'iterations':100, 'c_value':2.935643834971814},
+        #         {'type':'random'},
+        #         {'type':'random'},
+        #         {'type':'random'}
+        #         ],
+        #         'size':3, 'name':'test_agents'}
+
+                
+        {'data':[
+                {'type':'random'}
+                ,{'type':'MCTS', 'iterations':500, 'c_value':2.935643834971814}
+                ,{'type':'MCTS-OMA', 'iterations':500, 'c_value':2.935643834971814, 'eq':0.03600459242730309}
+                ,{'type':'MCTS-PW', 'iterations':500, 'c_value':2.935643834971814, 'c':1.550032374665823, 'alpha':1.716192864927639}
+                ,{'type':'MCTS-PW-OMA', 'c_value': 2.935643834971814, 'eq': 0.03600459242730309, 'c': 1.550032374665823, 'alpha': 1.716192864927639, 'iterations':500}
+                ],
+                'size':3, 'name':'analysis_1_1'}
+
+
         #   , (5, 1, 100), (5, 1, 150), (5, 1, 200), (5, 1, 250), (5, 1, 300),
-        #             (5, 1, 350), (5, 1, 400), (5, 1, 450), (5, 1, 500)]},
+        #             (5, 1, 350), (5, 1, 400), (5, 1, 450), (5, 1, 500)]}
         # {'name': 'mcts_vs_mcts','function':debug_mcts, 'mode':'paralel', 'result_size':30, 
         # 'param': [(5, 5, 1.2), (5, 4, 1.2), (5, 3, 1.2), (5, 2, 1.2), (5, 1, 1.2)]},
          
@@ -625,47 +383,56 @@ if __name__ == "__main__":
         # 'param': [1]}
     ]
     for test in tests:
-        for parameter in test['param']:
-            start = timer()
+        # for parameter in test['param']:
+        start = timer()
 
-            now_ts = datetime.now()
-            test_time = now_ts.strftime('%Y%m%d_%H%M%S')
-            results = manager.list([None] * test['result_size'])
+        now_ts = datetime.now()
+        test_time = now_ts.strftime('%Y%m%d_%H%M%S')
+        # results = manager.list([None] * test['result_size'])
 
-            iter_variable = [i for i in range(test['result_size'])]
-            if test['mode'] == 'paralel':
-                results = run_tests(test['function'], parameter, test['result_size'])
+        # iter_variable = [i for i in range(test['result_size'])]
+        results = run_tests(create_mcts, test['data'], test['size'])
+        # else:
+        #     for idx in iter_variable:
+        #         run_tests(results, [idx], test['function'], parameter)
+        return_list = []
+        for res in results:
+            new_obj = {}
+            game_id, scores = res
+            if game_id != 'failed':
+                new_obj['game_id'] = game_id
+                new_obj['scores'] = scores
+                return_list.append(new_obj)
+            else:
+                print('Failed Simulation')
+        # incomplete = True
+        # errors = 0
+        # while(incomplete):
+            # failed_in = []
+            # good_results = 0
+            # for index in range(test['result_size']):
+            #     if results[index] != None:
+            #         good_results += 1
+            #     else:
+            #         failed_in.append(index)
+            # if good_results == test['result_size']:
+            #     incomplete = False
             # else:
-            #     for idx in iter_variable:
-            #         run_tests(results, [idx], test['function'], parameter)
-
-            incomplete = True
-            errors = 0
-            while(incomplete):
-                failed_in = []
-                good_results = 0
-                for index in range(test['result_size']):
-                    if results[index] != None:
-                        good_results += 1
-                    else:
-                        failed_in.append(index)
-                if good_results == test['result_size']:
-                    incomplete = False
-                else:
-                    print(f"Only {good_results} of {test['result_size']}, run again {test['name']}, value={parameter}")
-                    run_tests(results, failed_in, test['function'], parameter)
+            #     print(f"Only {good_results} of {test['result_size']}, run again {test['name']}, value={parameter}")
+            #     run_tests(results, failed_in, test['function'], parameter)
 
 
-                errors += 1
-                if errors > 10:
-                    print(f"Failed test {test['name']}")
-                    incomplete = False
-                    break
-            if incomplete == False:
-                save_scores(results=results, save_name=f'Logs/TestResults/{test["name"]}/{test_time}_{str(parameter)}')
-            end = timer()
-            print(f"Success {test['name']}, value={parameter}")
-            duration = end - start
-            print(f"Test duration: {duration}")
+            # errors += 1
+            # if errors > 10:
+            #     print(f"Failed test {test['name']}")
+            #     incomplete = False
+            #     break
+        # if incomplete == False:
+        # save_scores(results=return_list, 
+        #             save_name=f'Logs/TestResults/{test["name"]}/{test_time}', data=test['data'])
+        end = timer()
+        print(f"Success {test['name']}")
+        duration = end - start
+        print(f"Time: {now_ts.strftime('%Y%m%d_%H%M%S')}, Test duration: {duration}")
 
 

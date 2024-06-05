@@ -40,6 +40,7 @@ class Game:
         self.slot_index = game_state.slot_index
         self.number_of_slot_cards = GameState.get_number_of_cards(self.NUMBER_OF_PLAYERS)
         self.write_path = 'Logs/GameRuns'
+        self.result = None
 
     def generate_slots(self):
         self.slots = self.playing_board.generate_slots(
@@ -82,7 +83,7 @@ class Game:
 
 ##################################################################################################################
     # @profile
-    def run_game(self):
+    def run_game(self, main=False):
         # self.print_function(f'Game: {self.game_id}')
         # print(f'Game: {self.game_id}')
         try:
@@ -190,7 +191,7 @@ class Game:
             except Exception as e:
                 raise(e)
             try:
-                self.print_game_results()
+                self.print_game_results(main)
             except Exception as e:
                 raise(e)
             try:
@@ -326,30 +327,54 @@ class Game:
         if self.mode == 1:
             input()
 
-    def print_game_results(self):
+    def print_game_results(self, main=False):
         try:
-            if self.mode == 0:
-                return
-            self.print_function(
-                "################################################################################")
-            self.print_function("Results")
-            colors = self.card_deck.card_group.keys()
-            for player in self.players:
-                self.print_function(str(player))
-                self.print_function(str(player.coins))
-                self.print_function(player.card_deck.get_card_deck_string())
-                card_sum = 0
-                for color in colors:
-                    color_count = player.get_color_count(color)
-                    self.print_function(f"Has {player.card_deck.card_count[color]} of {color}")
-                    self.print_function(f"Has {color_count} ranks of {color}")
+            if main == True:
+                ret_text = ['"################################################################################"']
+                self.print_function("Results")
+                colors = self.card_deck.card_group.keys()
+                for player in self.players:
+                    ret_text.append(str(player))
+                    ret_text.append(str(player.coins))
+                    ret_text.append(player.card_deck.get_card_deck_string())
+                    card_sum = 0
+                    for color in colors:
+                        color_count = player.get_color_count(color)
+                        ret_text.append(f"Has {player.card_deck.card_count[color]} of {color}")
+                        ret_text.append(f"Has {color_count} ranks of {color}")
 
-                    card_sum += color_count
-                self.print_function(f"Has {str(player.card_deck.heroes)} heroes")
-                self.print_function(f"Has {str(len(player.card_deck.hero_cards))} hero cards")
+                        card_sum += color_count
+                    ret_text.append(f"Has {str(player.card_deck.heroes)} heroes")
+                    ret_text.append(f"Has {str(len(player.card_deck.hero_cards))} hero cards")
 
-                self.print_function(f"Player has {card_sum} cards")
-                self.print_function(player.get_player_points_str())
+                    ret_text.append(f"Player has {card_sum} cards")
+                    ret_text.append(player.get_player_points_str())
+
+                self.result = '\n'.join(ret_text)
+            else:
+                if self.mode == 0:
+                    return
+                self.print_function(
+                    "################################################################################")
+                self.print_function("Results")
+                colors = self.card_deck.card_group.keys()
+                for player in self.players:
+                    self.print_function(str(player))
+                    self.print_function(str(player.coins))
+                    self.print_function(player.card_deck.get_card_deck_string())
+                    card_sum = 0
+                    for color in colors:
+                        color_count = player.get_color_count(color)
+                        self.print_function(f"Has {player.card_deck.card_count[color]} of {color}")
+                        self.print_function(f"Has {color_count} ranks of {color}")
+
+                        card_sum += color_count
+                    self.print_function(f"Has {str(player.card_deck.heroes)} heroes")
+                    self.print_function(f"Has {str(len(player.card_deck.hero_cards))} hero cards")
+
+                    self.print_function(f"Player has {card_sum} cards")
+                    self.print_function(player.get_player_points_str())
+
         except Exception as e:
             self.mode = 1
             self.print_function(

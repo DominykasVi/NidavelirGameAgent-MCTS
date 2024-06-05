@@ -1,6 +1,8 @@
 from copy import deepcopy
 import itertools
 import math
+from multiprocessing import Pool
+import random
 from typing import Dict, List, Any
 from card import Card
 from coin import Coin
@@ -153,6 +155,7 @@ class Node:
 
     def simulate_run(self, total_runs:int, mcts_player_index:int, hashes:Dict[int, Dict[str, int]]):
         #expansion
+
         if len(self.children) == 0:
 
             if self.action is not None:
@@ -166,7 +169,10 @@ class Node:
             else:
                 self.child_states = child_states
                 new_node = self.generate_child_state(mcts_player_index)
-                self.run_game_simulation(new_node, mcts_player_index, hashes)  
+                if new_node.meta_information['player'] == mcts_player_index:
+                    self.run_game_simulation(new_node, mcts_player_index, hashes) 
+                else:
+                    new_node.simulate_run(total_runs, mcts_player_index, hashes)
         else:   
             #selection
             selected_state = self.find_max_child_node(total_runs, hashes)
@@ -198,11 +204,39 @@ class MCTS:
     # def save_run_info(self, time):
     #     with open('Results\\raw\\Iterations_runs\\iterations_runs_2.txt', 'a') as f:
     #         f.write(f'{self.max_iterations}_{self.c_value}:{time}\n')
+    def remove_generators(node:Node):
+        for child in node.children:
+            MCTS.remove_generators(child)
+        node.child_states = None
+
+    def parallel_function(obj):
+        node, index, hashes, total_runs, start = obj
+        end = timer()
+        while (end-start) < 5:
+            try:
+                node.simulate_run(total_runs, index, hashes)
+            except Exception as e:
+                raise(e)
+            total_runs += 1
+            end = timer()
+        MCTS.remove_generators(node)
+            
+        return node
+
+
+    def run_parallel(initial_nodes, mcts_index):
+        start = timer()
+        objects = [(node, mcts_index, {}, 0, start) for node in initial_nodes]
+        print(len(initial_nodes))
+        with Pool(len(initial_nodes)) as p:
+            res = p.map(MCTS.parallel_function, objects)
+        return res
 
 
     def run_simulation(self, game_state:GameState, mcts_player_index:int
                        ,pw:bool=False, alpha=0.5, c=2
-                       ,oma=False, eq_param:float = math.e) -> Node:
+                       ,oma=False, eq_param:float = math.e
+                       ,parallel=False) -> Node:
         self.total_runs = 0
         start = timer()
 
@@ -214,6 +248,7 @@ class MCTS:
             if player.player_type == 'MCTS':
                 bet_made = game_state.players[player.index].bet_made
                 card_taken = game_state.players[player.index].card_taken
+                distinction_cards = game_state.players[player.index].distinction_cards
                 game_state.players[player.index] = RandomPlayer(index=player.index,
                                                               crystal=game_state.players[player.index].crystal,
                                                               bank_reference=game_state.players[player.index].bank,
@@ -223,29 +258,54 @@ class MCTS:
                                                               card_deck=game_state.players[player.index].card_deck)
                 game_state.players[player.index].bet_made = bet_made
                 game_state.players[player.index].card_taken = card_taken
+                game_state.players[player.index].distinction_cards = distinction_cards
         game_state.mode = -1
 
         root_node = Node(game_state, 0, 'Root', constant=self.c_value, pw=pw, alpha=alpha, c=c, oma=oma, eq_param=eq_param)
         root_node.action = return_type
         root_node.meta_information = {'action':'None', 'player':mcts_player_index}
-        for i in range(self.max_iterations):
-            try:
-                root_node.simulate_run(self.total_runs, mcts_player_index, self.hashes)
-            except Exception as e:
-                raise(e)
-            self.total_runs += 1
+        # for i in range(self.max_iterations):
         end = timer()
+        if parallel:
+            action_information = (root_node.action, root_node.meta_information['player'])
+            child_states = root_node.game_state.get_next_state(action_information)
+            root_node.child_states = child_states
+            new_nodes = []
+            generate_states = True
+            while generate_states:
+                generate_states, root_node.child_states = root_node.has_next(root_node.child_states)
+                if not generate_states:
+                    break
+                new_node = root_node.generate_child_state(mcts_player_index)
+                new_node.parent = None
+                new_nodes.append(new_node)
+            root_node.children = []
+            results = MCTS.run_parallel(new_nodes, mcts_player_index)
+            for res in results:
+                root_node.children.append(res)
+                res.parent = root_node
+        else:
+            for i in range(self.max_iterations):
+                try:
+                    root_node.simulate_run(self.total_runs, mcts_player_index, self.hashes)
+                except Exception as e:
+                    raise(e)
+                self.total_runs += 1
         # print(f"Simulation of {self.total_runs} took: {end - start}")
         
-        # viz = Visualizer(root_node, f'{str(game_state.game_id)}/{root_node.game_state.turn}_{root_node.game_state.slot_index}_{return_type}')
-        # viz.visualize()
+        viz = Visualizer(root_node, f'{str(game_state.game_id)}/{root_node.game_state.turn}_{root_node.game_state.slot_index}_{return_type}')
+        viz.visualize()
 
         # self.save_run_info(end - start)
         return_index = -1
         return_node = root_node
         try:
             while return_type != return_node.meta_information['action'] or mcts_player_index != return_node.meta_information['player']: 
-                possible_scores = [node.score/node.iterations for node in return_node.children if node.meta_information['action'] == return_type]
+                possible_scores = [node.score/node.iterations for node in return_node.children if node.meta_information['action'] == return_type if node.iterations != 0]
+                if len(possible_scores) == 0:
+                    print('Partial Fail')
+                    return_node = random.choice(return_node.children)
+                    break
                 return_index = return_node.find_child_index_by_value(max(possible_scores))
                 return_node = return_node.children[return_index]
         except Exception as e:
