@@ -164,7 +164,7 @@ class GameState():
         return None
 
     def get_next_state(self, action:Tuple[str, int]=None):
-        # if self.slot_index < 4:
+        # actions is only for the first row of nodes (child nodes generated from parent)
         if action is not None:   
             action_name, mcts_index = action         
             if action_name == 'Bet':
@@ -182,17 +182,18 @@ class GameState():
         else:    
             if self.slot_index == 0 and self.turn == self.turn_split and self.distinction_applied == False:
                 return self.child_distinction_generator()
+            
             elif self.slot_index == 0 and self.turn == self.turn_split:
                 return self.new_slot_generator()
+            
             if self.slot_index == 0:
                 raise(Exception("Unexpected slot index"))
 
             for idx, player in enumerate(self.players):
                 if player.bet_made == False:
-                    # state_copy = self.copy_state()
-                    # state_copy.players[idx].bets = self.get_possible_bet(idx)
                     return self.child_bets_generator(idx)
                 elif player.bet_made == True and len(player.bets) < 3:
+                    # the agent does not have full information about other player bets
                     return self.partial_child_bets_generator(idx)
             # not in the first slot and can take
             if ((len(self.slots[self.slot_index]) > 1 and len(self.players) == 2) or
@@ -203,6 +204,7 @@ class GameState():
                 for player in player_queue:
                     if player.card_taken == False:
                         return self.child_card_generator(self.slot_index, player.index)
+            # End of game reached
             elif (self.turn >= (self.turn_split*2)-1 and \
                     (len(self.slots[1]) == 0 and len(self.slots[2]) == 0 and len(self.slots[3]) == 0)) \
                 or (self.turn >= (self.turn_split*2)-1 and len(self.players) == 2 and \
@@ -210,20 +212,17 @@ class GameState():
                 return None
             else:
                 if self.slot_index > 3:
-                    raise (f'Unexpected slot index {self.slot_index}')
+                    raise Exception(f'Unexpected slot index {self.slot_index}')
                 # New slots
                 if self.slot_index == 3:
-                    # TODO: move to next turn
                     return self.next_turn_generator()
                 # Move to next slot
                 else:
-                    # TODO: move slot and take card
                     bet_index = self.slot_index
                     player_queue = GameState.create_player_queue(self.players, bet_index)
                     for player in player_queue:
                         return self.child_card_generator(bet_index+1, player.index, move_slot=True)
-            # else:
-            #     raise (Exception("Game not ended, no new states"))
+
         
     def child_distinction_generator(self, predefined_cards:List[Card]=None):
         new_state = self.copy_state()
@@ -273,7 +272,6 @@ class GameState():
                                 ,'player':-10}}
         
     def new_slot_generator(self):
-        # new_state = self.copy_state()
         
         if self.turn < self.turn_split:
             selection_deck = self.playing_board.card_deck.get_age_one_cards().copy()
@@ -304,7 +302,6 @@ class GameState():
         
 
     def next_turn_generator(self):
-        # shulffled_cards = self.shuffle_object([self.card_deck.cards[key] for key in self.card_deck.cards.keys()])
         new_state = self.copy_state()
         for player in new_state.players:
                 player.card_taken = False
@@ -318,12 +315,6 @@ class GameState():
         else:
             return new_state.new_slot_generator()
 
-
-        # return_dict = {}
-        # for i in range(1, 4):
-        #     selected_cards = 
-        #     return_dict[i] = selected_cards
-        # return return_dict
 
     def child_bets_generator(self, index: int):
         random_coins = self.shuffle_object(self.players[index].coins.copy())
@@ -446,7 +437,6 @@ class GameState():
                 new_state.slots[slot_index], taken_card=taken_card)
             yield from new_state.take_card_generator(taken_card, player_index, f'Player{player_index}_take_{taken_card}.')
             
-# ----
     def award_distinction_cards(players: List[Player], playing_board: PlayingBoard, game=None) -> None:
         colors = ['red', 'green', 'orange', 'violet', 'blue']
         for color in colors:

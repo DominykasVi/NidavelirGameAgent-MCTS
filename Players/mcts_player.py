@@ -26,15 +26,6 @@ class MCTSPlayer(Player):
         self.player_type = 'MCTS'
         if type == 'MCTS':
             self.MCTS = mcts_simulation.MCTS()
-        # elif type == 'MCTSWL':
-        #     self.MCTS = mcts_simulation_wl.MCTS()
-        # elif type == 'MCTSLM':
-        #     self.MCTS = mcts_simulation_lm.MCTS()
-        #     self.max_child_nodes = max_child_nodes
-        # elif type == 'MCTSVS':
-        #     self.MCTS = mcts_simulation_vs.MCTS()
-        # elif type == 'MCTSED':
-        #     self.MCTS = mcts_simulation_ed.MCTS()
         self.c_value = c_value
         self.depth = depth
         self.coin_to_increase = None
@@ -48,14 +39,14 @@ class MCTSPlayer(Player):
 
     def run_simulation(self, game_state):
         try:
-            start = timer()
+            # start = timer()
             res = self.MCTS.run_simulation(game_state=game_state, mcts_player_index=self.index
                                            , pw=self.pw, c=self.c, alpha=self.alpha
                                            , oma=self.oma, eq_param = self.eq_param
                                            ,parallel=False)
-            end = timer()
-            with open(r'Logs\TestResults\times\3.txt', 'a') as f:
-                f.write(f'{end-start}\n')
+            # end = timer()
+            # with open(r'Logs\TestResults\times\3.txt', 'a') as f:
+            #     f.write(f'{end-start}\n')
             return res
         except Exception as e:
             raise(e)
@@ -148,12 +139,12 @@ class MCTSPlayer(Player):
             raise(Exception('Different count of dicarded cards'))
         if len(self.cards_to_discard) == 2:
             if self.cards_to_discard[0].color == self.cards_to_discard[1].color:
-                raise(Exception('Discard the same color. Illegal.'))
+                raise(Exception('Discard the same color.'))
             if self.cards_to_discard[0].color not in available_colors or \
                     self.cards_to_discard[1].color not in available_colors:
-                raise(Exception('Illegal color card discarded. Illegal.'))
+                raise(Exception('Illegal color card discarded.'))
         else:
             if self.cards_to_discard[0].color not in available_colors:
-                raise(Exception('Discard the same color. Illegal.'))
+                raise(Exception('Discard the same color.'))
             
         return super().discard_cards(self.cards_to_discard)

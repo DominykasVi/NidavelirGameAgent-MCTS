@@ -40,8 +40,6 @@ class Player:
     def __repr__(self) -> str:
         return f"{self.name} ({self.crystal})"
 
-    # def add_card_to_deck(self, card:Card) -> None:
-    #     self.card_deck.add_card(card)
     def set_crystal(self, crystal: int) -> None:
         self.crystal = crystal
 

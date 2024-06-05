@@ -89,21 +89,10 @@ class Bank:
                 return return_value
         except Exception as err:
             raise(err)
-        # if self.coins[(coin_value+1)] > 0:
-        #     self.coins[(coin_value+1)] -= 1
-        #     self.error_check()
 
-        #     return (coin_value+1)
-        # elif self.coins[(coin_value-1)] > 0:
-        #     self.coins[(coin_value-1)] -= 1
-        #     self.error_check()
-        #     return (coin_value-1)
-        # else:
-        #     return self.take_coin((coin_value-1))
                 
     def error_check(self) -> None:
         for key in self.coins.keys():
             if self.coins[key] < 0:
                 raise("Negative coins")
-                exit()
     

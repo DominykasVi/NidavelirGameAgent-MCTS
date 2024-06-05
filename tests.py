@@ -38,25 +38,15 @@ GLOBAL_MAX_NODES = 120 #Tested
 def run_game_threaded(index_function_parameter):
     try:
         # print(f"Starting process {os.getpid()}") 
-        global EXECUTE
         index, function, parameters = index_function_parameter 
         game_simulation, players = function(parameters)
         print(f"{index}: Started {game_simulation.game_id}")
-        if EXECUTE:
-            with open(f'Logs/StrategyAnalysis/{game_simulation.game_id}.txt', 'a') as f:
-                f.write(json.dumps(players))
-            game_simulation.write_path = 'Logs/StrategyAnalysis'
-            result = game_simulation.run_game(main=True)
-        else:
-            return ('stop', [-10])
-        # mcts = []
-        # for player in game_simulation.players:
-        #     if player.player_type == 'MCTS':
-        #         mcts.append(player.index)
-        # result = result + [':'] + mcts
-        # print(mcts)
-        # print(result)
-        # results[index] = result
+
+        with open(f'Logs/StrategyAnalysis/{game_simulation.game_id}.txt', 'a') as f:
+            f.write(json.dumps(players))
+        game_simulation.write_path = 'Logs/StrategyAnalysis'
+        result = game_simulation.run_game(main=True)
+ 
         print(f"{index}: End {game_simulation.game_id}")
         return (game_simulation.game_id, result)
     except Exception as e:
@@ -211,7 +201,7 @@ def check_and_create_folder(file_path: str) -> None:
 
 def run_tests(function, parameters, result_size):
     num_processes = os.cpu_count()
-    with Pool(3) as pool:
+    with Pool(num_processes) as pool:
         # Create a list of tuples for each task
         tasks = [(i, function, parameters) for i in range(result_size)]
         
@@ -276,22 +266,8 @@ def check_and_create_folder(file_path: str) -> None:
         os.makedirs(folder_path)
 
 
-def signal_handler(sig, frame):
-    global EXECUTE
-    EXECUTE= False
-    print('You pressed Ctrl+C!')
-    # sys.exit(0)
-
-def main():
-    signal.signal(signal.SIGINT, signal_handler)
-
-EXECUTE = True
-
 if __name__ == "__main__":
     # NUMBER_OF_PLAYERS = 2
-    main()
-    
-
     manager = Manager()
     tests = [
         # {'name': 'different_counts_of_players','function':debug_mcts, 'mode':'paralel', 'result_size':30, 
@@ -317,7 +293,6 @@ if __name__ == "__main__":
         #         {'type':'random'}
         #         ],
         #         'size':3, 'name':'test_agents'}
-
                 
         {'data':[
                 {'type':'random'}
@@ -346,41 +321,6 @@ if __name__ == "__main__":
         # {'name': 'EDTimeTests','function':ed_time_test, 'mode':'simple', 'result_size':50, 
         # 'param': [1]},
 
-
-        # {'name': 'LIM_VS','function':lim_vs, 'mode':'paralel', 'result_size':100, 
-        # 'param': [1]},
-        # {'name': 'LIM_WL','function':lim_wl, 'mode':'paralel', 'result_size':100, 
-        #  'param': [1]},
-        # # {'name': 'LimitTests','function':limit_test, 'mode':'paralel', 'result_size':100, 
-        # #  'param': [i for i in range(40, 201, 40)]},
-        # {'name': 'MCTS_LIM','function':mcts_lim, 'mode':'paralel', 'result_size':100, 
-        #  'param': [1]},
-        # {'name': 'MCTS_VS','function':mcts_vs, 'mode':'paralel', 'result_size':100, 
-        #  'param': [1]},
-        # {'name': 'MCTS_WL','function':mcts_wl, 'mode':'paralel', 'result_size':100, 
-        #  'param': [1]},
-        # {'name': 'MCTSTimeTests','function':mcts_time_test, 'mode':'simple', 'result_size':20, 
-        #  'param': [50, 100, 150, 200, 250, 300, 350, 400, 450, 550, 600]},
-        # {'name': 'Random_VS','function':random_vs, 'mode':'paralel', 'result_size':100, 
-        #  'param': [1]},
-        # {'name': 'Random_LIM','function':random_lim, 'mode':'paralel', 'result_size':100, 
-        #  'param': [1]},
-        # # {'name': 'Random_MCTS','function':random_mcts, 'mode':'paralel', 'result_size':100, 
-        # #  'param': [1]},
-        # {'name': 'Random_WL','function':random_wl, 'mode':'paralel', 'result_size':100, 
-        #  'param': [1]},
-        # {'name': 'WL_VS','function':wl_vs, 'mode':'paralel', 'result_size':100, 
-        #  'param': [1]},
-        # {'name': 'Random_ED','function':random_ed, 'mode':'simple', 'result_size':15, 
-        #  'param': [1]},
-        # {'name': 'MCTS_ED','function':mcts_ed, 'mode':'simple', 'result_size':15, 
-        #  'param': [1]},
-        # {'name': 'ED_VS','function':ed_vs, 'mode':'simple', 'result_size':15, 
-        #  'param': [1]},
-        # {'name': 'ED_WL','function':ed_wl, 'mode':'simple', 'result_size':15, 
-        # 'param': [1]},
-        # {'name': 'LIM_ED','function':lim_ed, 'mode':'simple', 'result_size':15, 
-        # 'param': [1]}
     ]
     for test in tests:
         # for parameter in test['param']:
@@ -388,13 +328,8 @@ if __name__ == "__main__":
 
         now_ts = datetime.now()
         test_time = now_ts.strftime('%Y%m%d_%H%M%S')
-        # results = manager.list([None] * test['result_size'])
-
-        # iter_variable = [i for i in range(test['result_size'])]
         results = run_tests(create_mcts, test['data'], test['size'])
-        # else:
-        #     for idx in iter_variable:
-        #         run_tests(results, [idx], test['function'], parameter)
+
         return_list = []
         for res in results:
             new_obj = {}
@@ -405,31 +340,7 @@ if __name__ == "__main__":
                 return_list.append(new_obj)
             else:
                 print('Failed Simulation')
-        # incomplete = True
-        # errors = 0
-        # while(incomplete):
-            # failed_in = []
-            # good_results = 0
-            # for index in range(test['result_size']):
-            #     if results[index] != None:
-            #         good_results += 1
-            #     else:
-            #         failed_in.append(index)
-            # if good_results == test['result_size']:
-            #     incomplete = False
-            # else:
-            #     print(f"Only {good_results} of {test['result_size']}, run again {test['name']}, value={parameter}")
-            #     run_tests(results, failed_in, test['function'], parameter)
 
-
-            # errors += 1
-            # if errors > 10:
-            #     print(f"Failed test {test['name']}")
-            #     incomplete = False
-            #     break
-        # if incomplete == False:
-        # save_scores(results=return_list, 
-        #             save_name=f'Logs/TestResults/{test["name"]}/{test_time}', data=test['data'])
         end = timer()
         print(f"Success {test['name']}")
         duration = end - start

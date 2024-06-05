@@ -9,9 +9,6 @@ from datetime import datetime
 class PlayingBoard:
     def __init__(self, card_deck:CardDeck, seed=datetime.now().timestamp()) -> None:
         self.card_deck = card_deck
-        # self.slot_1 = []
-        # self.slot_2 = []
-        # self.slot_3 = []
         random.seed(seed)
 
         

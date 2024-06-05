@@ -176,68 +176,6 @@ class CardDeck:
             self.cards[card.index] = card
             self.card_group[card.color].append(card)
             self.hero_cards.append(card)
-            # self.card_count[card.color] += card.rank
-
-    # def hero_rank_increase(self, hero_name:str) -> None:
-    #     if hero_name == 'KRALL':
-    #         self.hero_ranks['red'] += 2
-    #     if hero_name == 'TARAH':
-    #         self.hero_ranks['red'] += 1
-    #     if hero_name == 'ARAL':
-    #         self.hero_ranks['green'] += 2
-    #     if hero_name == 'DAGDA':
-    #         self.hero_ranks['green'] += 3
-    #     if hero_name == 'AEGUR':
-    #         self.hero_ranks['violet'] += 2
-    #     if hero_name == 'BONFUR':
-    #         self.hero_ranks['violet'] += 3
-    #     if hero_name == 'ZORAL':
-    #         self.hero_ranks['violet'] += 3
-
-    # def get_hero_ranks_by_color(self, color:str) -> Tuple[int, int]:
-    #     extra_ranks = 0
-    #     extra_points = 0
-    #     for card in self.hero_cards:
-    #         if card.color == 'KRALL':
-    #             ranks = 2
-    #             points = 7
-    #             color = 'red'
-    #         if card.color == 'TARAH':
-    #             ranks = 1
-    #             points = 14
-    #             color = 'red'
-    #         if card.color == 'ARAL':
-    #             ranks = 2
-    #             points = 0
-    #             color = 'green'
-    #         if card.color == 'DAGDA':
-    #             ranks = 3
-    #             points = 0
-    #             color = 'green'
-    #         if card.color == 'AEGUR':
-    #             ranks = 2
-    #             points = 0
-    #             color = 'violet'
-    #         if card.color == 'BONFUR':
-    #             ranks = 3
-    #             points = 0
-    #             color = 'violet'
-    #         if card.color == 'ZORAL':
-    #             ranks = 3
-    #             points = 1
-    #             color = 'orange'
-    #         if card.color == 'LOKDUR':
-    #             ranks = 1
-    #             points = 3
-    #             color = 'orange'
-    #         if card.color == 'HOURYA':
-    #             ranks = 1
-    #             points = 20
-    #             color = 'blue'
-    #         if card.color == 'IDUNN':
-    #             ranks = 1
-    #             points = 7
-    #             color = 'blue'
 
     def calculate_points(self) -> int:
         color_counts: Dict[str, int] = {
@@ -293,8 +231,4 @@ class CardDeck:
             if hero.color == color:
                 temp_count += hero.rank
         return temp_count
-# cd = CardDeck(True)
-# cd.print_card_deck()
-# age_one_cards = cd.get_age_two_cards()
-# for card in age_one_cards:
-#     print(card)
+
