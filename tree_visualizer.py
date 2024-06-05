@@ -286,7 +286,7 @@ class Visualizer():
         )
         fig.write_html(f"{self.save_path}")
         # fig.write_image(f"{self.save_path.replace('.html', '.png')}")
-        print('Drawn')
+        # print('Drawn')
 
         # # good code
         # anytree_root = self.convert_to_anytree(self.root)

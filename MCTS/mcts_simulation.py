@@ -69,8 +69,6 @@ class Node:
         if self.oma and self.mcts:
             try:
                 e = math.sqrt(self.eq_param / (3*self.iterations) + self.eq_param)
-                # print(hashes.keys())
-                # print(self.history)
                 return e*(hashes[self.history]['scores']/hashes[self.history]['iterations']) + \
                         (1-e)*(self.score/self.iterations) + self.constant * math.sqrt(math.log(total_runs)/self.iterations)
             except Exception as e:
@@ -201,9 +199,6 @@ class MCTS:
         self.c_value = 0
         self.hashes = {}
 
-    # def save_run_info(self, time):
-    #     with open('Results\\raw\\Iterations_runs\\iterations_runs_2.txt', 'a') as f:
-    #         f.write(f'{self.max_iterations}_{self.c_value}:{time}\n')
     def remove_generators(node:Node):
         for child in node.children:
             MCTS.remove_generators(child)
@@ -238,7 +233,6 @@ class MCTS:
                        ,oma=False, eq_param:float = math.e
                        ,parallel=False) -> Node:
         self.total_runs = 0
-        start = timer()
 
         return_type = game_state.players[mcts_player_index].action_to_perform
         self.max_iterations = game_state.players[mcts_player_index].depth
@@ -264,8 +258,7 @@ class MCTS:
         root_node = Node(game_state, 0, 'Root', constant=self.c_value, pw=pw, alpha=alpha, c=c, oma=oma, eq_param=eq_param)
         root_node.action = return_type
         root_node.meta_information = {'action':'None', 'player':mcts_player_index}
-        # for i in range(self.max_iterations):
-        end = timer()
+
         if parallel:
             action_information = (root_node.action, root_node.meta_information['player'])
             child_states = root_node.game_state.get_next_state(action_information)
@@ -291,12 +284,10 @@ class MCTS:
                 except Exception as e:
                     raise(e)
                 self.total_runs += 1
-        # print(f"Simulation of {self.total_runs} took: {end - start}")
         
-        viz = Visualizer(root_node, f'{str(game_state.game_id)}/{root_node.game_state.turn}_{root_node.game_state.slot_index}_{return_type}')
-        viz.visualize()
+        # viz = Visualizer(root_node, f'{str(game_state.game_id)}/{root_node.game_state.turn}_{root_node.game_state.slot_index}_{return_type}')
+        # viz.visualize()
 
-        # self.save_run_info(end - start)
         return_index = -1
         return_node = root_node
         try:

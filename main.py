@@ -58,6 +58,7 @@ if __name__ == "__main__":
         players.append(RandomPlayer(i, None, bank))
         print(f"Player {i} added")
 
+    idx = 2
     players[idx] = MCTSPlayer(idx, None, bank, 3.4680925162101737, 500)#, pw=True, c=0.5604952853346341, eq_param=0.05281024338707091, alpha=1.4473637176345078, oma=True)
     game_state = GameState(playing_board=playing_board,
                         players=players,
